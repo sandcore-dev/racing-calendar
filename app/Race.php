@@ -59,7 +59,7 @@ class Race extends Model
 	 */
 	public function getDateAttribute()
 	{
-		return $this->start_time->formatLocalized('%e %B');
+		return $this->start_time->formatLocalized('%d %B');
 	}
 	
 	/**

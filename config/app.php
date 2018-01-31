@@ -82,6 +82,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | PHP Locale Configuration
+    |--------------------------------------------------------------------------
+    |
+    | The PHP locale determines the default locale that will be used by PHP.
+    | You are free to set this value to any of the locales which will be
+    | supported by the operating system.
+    |
+    */
+
+    'php_locale' => 'nl_NL.utf8',
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Fallback Locale
     |--------------------------------------------------------------------------
     |
