@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Season extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'year', 'access_token', 'header_url', 'footer_url',
+    ];
+
 	/**
      * The "booting" method of the model.
      *

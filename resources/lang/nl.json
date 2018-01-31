@@ -1,8 +1,16 @@
 {
+	"Season": "Seizoen",
 	"Year": "Jaar",
 	"Date": "Datum",
 	"Race time": "Tijdstip race",
 	"Country": "Land",
 	"Location": "Locatie",
-	"Cancel": "Annuleren"
+	"Circuit": "Circuit",
+	"Cancel": "Annuleren",
+	"Admin": "Beheer",
+	"No seasons have been found": "Er zijn geen seizoenen gevonden",
+	"Add season": "Seizoen toevoegen",
+	"Edit season": "Seizoen bewerken",
+	"Header image": "Topafbeelding",
+	"Footer image": "Voetafbeelding"
 }

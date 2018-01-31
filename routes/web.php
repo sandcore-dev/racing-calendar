@@ -22,6 +22,14 @@ $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 $this->post('password/reset', 'Auth\ResetPasswordController@reset');
 
+Route::group([ 'prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => 'auth' ], function () {
+	Route::resource('season', 'SeasonController');
+	Route::resource('race', 'RaceController');
+	Route::resource('circuit', 'CircuitController');
+	Route::resource('country', 'CountryController');
+	Route::resource('location', 'LocationController');
+});
+
 Route::get('/{token?}', 'CalendarController@index')->name('calendar');
 Route::get('/{token}/{race}/location', 'CalendarController@editLocation')->name('calendar.location.edit');
 Route::put('/{token}/{race}/location', 'CalendarController@updateLocation')->name('calendar.location.update');

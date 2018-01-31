@@ -48,7 +48,7 @@
 							</td>
 							@if( $showLocations )
 							<td>
-								@if( !$race->start_time->isPast() )
+								@if( $race->start_time->isPast() )
 									{{ $race->location->name }}
 								@else
 									<a href="{{ route('calendar.location.edit', [ 'token' => $race->season->access_token, 'race' => $race->id ]) }}">

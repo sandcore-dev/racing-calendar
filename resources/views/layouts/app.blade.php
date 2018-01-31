@@ -37,6 +37,23 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         &nbsp;
+                        @auth
+                        <li class="{{ Route::currentRouteNamed('admin.season.*') ? 'active' : '' }}">
+							<a href="{{ route('admin.season.index') }}">@lang('Season')</a>
+                        </li>
+                        <li class="{{ Route::currentRouteNamed('admin.race.*') ? 'active' : '' }}">
+							<a href="{{ route('admin.race.index') }}">@lang('Race')</a>
+                        </li>
+                        <li class="{{ Route::currentRouteNamed('admin.circuit.*') ? 'active' : '' }}">
+							<a href="{{ route('admin.circuit.index') }}">@lang('Circuit')</a>
+                        </li>
+                        <li class="{{ Route::currentRouteNamed('admin.country.*') ? 'active' : '' }}">
+							<a href="{{ route('admin.country.index') }}">@lang('Country')</a>
+                        </li>
+                        <li class="{{ Route::currentRouteNamed('admin.location.*') ? 'active' : '' }}">
+							<a href="{{ route('admin.location.index') }}">@lang('Location')</a>
+                        </li>
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
