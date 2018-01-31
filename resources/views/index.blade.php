@@ -48,7 +48,17 @@
 							</td>
 							@if( $showLocations )
 							<td>
-								{{ $race->location->name }}
+								@if( !$race->start_time->isPast() )
+									{{ $race->location->name }}
+								@else
+									<a href="{{ route('calendar.location.edit', [ 'token' => $race->season->access_token, 'race' => $race->id ]) }}">
+										@if( $race->location->name )
+											{{ $race->location->name }}
+										@else
+											<span class="glyphicon glyphicon-plus"></span>
+										@endif
+									</a>
+								@endif
 							</td>
 							@endif
 						</tr>

@@ -23,3 +23,5 @@ $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm
 $this->post('password/reset', 'Auth\ResetPasswordController@reset');
 
 Route::get('/{token?}', 'CalendarController@index')->name('calendar');
+Route::get('/{token}/{race}/location', 'CalendarController@editLocation')->name('calendar.location.edit');
+Route::put('/{token}/{race}/location', 'CalendarController@updateLocation')->name('calendar.location.update');

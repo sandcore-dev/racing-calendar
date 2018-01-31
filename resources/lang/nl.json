@@ -1,6 +1,8 @@
 {
+	"Year": "Jaar",
 	"Date": "Datum",
 	"Race time": "Tijdstip race",
 	"Country": "Land",
-	"Location": "Locatie"
+	"Location": "Locatie",
+	"Cancel": "Annuleren"
 }
