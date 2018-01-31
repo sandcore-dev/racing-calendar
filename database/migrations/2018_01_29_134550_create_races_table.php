@@ -15,7 +15,7 @@ class CreateRacesTable extends Migration
     {
         Schema::create('races', function (Blueprint $table) {
             $table->increments('id');
-            $table->datetime('race_start');
+            $table->datetime('start_time');
             $table->string('name');
             $table->integer('season_id')->unsigned();
             $table->integer('circuit_id')->unsigned();
@@ -26,7 +26,7 @@ class CreateRacesTable extends Migration
             $table->foreign('circuit_id')->references('id')->on('circuits');
             $table->foreign('location_id')->references('id')->on('locations');
             
-            $table->unique([ 'race_start', 'name' ]);
+            $table->unique([ 'start_time', 'name' ]);
             $table->unique([ 'season_id', 'name' ]);
         });
     }
