@@ -11,19 +11,9 @@ class TestDataSeeder extends Seeder
      */
     public function run()
     {
-		$this->seedUser();
+		$this->call(UserDataSeeder::class);
         
         $this->seedORM();
-    }
-    
-    /**
-     * Seed a single user.
-     */
-    protected function seedUser()
-    {
-        factory(App\User::class)->create([
-			'email'	=> 'webmaster@localhost',
-        ]);
     }
     
     /**

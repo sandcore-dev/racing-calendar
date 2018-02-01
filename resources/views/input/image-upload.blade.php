@@ -15,7 +15,7 @@
 			</label>
 		</file-upload>
 		
-		@if( $value )
+		@if( isset($value) && $value )
 			<div class="checkbox">
 				<label>
 					<input type="checkbox" name="remove_{{ $field }}" value="1">

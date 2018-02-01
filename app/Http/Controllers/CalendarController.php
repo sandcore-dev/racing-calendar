@@ -20,6 +20,9 @@ class CalendarController extends Controller
     {
 		$season = $this->getSeasonByToken( $token );
 		
+		if( !$season )
+			return view('empty');
+		
 		if( Auth::check() && !$token )
 			return redirect()->route('calendar', [ 'token' => $season->access_token ]);
 		
@@ -32,8 +35,8 @@ class CalendarController extends Controller
     /**
      * Get season by token.
      * 
-     * @param	string		$token
-     * @return	App\Season
+     * @param	string			$token
+     * @return	App\Season|null
      */
     protected function getSeasonByToken( $token )
     {
