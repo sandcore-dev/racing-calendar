@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Circuit extends Model
 {
 	/**
+	 * Eager loading.
+	 * 
+	 * @var array
+	 */
+	protected $_with = [ 'country' ];
+	
+	/**
 	 * Get the races held at this circuit.
 	 */
 	public function races()
@@ -20,5 +27,32 @@ class Circuit extends Model
 	public function country()
 	{
 		return $this->belongsTo(Country::class);
+	}
+	
+	/**
+	 * Get full location of this circuit.
+	 * 
+	 * @return string
+	 */
+	public function getLocationAttribute()
+	{
+		$location = $this->city;
+		
+		if( $this->area )
+			$location .= ', ' . $this->area;
+		
+		$location .= ', '. __($this->country->name);
+		
+		return $location;
+	}
+	
+	/**
+	 * Get full name of this circuit.
+	 * 
+	 * @return string
+	 */
+	public function getFullNameAttribute()
+	{
+		return $this->name . ', ' . $this->location;
 	}
 }

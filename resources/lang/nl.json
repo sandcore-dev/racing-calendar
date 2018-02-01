@@ -13,5 +13,7 @@
 	"Edit season": "Seizoen bewerken",
 	"Header image": "Topafbeelding",
 	"Footer image": "Voetafbeelding",
-	"Generate a new access token": "Toegangstoken opnieuw genereren"
+	"Generate a new access token": "Toegangstoken opnieuw genereren",
+	"No races have been found": "Er zijn geen races gevonden",
+	"Add race": "Race toevoegen"
 }

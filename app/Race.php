@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Race extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'season_id', 'start_time', 'name', 'circuit_id', 'location_id',
+    ];
+
 	/**
      * The attributes that should be mutated to dates.
      *
@@ -70,5 +79,18 @@ class Race extends Model
 	public function getTimeAttribute()
 	{
 		return $this->start_time->formatLocalized('%R');
+	}
+	
+	/**
+	 * Scope to season.
+	 * 
+	 * @param	\Illuminate\Database\Eloquent\Builder	$query
+	 * @param	\App\Season								$season
+	 * 
+	 * @return	\Illuminate\Database\Eloquent\Builder
+	 */
+	public function scopeBySeason( Builder $query, Season $season )
+	{
+		return $query->where( 'season_id', $season->id );
 	}
 }
