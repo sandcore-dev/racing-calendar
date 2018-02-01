@@ -13,7 +13,7 @@ class Season extends Model
      * @var array
      */
     protected $fillable = [
-        'year', 'access_token', 'header_url', 'footer_url',
+        'year', 'access_token', 'header_image', 'footer_image',
     ];
 
 	/**

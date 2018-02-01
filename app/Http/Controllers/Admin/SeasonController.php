@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Season;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 
 class SeasonController extends Controller
@@ -37,17 +39,18 @@ class SeasonController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-			'year'		=> [ 'required', 'integer', 'between:1970,9999', 'unique:seasons,year' ],
-			'header'	=> [ 'nullable', 'image' ],
-			'footer'	=> [ 'nullable', 'image' ],
+			'year'			=> [ 'required', 'integer', 'between:1970,9999', 'unique:seasons,year' ],
+			'header_image'	=> [ 'nullable', 'image' ],
+			'footer_image'	=> [ 'nullable', 'image' ],
         ]);
         
         $data = $request->only('year');
         
         $data['access_token'] = str_random(10);
         
-		foreach( [ 'header', 'footer' ] as $image )
-			$data[$image . '_url'] = $request->file($image)->store('images');
+		foreach( [ 'header_image', 'footer_image' ] as $field )
+			if( $request->file( $field ) )
+				$data[$field] = $request->file( $field )->store('public/images');
         
         $season = Season::create($data);
         
@@ -73,7 +76,7 @@ class SeasonController extends Controller
      */
     public function edit(Season $season)
     {
-        //
+        return view('admin.season.edit')->with( 'season', $season );
     }
 
     /**
@@ -85,7 +88,30 @@ class SeasonController extends Controller
      */
     public function update(Request $request, Season $season)
     {
-        //
+        $request->validate([
+			'year'				=> [ 'required', 'integer', 'between:1970,9999', 'unique:seasons,year,' . $season->id ],
+			'header_image'		=> [ 'nullable', 'image' ],
+			'footer_image'		=> [ 'nullable', 'image' ],
+			'regenerate_token'	=> [ 'required', 'boolean' ],
+        ]);
+        
+        $data = $request->only('year');
+        
+        if( $request->input('regenerate_token') )
+			$data['access_token'] = str_random(10);
+        
+		foreach( [ 'header_image', 'footer_image' ] as $field )
+			if( $request->file( $field ) )
+			{
+				if( $data[$field] = $request->file( $field )->store('public/images') )
+					Storage::delete( $season->{$field} );
+			}
+			elseif( $request->input( 'remove_' . $field ) )
+				Storage::delete( $season->{$field} );
+        
+        $season->update( $data );
+        
+        return redirect()->route('admin.season.index')->with( 'success', __('The season :season has been edited.', [ 'season' => $season->name ]) );
     }
 
     /**

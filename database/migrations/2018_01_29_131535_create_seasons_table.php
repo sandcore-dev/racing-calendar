@@ -17,8 +17,8 @@ class CreateSeasonsTable extends Migration
             $table->increments('id');
             $table->year('year')->unique();
             $table->string('access_token')->nullable()->unique();
-            $table->string('header_url')->nullable();
-            $table->string('footer_url')->nullable();
+            $table->string('header_image')->nullable();
+            $table->string('footer_image')->nullable();
             $table->timestamps();
         });
     }
