@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Circuit extends Model
 {
@@ -22,6 +23,20 @@ class Circuit extends Model
 	 */
 	protected $_with = [ 'country' ];
 	
+	/**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('sortByName', function (Builder $builder) {
+            $builder->orderBy('name', 'asc');
+        });
+    }
+
 	/**
 	 * Get the races held at this circuit.
 	 */

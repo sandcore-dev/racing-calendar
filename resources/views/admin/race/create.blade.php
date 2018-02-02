@@ -25,8 +25,9 @@
 			@component('input.datetime')
 				@slot('field', 'start_time')
 				@slot('label', __('Race time'))
+				@slot('value', $season->year . '-')
 				
-				required
+				required autofocus
 			@endcomponent
 			
 			@component('input.text')

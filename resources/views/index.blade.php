@@ -44,7 +44,7 @@
 								{{ $race->time }}
 							</td>
 							<td>
-								@lang($race->circuit->country->name)
+								{{ $race->circuit->country->localName }}
 							</td>
 							@if( $showLocations )
 							<td>

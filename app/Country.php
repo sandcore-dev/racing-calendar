@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Monarobase\CountryList\CountryListFacade as Countries;
 
 class Country extends Model
 {
@@ -36,5 +37,13 @@ class Country extends Model
 	public function circuits()
 	{
 		return $this->hasMany(Circuit::class);
+	}
+	
+	/**
+	 * Get the country name according to the default locale.
+	 */
+	public function getLocalNameAttribute()
+	{
+		return Countries::getOne( $this->code, config('app.locale') );
 	}
 }

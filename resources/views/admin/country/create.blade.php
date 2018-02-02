@@ -11,17 +11,9 @@
 			{{ csrf_field() }}
 			
 			<h1 class="text-center">@lang('Add country')</h1>
-		
-			@component('input.text')
-				@slot('field', 'name')
-				@slot('label', __('Country'))
-				
-				required autofocus
-			@endcomponent
-		
-			@component('input.text')
+			
+			@component('input.countries')
 				@slot('field', 'code')
-				@slot('label', __('Country code'))
 				
 				required
 			@endcomponent

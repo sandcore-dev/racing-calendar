@@ -37,11 +37,13 @@ class CountryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-			'name'		=> [ 'required', 'min:2', 'unique:countries' ],
 			'code'		=> [ 'required', 'size:2', 'unique:countries' ],
         ]);
         
-        $country = Country::create( $request->only( 'name', 'code' ) );
+        $country = Country::create([
+			'code'	=> $request->input('code'),
+			'name'	=> Countries::getOne( $request->input('code'), config('app.locale') ),
+        ]);
         
         return redirect()->route('admin.country.index')->with( 'success', __('The country :name has been added.', [ 'name' => $country->name ]) );
     }

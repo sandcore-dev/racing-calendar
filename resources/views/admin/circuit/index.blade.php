@@ -54,7 +54,7 @@
 				</tr>
 			@empty
 				<tr>
-					<td colspan="2" class="text-center">
+					<td colspan="5" class="text-center">
 						@lang('No circuits have been found')
 					</td>
 				</tr>

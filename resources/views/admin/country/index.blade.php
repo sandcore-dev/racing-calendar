@@ -46,7 +46,7 @@
 				</tr>
 			@empty
 				<tr>
-					<td colspan="2" class="text-center">
+					<td colspan="3" class="text-center">
 						@lang('No countries have been found')
 					</td>
 				</tr>
