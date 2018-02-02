@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Circuit extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'city', 'area', 'country_id',
+    ];
+
 	/**
 	 * Eager loading.
 	 * 

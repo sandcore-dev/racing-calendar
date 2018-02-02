@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Circuit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
+use App\Circuit;
+use App\Country;
 
 class CircuitController extends Controller
 {
@@ -15,7 +17,7 @@ class CircuitController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.circuit.index')->with( 'circuits', Circuit::paginate() );
     }
 
     /**
@@ -25,7 +27,7 @@ class CircuitController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.circuit.create')->with( 'countries', Country::all() );
     }
 
     /**
@@ -36,7 +38,16 @@ class CircuitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+			'name'			=> [ 'required', 'min:2', 'unique:circuits' ],
+			'city'			=> [ 'required', 'min:2' ],
+			'area'			=> [ 'nullable', 'min:2' ],
+			'country_id'	=> [ 'required', 'integer', 'exists:countries,id' ],
+        ]);
+        
+        $circuit = Circuit::create( $request->only( 'name', 'city', 'area', 'country_id' ) );
+        
+        return redirect()->route('admin.circuit.index')->with( 'success', __('The circuit :name has been added.', [ 'name' => $circuit->name ]) );
     }
 
     /**
@@ -58,7 +69,7 @@ class CircuitController extends Controller
      */
     public function edit(Circuit $circuit)
     {
-        //
+        return view('admin.circuit.edit')->with( 'circuit', $circuit );
     }
 
     /**
@@ -70,7 +81,13 @@ class CircuitController extends Controller
      */
     public function update(Request $request, Circuit $circuit)
     {
-        //
+        $request->validate([
+			'name'		=> [ 'required', 'min:2', 'unique:circuits,name,' . $circuit->id ],
+        ]);
+        
+        $circuit->update( $request->only( 'name', 'code' ) );
+        
+        return redirect()->route('admin.circuit.index')->with( 'success', __('The circuit :name has been updated.', [ 'name' => $circuit->name ]) );
     }
 
     /**

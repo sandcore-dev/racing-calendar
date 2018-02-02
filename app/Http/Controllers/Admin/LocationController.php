@@ -15,7 +15,7 @@ class LocationController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.location.index')->with( 'locations', Location::paginate() );
     }
 
     /**
@@ -25,7 +25,7 @@ class LocationController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.location.create');
     }
 
     /**
@@ -36,7 +36,13 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+			'name'		=> [ 'required', 'min:2', 'unique:locations' ],
+        ]);
+        
+        $location = Location::create( $request->only( 'name' ) );
+        
+        return redirect()->route('admin.location.index')->with( 'success', __('The location :name has been added.', [ 'name' => $location->name ]) );
     }
 
     /**
@@ -58,7 +64,7 @@ class LocationController extends Controller
      */
     public function edit(Location $location)
     {
-        //
+        return view('admin.location.edit')->with( 'location', $location );
     }
 
     /**
@@ -70,7 +76,13 @@ class LocationController extends Controller
      */
     public function update(Request $request, Location $location)
     {
-        //
+        $request->validate([
+			'name'		=> [ 'required', 'min:2', 'unique:locations,name,' . $location->id ],
+        ]);
+        
+        $location->update( $request->only( 'name', 'code' ) );
+        
+        return redirect()->route('admin.location.index')->with( 'success', __('The location :name has been updated.', [ 'name' => $location->name ]) );
     }
 
     /**

@@ -20,5 +20,9 @@
 	"Country code": "Landcode",
 	"Edit country": "Land bewerken",
 	"The country :name has been added.": "Het land :name is toegevoegd.",
-	"The country :name has been updated.": "Het land :name is bijgewerkt."
+	"The country :name has been updated.": "Het land :name is bijgewerkt.",
+	"City": "Stad",
+	"Area": "Regio",
+	"Add circuit": "Circuit toevoegen",
+	"Edit circuit": "Circuit bewerken"
 }
