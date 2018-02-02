@@ -15,5 +15,10 @@
 	"Footer image": "Voetafbeelding",
 	"Generate a new access token": "Toegangstoken opnieuw genereren",
 	"No races have been found": "Er zijn geen races gevonden",
-	"Add race": "Race toevoegen"
+	"Add race": "Race toevoegen",
+	"Add country": "Land toevoegen",
+	"Country code": "Landcode",
+	"Edit country": "Land bewerken",
+	"The country :name has been added.": "Het land :name is toegevoegd.",
+	"The country :name has been updated.": "Het land :name is bijgewerkt."
 }

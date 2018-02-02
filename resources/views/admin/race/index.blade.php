@@ -7,9 +7,9 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		@if( isset($success) && $success )
+		@if( session('success') )
 			<div class="alert alert-success">
-				{{ $success }}
+				{{ session('success') }}
 			</div>
 		@endif
 		

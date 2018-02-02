@@ -12,7 +12,7 @@ class UserDataSeeder extends Seeder
     public function run()
     {
         factory(App\User::class)->create([
-			'email'	=> 'webmaster',
+			'email'	=> 'webmaster@localhost',
         ]);
     }
 }

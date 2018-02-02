@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Admin') . ' - ' . __('Season'))
+@section('title', __('Admin') . ' - ' . __('Country'))
 
 @section('nav-title', __('Admin'))
 
@@ -13,29 +13,33 @@
 			</div>
 		@endif
 		
-		{{ $seasons->links() }}
+		{{ $countries->links() }}
 	
 		<table class="table table-striped table-hover">
 		<thead>
 			<tr>
-				<th>@lang('Jaar')</th>
+				<th>@lang('Country')</th>
+				<th>@lang('Code')</th>
 				<th class="col-sm-2 text-center">
-					<a href="{{ route('admin.season.create') }}" title="@lang('Add season')">
+					<a href="{{ route('admin.country.create') }}" title="@lang('Add country')">
 						<span class="glyphicon glyphicon-plus"></span>
 					</a>
 				</th>
 			</tr>
 		</thead>
 		<tbody>
-			@forelse( $seasons as $season )
+			@forelse( $countries as $country )
 				<tr>
 					<td>
-						<a href="{{ route('admin.season.edit', [ 'season' => $season->id ]) }}" title="@lang('Edit season')">
-							{{ $season->year }}
+						<a href="{{ route('admin.country.edit', [ 'country' => $country->id ]) }}" title="@lang('Edit country')">
+							{{ $country->name }}
 						</a>
 					</td>
+					<td>
+							{{ $country->code }}
+					</td>
 					<td class="text-center">
-						<a href="{{ route('admin.season.edit', [ 'season' => $season->id ]) }}" title="@lang('Edit season')">
+						<a href="{{ route('admin.country.edit', [ 'country' => $country->id ]) }}" title="@lang('Edit country')">
 							<span class="glyphicon glyphicon-edit"></span>
 						</a>
 					</td>
@@ -43,14 +47,14 @@
 			@empty
 				<tr>
 					<td colspan="2" class="text-center">
-						@lang('No seasons have been found')
+						@lang('No countries have been found')
 					</td>
 				</tr>
 			@endforelse
 		</tbody>
 		</table>
 		
-		{{ $seasons->links() }}
+		{{ $countries->links() }}
 	</div>
 </div>
 @endsection
