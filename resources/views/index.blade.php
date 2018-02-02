@@ -38,7 +38,12 @@
 					@foreach( $season->races as $race )
 						<tr>
 							<td>
-								{{ $race->date }}
+								<span class="hidden-xs">
+									{{ $race->date }}
+								</span>
+								<span class="visible-xs-inline">
+									{{ $race->dateShort }}
+								</span>
 							</td>
 							<td>
 								{{ $race->time }}

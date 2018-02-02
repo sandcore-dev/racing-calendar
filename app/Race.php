@@ -72,6 +72,16 @@ class Race extends Model
 	}
 	
 	/**
+	 * Get localized date.
+	 * 
+	 * @return	string
+	 */
+	public function getDateShortAttribute()
+	{
+		return $this->start_time->formatLocalized('%d %b');
+	}
+	
+	/**
 	 * Get localized time.
 	 * 
 	 * @return	string
