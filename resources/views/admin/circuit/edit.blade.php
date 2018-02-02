@@ -21,6 +21,28 @@
 				required autofocus
 			@endcomponent
 		
+			@component('input.text')
+				@slot('field', 'city')
+				@slot('label', __('City'))
+				@slot('value', $circuit->city)
+				
+				required
+			@endcomponent
+		
+			@component('input.text')
+				@slot('field', 'area')
+				@slot('label', __('Area'))
+				@slot('value', $circuit->area)
+			@endcomponent
+		
+			@component('input.select')
+				@slot('field', 'country_id')
+				@slot('label', __('Country'))
+				@slot('value', $circuit->country)
+				
+				@slot('options', $countries);
+			@endcomponent
+		
 			@component('input.submit')
 				@slot('label', __('Edit circuit'))
 				@slot('cancel', route('admin.circuit.index'))

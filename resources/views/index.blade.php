@@ -18,17 +18,17 @@
 				<table class="table table-striped">
 				<thead>
 					<tr>
-						<th class="col-sm-3">
+						<th class="col-xs-3">
 							@lang('Date')
 						</th>
-						<th class="col-sm-3">
+						<th class="col-xs-3">
 							@lang('Race time')
 						</th>
 						<th>
-							@lang('Country')
+							@lang('Race')
 						</th>
 						@if( $showLocations )
-						<th class="col-sm-3">
+						<th class="col-xs-3">
 							@lang('Location')
 						</th>
 						@endif
@@ -49,7 +49,10 @@
 								{{ $race->time }}
 							</td>
 							<td>
-								{{ $race->circuit->country->localName }}
+								<span class="{{ $race->circuit->country->flagClass }}" title="{{ $race->circuit->country->localName }}"></span>
+								<span class="hidden-xs">
+									{{ $race->circuit->city }}
+								</span>
 							</td>
 							@if( $showLocations )
 							<td>

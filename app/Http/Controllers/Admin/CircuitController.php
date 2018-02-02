@@ -69,7 +69,10 @@ class CircuitController extends Controller
      */
     public function edit(Circuit $circuit)
     {
-        return view('admin.circuit.edit')->with( 'circuit', $circuit );
+        return view('admin.circuit.edit')->with([
+			'circuit' 	=> $circuit,
+			'countries'	=> Country::all(),
+		]);
     }
 
     /**
@@ -82,12 +85,15 @@ class CircuitController extends Controller
     public function update(Request $request, Circuit $circuit)
     {
         $request->validate([
-			'name'		=> [ 'required', 'min:2', 'unique:circuits,name,' . $circuit->id ],
+			'name'			=> [ 'required', 'min:2', 'unique:circuits,name,' . $circuit->id ],
+			'city'			=> [ 'required', 'min:2' ],
+			'area'			=> [ 'nullable', 'min:2' ],
+			'country_id'	=> [ 'required', 'integer', 'exists:countries,id' ],
         ]);
         
-        $circuit->update( $request->only( 'name', 'code' ) );
+        $circuit->update( $request->only( 'name', 'city', 'area', 'country_id' ) );
         
-        return redirect()->route('admin.circuit.index')->with( 'success', __('The circuit :name has been updated.', [ 'name' => $circuit->name ]) );
+        return redirect()->route('admin.circuit.index')->with( 'success', __('The circuit :name has been changed.', [ 'name' => $circuit->name ]) );
     }
 
     /**

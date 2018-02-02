@@ -46,4 +46,14 @@ class Country extends Model
 	{
 		return Countries::getOne( $this->code, config('app.locale') );
 	}
+
+	/**
+	 * Get the flag class of this country.
+	 *
+	 * @return	string
+	 */
+	public function getFlagClassAttribute()
+	{
+		return 'flag-icon flag-icon-' . strtolower( $this->code );
+	}
 }
