@@ -93,6 +93,7 @@ class SeasonController extends Controller
 			'header_image'		=> [ 'nullable', 'image' ],
 			'footer_image'		=> [ 'nullable', 'image' ],
 			'regenerate_token'	=> [ 'required', 'boolean' ],
+			'locations.*'		=> [ 'integer', 'exists:locations,id' ],
         ]);
         
         $data = $request->only('year');
@@ -110,6 +111,8 @@ class SeasonController extends Controller
 				Storage::delete( $season->{$field} );
         
         $season->update( $data );
+        
+        $season->locations()->sync( $request->input('locations') );
         
         return redirect()->route('admin.season.index')->with( 'success', __('The season :season has been edited.', [ 'season' => $season->name ]) );
     }

@@ -16,6 +16,21 @@ window.Vue = require('vue');
  */
 
 Vue.component(
+	'location-sync',
+	require('./components/LocationSync.vue')
+);
+
+Vue.component(
+	'location-checkboxes',
+	require('./components/LocationCheckboxes.vue')
+);
+
+Vue.component(
+	'location-search',
+	require('./components/LocationSearch.vue')
+);
+
+Vue.component(
         'file-upload',
         require('./components/FileUpload.vue')
 );

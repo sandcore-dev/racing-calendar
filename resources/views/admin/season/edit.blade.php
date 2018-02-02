@@ -38,6 +38,12 @@
 				@slot('field', 'regenerate_token')
 				@slot('label', __('Generate a new access token'))
 			@endcomponent
+			
+			<div class="form-group">
+				<label class="col-sm-4 control-label">@lang('Locations')</label>
+
+				<location-sync class="col-sm-6" api-token="{{ auth()->user()->api_token }}" season-id="{{ $season->id }}" search-placeholder="@lang('Search for a location')"></location-sync>
+			</div>
 		
 			@component('input.submit')
 				@slot('label', __('Edit season'))

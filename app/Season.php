@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
 
 class Season extends Model
 {
@@ -56,5 +57,36 @@ class Season extends Model
     public function scopeByToken($query, $token)
     {
         return $query->whereNotNull( 'access_token' )->where( 'access_token', $token );
+    }
+    
+    /**
+     * Get the URL of the header image.
+     * 
+     * @return string
+     */
+    public function getHeaderUrlAttribute()
+    {
+		return $this->getImageUrl('header');
+    }
+    
+    /**
+     * Get the URL of the footer image.
+     * 
+     * @return string
+     */
+    public function getFooterUrlAttribute()
+    {
+		return $this->getImageUrl('footer');
+    }
+    
+    /**
+     * Get the image URL of the section.
+     * 
+     * @param	string	$section
+     * @return	string
+     */
+    protected function getImageUrl( $section )
+    {
+		return $this->{$section . '_image'} ? Storage::url( $this->{$section . '_image'} ) : '';
     }
 }

@@ -5,6 +5,7 @@
 	"Race time": "Tijdstip race",
 	"Country": "Land",
 	"Location": "Locatie",
+	"Locations": "Locaties",
 	"Circuit": "Circuit",
 	"Cancel": "Annuleren",
 	"Admin": "Beheer",
@@ -24,5 +25,7 @@
 	"City": "Stad",
 	"Area": "Regio",
 	"Add circuit": "Circuit toevoegen",
-	"Edit circuit": "Circuit bewerken"
+	"Edit circuit": "Circuit bewerken",
+	"Remove image": "Afbeelding verwijderen",
+	"Search for a location": "Zoek naar een locatie"
 }

@@ -19,7 +19,7 @@
 			<div class="checkbox">
 				<label>
 					<input type="checkbox" name="remove_{{ $field }}" value="1">
-					Remove image
+					@lang('Remove image')
 				</label>
 			</div>
 		@endif

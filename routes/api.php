@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([ 'middleware' => 'auth:api', 'namespace' => 'Api' ], function () {
+	Route::group([ 'prefix' => 'locations' ], function () {
+		Route::post('season/{season}', 'LocationsController@getBySeason');
+		Route::post('search', 'LocationsController@search');
+	});
 });
