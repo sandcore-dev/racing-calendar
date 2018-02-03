@@ -36,7 +36,7 @@
 				</thead>
 				<tbody>
 					@foreach( $season->races as $race )
-						<tr>
+						<tr class="{{ $race->thisWeek ? 'warning' : '' }}">
 							<td>
 								<span class="hidden-xs">
 									{{ $race->date }}

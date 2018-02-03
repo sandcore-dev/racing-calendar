@@ -92,6 +92,16 @@ class Race extends Model
 	}
 	
 	/**
+	 * Is the start time within 7 days?
+	 * 
+	 * @return	boolean
+	 */
+	public function getThisWeekAttribute()
+	{
+		return $this->start_time->diffInDays() <= 7;
+	}
+	
+	/**
 	 * Scope to season.
 	 * 
 	 * @param	\Illuminate\Database\Eloquent\Builder	$query
