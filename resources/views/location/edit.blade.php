@@ -15,28 +15,32 @@
 				@slot('field', 'year')
 				@slot('label', __('Year'))
 				@slot('value', $race->season->year)
-				@slot('attributes', 'disabled')
+				
+				disabled
 			@endcomponent
 			
 			@component('input.text')
 				@slot('field', 'date')
 				@slot('label', __('Date'))
 				@slot('value', $race->date)
-				@slot('attributes', 'disabled')
+				
+				disabled
 			@endcomponent
 			
 			@component('input.text')
 				@slot('field', 'time')
 				@slot('label', __('Race time'))
 				@slot('value', $race->time)
-				@slot('attributes', 'disabled')
+				
+				disabled
 			@endcomponent
 			
 			@component('input.text')
 				@slot('field', 'country')
 				@slot('label', __('Country'))
 				@slot('value', $race->circuit->country->name)
-				@slot('attributes', 'disabled')
+				
+				disabled
 			@endcomponent
 			
 			@component('input.locations')
@@ -48,7 +52,13 @@
 			
 			<div class="form-group">
 				<div class="col-sm-6 col-sm-offset-4">
-					<a class="btn btn-danger" href="{{ route('calendar', [ 'token' => $race->season->access_token ]) }}">{{ __('Cancel') }}</a>
+					<a class="btn btn-primary" href="{{ route('calendar', [ 'token' => $race->season->access_token ]) }}">{{ __('Cancel') }}</a>
+					
+					@if( $race->location->id )
+					<button class="btn btn-danger pull-right" type="submit" name="erase_location" value="1">
+						@lang('Erase current location')
+					</button>
+					@endif
 				</div>
 			</div>
 		</form>

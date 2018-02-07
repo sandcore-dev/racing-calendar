@@ -78,10 +78,14 @@ class CalendarController extends Controller
 			abort(404);
 		
 		$request->validate([
-			'location' => [ 'required', 'exists:locations,id' ],
+			'location'			=> [ 'integer', 'exists:locations,id' ],
+			'erase_location'	=> [ 'boolean' ],
 		]);
 		
-		$race->location()->associate( $request->input('location') );
+		if( $location = $request->input('location') )
+			$race->location()->associate( $location );
+		elseif( $request->input('erase_location') )
+			$race->location()->dissociate();
 		
 		$race->save();
 		

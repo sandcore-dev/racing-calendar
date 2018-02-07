@@ -27,5 +27,7 @@
 	"Add circuit": "Circuit toevoegen",
 	"Edit circuit": "Circuit bewerken",
 	"Remove image": "Afbeelding verwijderen",
-	"Search for a location": "Zoek naar een locatie"
+	"Search for a location": "Zoek naar een locatie",
+	"Erase current location": "Wis huidige locatie",
+	"The selected location is invalid.": "De geselecteerde locatie is ongeldig."
 }
