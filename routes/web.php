@@ -30,6 +30,8 @@ Route::group([ 'prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'm
 	Route::resource('location', 'LocationController');
 });
 
-Route::get('/{token?}', 'CalendarController@index')->name('calendar');
-Route::get('/{token}/{race}/location', 'CalendarController@editLocation')->name('calendar.location.edit');
-Route::put('/{token}/{race}/location', 'CalendarController@updateLocation')->name('calendar.location.update');
+Route::get('/', 'CalendarController@index')->name('index');
+Route::get('/{access_token}', 'CalendarController@calendar')->name('calendar');
+
+Route::get('/{access_token}/{race}/location', 'CalendarController@editLocation')->name('calendar.location.edit');
+Route::put('/{access_token}/{race}/location', 'CalendarController@updateLocation')->name('calendar.location.update');

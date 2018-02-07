@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Season;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+
 use App\Http\Controllers\Controller;
+
+use App\AccessToken;
+use App\Season;
 
 class SeasonController extends Controller
 {
@@ -46,13 +49,13 @@ class SeasonController extends Controller
         
         $data = $request->only('year');
         
-        $data['access_token'] = str_random(10);
-        
 		foreach( [ 'header_image', 'footer_image' ] as $field )
 			if( $request->file( $field ) )
 				$data[$field] = $request->file( $field )->store('public/images');
         
         $season = Season::create($data);
+        
+        AccessTokenController::generate( $season );
         
         return redirect()->route('admin.season.index')->with( 'success', __('The season :season has been added.', [ 'season' => $season->name ]) );
     }
@@ -98,9 +101,6 @@ class SeasonController extends Controller
         
         $data = $request->only('year');
         
-        if( $request->input('regenerate_token') )
-			$data['access_token'] = str_random(10);
-        
 		foreach( [ 'header_image', 'footer_image' ] as $field )
 			if( $request->file( $field ) )
 			{
@@ -109,11 +109,18 @@ class SeasonController extends Controller
 			}
 			elseif( $request->input( 'remove_' . $field ) )
 				Storage::delete( $season->{$field} );
-        
-        $season->update( $data );
-        
+			
         $season->locations()->sync( $request->input('locations') );
         
+		if( $request->input('regenerate_token') )
+		{
+			$season->access_token->delete();
+			
+			AccessTokenController::generate( $season );
+		}
+		
+		$season->update( $data );
+
         return redirect()->route('admin.season.index')->with( 'success', __('The season :season has been edited.', [ 'season' => $season->name ]) );
     }
 

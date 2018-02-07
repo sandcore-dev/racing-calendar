@@ -14,7 +14,7 @@ class Season extends Model
      * @var array
      */
     protected $fillable = [
-        'year', 'access_token', 'header_image', 'footer_image',
+        'year', 'access_token_id', 'header_image', 'footer_image',
     ];
 
 	/**
@@ -48,15 +48,11 @@ class Season extends Model
 	}
 	
 	/**
-     * Scope a query to find the given token.
-     *
-     * @param	\Illuminate\Database\Eloquent\Builder	$query
-     * @param	string									$token
-     * @return	\Illuminate\Database\Eloquent\Builder
+     * Get the access token associated with this season.
      */
-    public function scopeByToken($query, $token)
+    public function access_token()
     {
-        return $query->whereNotNull( 'access_token' )->where( 'access_token', $token );
+        return $this->hasOne(AccessToken::class)->withDefault();
     }
     
     /**

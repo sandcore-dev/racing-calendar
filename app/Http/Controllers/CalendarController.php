@@ -5,65 +5,57 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\AccessToken;
 use App\Season;
 use App\Race;
 
 class CalendarController extends Controller
 {
 	/**
-	 * Show calendar.
+	 * If logged in: redirect to most recent calendar.
+	 * If not logged in: show most recent calendar without locations.
 	 * 
-	 * @param	string|null					$token
 	 * @return	\Illuminate\Http\Response
 	 */
-    public function index( $token = null )
+    public function index()
     {
-		$season = $this->getSeasonByToken( $token );
-		
-		if( !$season )
+		if( !Season::count() )
 			return view('empty');
-		
-		if( Auth::check() && !$token )
-			return redirect()->route('calendar', [ 'token' => $season->access_token ]);
-		
+
+		if( Auth::check() && $season = Season::has('access_token')->first() )
+			return redirect()->route('calendar', [ 'access_token' => $season->access_token->name ]);
+			
 		return view('index')->with([
-			'season'		=> $season,
-			'showLocations'	=> $season->access_token == $token,
+			'season'		=> Season::first(),
+			'showLocations'	=> false,
 		]);
     }
     
-    /**
-     * Get season by token.
-     * 
-     * @param	string			$token
-     * @return	App\Season|null
-     */
-    protected function getSeasonByToken( $token )
+	/**
+	 * Show calendar.
+	 * 
+	 * @param	\App\AccessToken			$access_token
+	 * @return	\Illuminate\Http\Response
+	 */
+    public function calendar( AccessToken $access_token )
     {
-		if( !$token )
-			return Season::with('races', 'races.circuit.country', 'races.location')->first();
-		
-		$seasons = Season::with('races', 'races.circuit.country', 'races.location')->byToken( $token )->get();
-		
-		if( $seasons->isEmpty() )
-			abort(404);
-		
-		return $seasons->first();
+		return view('index')->with([
+			'season'		=> $access_token->season,
+			'showLocations'	=> true,
+		]);
     }
     
     /**
      * Show location edit form.
      * 
-     * @param	string		$token
-     * @param	\App\Race	$race
+     * @param	\App\AccessToken	$access_token
+     * @param	\App\Race			$race
      * 
      * @return	\Illuminate\Http\Response
      */
-    public function editLocation( string $token, Race $race )
+    public function editLocation( AccessToken $access_token, Race $race )
     {
-		$season = $this->getSeasonByToken( $token );
-		
-		if( !$race->season->is( $season ) )
+		if( !$race->season->is( $access_token->season ) )
 			abort(404);
 		
 		return view('location.edit')->with([
@@ -74,17 +66,15 @@ class CalendarController extends Controller
     /**
      * Update location.
      * 
-     * @param	string						$token
+     * @param	\App\AccessToken			$access_token
      * @param	\App\Race					$race
      * @param	\Illuminate\Http\Request	$request
      * 
      * @return	\Illuminate\Http\Response
      */
-    public function updateLocation( string $token, Race $race, Request $request )
+    public function updateLocation( AccessToken $access_token, Race $race, Request $request )
     {
-		$season = $this->getSeasonByToken( $token );
-		
-		if( !$race->season->is( $season ) )
+		if( !$race->season->is( $access_token->season ) )
 			abort(404);
 		
 		$request->validate([
@@ -95,6 +85,6 @@ class CalendarController extends Controller
 		
 		$race->save();
 		
-		return redirect()->route('calendar', [ 'token' => $race->season->access_token ]);
+		return redirect()->route('calendar', [ 'access_token' => $race->season->access_token ]);
     }
 }
