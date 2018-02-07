@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $season->year)
+@section('title', config('app.name') . ' - ' . $season->year)
 @section('nav-title', $season->year)
 
 @section('content')
@@ -50,7 +50,7 @@
 							</td>
 							<td>
 								<span class="{{ $race->circuit->country->flagClass }}" title="{{ $race->circuit->country->localName }}"></span>
-								<span class="hidden-xs">
+								<span class="{{ $showLocations ? 'hidden-xs' : '' }}">
 									{{ $race->circuit->city }}
 								</span>
 							</td>
