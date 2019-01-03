@@ -22,7 +22,7 @@ class Race extends Model
      * @var array
      */
     protected $dates = ['start_time'];
-    
+
     /**
      * The "booting" method of the model.
      *
@@ -44,7 +44,7 @@ class Race extends Model
 	{
 		return $this->belongsTo(Season::class);
 	}
-	
+
 	/**
 	 * Get the circuit of this race.
 	 */
@@ -52,7 +52,7 @@ class Race extends Model
 	{
 		return $this->belongsTo(Circuit::class);
 	}
-	
+
 	/**
 	 * Get the location of this race.
 	 */
@@ -60,53 +60,54 @@ class Race extends Model
 	{
 		return $this->belongsTo(Location::class)->withDefault();
 	}
-	
+
 	/**
 	 * Get localized date.
-	 * 
+	 *
 	 * @return	string
 	 */
 	public function getDateAttribute()
 	{
 		return $this->start_time->formatLocalized('%d %B');
 	}
-	
+
 	/**
 	 * Get localized date.
-	 * 
+	 *
 	 * @return	string
 	 */
 	public function getDateShortAttribute()
 	{
 		return $this->start_time->formatLocalized('%d %b');
 	}
-	
+
 	/**
 	 * Get localized time.
-	 * 
+	 *
 	 * @return	string
 	 */
 	public function getTimeAttribute()
 	{
 		return $this->start_time->formatLocalized('%R');
 	}
-	
+
 	/**
 	 * Is the start time within 7 days?
-	 * 
+	 *
 	 * @return	boolean
 	 */
 	public function getThisWeekAttribute()
 	{
-		return $this->start_time->diffInDays() <= 7;
+        $diffInDays = $this->start_time->diffInDays(null, false);
+		return 0 >= $diffInDays && $diffInDays > -7;
 	}
-	
+
 	/**
 	 * Scope to season.
-	 * 
+	 *
 	 * @param	\Illuminate\Database\Eloquent\Builder	$query
 	 * @param	\App\Season								$season
-	 * 
+	 *
 	 * @return	\Illuminate\Database\Eloquent\Builder
 	 */
 	public function scopeBySeason( Builder $query, Season $season )
