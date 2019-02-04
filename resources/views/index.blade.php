@@ -12,7 +12,7 @@
 			</div>
 		</div>
 		@endif
-		
+
 		<div class="row">
 			<div class="col-sm-12">
 				<table class="table table-striped">
@@ -35,8 +35,8 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach( $season->races as $race )
-						<tr class="{{ $race->thisWeek ? 'warning' : '' }}">
+					@foreach( $season->races as $index => $race )
+						<tr class="{{ $race->thisWeek ? 'warning' : '' }}" data-toggle="collapse" data-target=".details{{ $index }}">
 							<td>
 								<span class="hidden-xs">
 									{{ $race->date }}
@@ -70,12 +70,31 @@
 							</td>
 							@endif
 						</tr>
+						<tr class="hidden">
+							<td colspan="4">
+								&nbsp;
+							</td>
+						</tr>
+						<tr class="collapse details{{ $index }}">
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>
+								@if($race->remarks)
+								<div class="alert alert-warning">
+									<small>
+										{{ $race->remarks }}
+									</small>
+								</div>
+								@endif
+							</td>
+						</tr>
 					@endforeach
 				</tbody>
 				</table>
 			</div>
 		</div>
-		
+
 		@if( $season->footer_url )
 		<div class="row">
 			<div class="col-sm-12">

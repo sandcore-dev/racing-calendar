@@ -13,7 +13,7 @@ class Race extends Model
      * @var array
      */
     protected $fillable = [
-        'season_id', 'start_time', 'name', 'circuit_id', 'location_id',
+        'season_id', 'start_time', 'name', 'circuit_id', 'location_id', 'remarks',
     ];
 
 	/**
@@ -101,6 +101,16 @@ class Race extends Model
         $diffInDays = $this->start_time->diffInDays(null, false);
 		return 0 >= $diffInDays && $diffInDays > -7;
 	}
+
+    /**
+     * Sanitize and set remarks.
+     *
+     * @param string $value The value to sanitize.
+     */
+    public function setRemarksAttribute($value)
+    {
+        $this->attributes['remarks'] = strip_tags($value);
+    }
 
 	/**
 	 * Scope to season.
