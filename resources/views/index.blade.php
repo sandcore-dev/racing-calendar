@@ -72,8 +72,13 @@
 						</tr>
 						@if(!$race->sessions->isEmpty())
 							<tr class="collapse details{{ $index }}">
-								<td colspan="4" class="text-center h4">
-									@lang(':race timetable', [ 'race' => $race->name ])
+								<td colspan="4" class="text-center">
+									<div class="h4">
+										@lang(':race timetable', [ 'race' => $race->name ])
+									</div>
+									<div class="h5">
+										{{ $race->circuit->full_name }}
+									</div>
 								</th>
 							</tr>
 							@foreach($race->sessions as $sessionIndex => $session)
