@@ -12,7 +12,7 @@
 				{{ session('success') }}
 			</div>
 		@endif
-		
+
 		<form action="{{ route('admin.race.index') }}" method="get">
 			<select name="season" onchange="return this.form.submit();">
 				@forelse( $seasons as $season )
@@ -27,9 +27,9 @@
 				</button>
 			</noscript>
 		</form>
-		
+
 		{{ $races->links() }}
-	
+
 		<table class="table table-striped table-hover">
 		<thead>
 			<tr>
@@ -66,13 +66,32 @@
 			@empty
 				<tr>
 					<td colspan="4" class="text-center">
-						@lang('No races have been found')
+						<p>
+							@lang('No races have been found')
+						</p>
+						@if($previousSeasons)
+						<p>
+							@lang('Copy races from season:')
+						</p>
+						<form action="{{ route('admin.race.copy-season') }}" method="post">
+							{{ csrf_field() }}
+							<input type="hidden" name="season" value="{{ $currentSeason->id }}"/>
+							<select name="copyFromSeason">
+								@foreach($previousSeasons as $previousSeason)
+									<option value="{{ $previousSeason->id }}">{{ $previousSeason->year }}</option>
+								@endforeach
+							</select>
+							<button type="submit" class="btn btn-primary">
+								@lang('Send')
+							</button>
+						</form>
+						@endif
 					</td>
 				</tr>
 			@endforelse
 		</tbody>
 		</table>
-		
+
 		{{ $races->links() }}
 	</div>
 </div>

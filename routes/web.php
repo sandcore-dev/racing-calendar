@@ -25,6 +25,7 @@ $this->post('password/reset', 'Auth\ResetPasswordController@reset');
 Route::group([ 'prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => 'auth' ], function () {
 	Route::resource('season', 'SeasonController');
 	Route::resource('race', 'RaceController');
+	Route::post('race/copy-season', 'RaceController@copySeason')->name('race.copy-season');
 	Route::resource('circuit', 'CircuitController');
 	Route::resource('country', 'CountryController');
 	Route::resource('location', 'LocationController');

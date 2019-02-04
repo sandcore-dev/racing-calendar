@@ -23,15 +23,48 @@ class RaceController extends Controller
 		$season = $request->input('season') ? Season::find( $request->input('season') ) : ( Season::first() ?: new Season );
 
         return view('admin.race.index')->with([
-			'currentSeason'	=> $season,
-			'seasons'		=> Season::all(),
-			'races'			=> Race::bySeason($season)->paginate(),
+            'previousSeasons' => Season::has('races')->where('year', '<', $season->year)->get(),
+			'currentSeason'	  => $season,
+			'seasons'		  => Season::all(),
+			'races'			  => Race::bySeason($season)->paginate(),
         ]);
+    }
+
+    /**
+     * Copy races from the given season.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function copySeason(Request $request) {
+        $request->validate([
+            'season'	        => [ 'required', 'integer', 'exists:seasons,id', 'different:copyFromSeason' ],
+            'copyFromSeason'    => [ 'required', 'integer', 'exists:seasons,id', 'different:season' ],
+		]);
+
+        $season = Season::find($request->input('season'));
+        $copyFromSeason = Season::find($request->input('copyFromSeason'));
+
+        $copyFromSeason->races->each(function ($race) use ($season) {
+            $start_time = clone $race->start_time;
+            $start_time->year($season->year);
+
+            Race::create([
+                'season_id'     => $season->id,
+                'start_time'    => $start_time,
+                'name'          => $race->name,
+                'circuit_id'    => $race->circuit_id,
+                'remarks'       => '',
+            ]);
+        });
+
+        return redirect()->route('admin.race.index', [ 'season' => $season->id ])->with( 'success', __('The races from :year have been copied.', [ 'year' => $copyFromSeason->year ]) );
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
