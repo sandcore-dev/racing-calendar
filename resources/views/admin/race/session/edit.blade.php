@@ -1,36 +1,27 @@
 @extends('layouts.app')
 
-@section('title', __('Admin') . ' - ' . __('template.session') . ' - ' . __('Edit template.session'))
+@section('title', __('Admin') . ' - ' . __('race.session') . ' - ' . __('Edit race.session'))
 
 @section('nav-title', __('Admin'))
 
 @section('content')
 <div class="container">
 	<div class="row">
-		<form class="form-horizontal" action="{{ route('admin.template.session.update', [ 'template' => $template->id, 'session' => $session->id ]) }}" method="post">
+		<form class="form-horizontal" action="{{ route('admin.race.session.update', [ 'race' => $race->id, 'session' => $session->id ]) }}" method="post">
 			{{ csrf_field() }}
 			{{ method_field('PUT') }}
 
 			<h1 class="text-center">@lang('Edit session')</h1>
 
-			@component('input.text')
-				@slot('type', 'number')
-				@slot('field', 'days')
-				@slot('label', __('Days before race day'))
-				@slot('value', $session->days)
-
-				required autofocus min="0" max="7"
-			@endcomponent
-
-			@component('input.time')
+			@component('input.datetime')
 				@slot('field', 'start_time')
 				@slot('label', __('Start time'))
 				@slot('value', $session->start_time)
 
-				required
+				required autofocus
 			@endcomponent
 
-			@component('input.time')
+			@component('input.datetime')
 				@slot('field', 'end_time')
 				@slot('label', __('End time'))
 				@slot('value', $session->end_time)
@@ -48,7 +39,7 @@
 
 			@component('input.submit')
 				@slot('label', __('Edit session'))
-				@slot('cancel', route('admin.template.session.index', [ 'template' => $template->id ]))
+				@slot('cancel', route('admin.race.session.index', [ 'race' => $race->id ]))
 			@endcomponent
 		</form>
 	</div>

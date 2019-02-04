@@ -53,12 +53,20 @@ class Race extends Model
 		return $this->belongsTo(Circuit::class);
 	}
 
-	/**
+    /**
 	 * Get the location of this race.
 	 */
 	public function location()
 	{
 		return $this->belongsTo(Location::class)->withDefault();
+	}
+
+    /**
+	 * Get the sessions of this race.
+	 */
+	public function sessions()
+	{
+		return $this->hasMany(RaceSession::class);
 	}
 
 	/**

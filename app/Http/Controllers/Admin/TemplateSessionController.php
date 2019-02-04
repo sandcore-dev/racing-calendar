@@ -42,12 +42,13 @@ class TemplateSessionController extends Controller
     public function store(Request $request, Template $template)
     {
         $request->validate([
+            'days'	        => [ 'required', 'integer' ],
             'start_time'	=> [ 'required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/' ],
             'end_time'		=> [ 'required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/' ],
             'name'			=> [ 'required', 'unique:template_sessions,name' ],
         ]);
 
-        $data = $request->only('start_time', 'end_time', 'name');
+        $data = $request->only('days', 'start_time', 'end_time', 'name');
         $data['template_id'] = $template->id;
 
         $session = TemplateSession::create($data);
@@ -90,12 +91,13 @@ class TemplateSessionController extends Controller
     public function update(Request $request, Template $template, TemplateSession $session)
     {
         $request->validate([
+            'days'	        => [ 'required', 'integer' ],
             'start_time'	=> [ 'required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/' ],
             'end_time'		=> [ 'required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/' ],
             'name'			=> [ 'required', 'unique:template_sessions,name,' . $session->id ],
         ]);
 
-        $session->update($request->only('start_time', 'end_time', 'name'));
+        $session->update($request->only('days', 'start_time', 'end_time', 'name'));
 
         return redirect()->route('admin.template.session.index', [ 'template' => $template->id ])->with( 'success', __('The session :name has been edited.', [ 'name' => $session->name ]) );
     }

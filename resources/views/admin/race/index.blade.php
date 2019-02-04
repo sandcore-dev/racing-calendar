@@ -61,6 +61,10 @@
 						<a href="{{ route('admin.race.edit', [ 'race' => $race->id ]) }}" title="@lang('Edit race')">
 							<span class="glyphicon glyphicon-edit"></span>
 						</a>
+						&nbsp;
+						<a href="{{ route('admin.race.session.index', [ 'race' => $race->id ]) }}" title="@lang('To race sessions')">
+							<span class="glyphicon glyphicon-th-list"></span>
+						</a>
 					</td>
 				</tr>
 			@empty

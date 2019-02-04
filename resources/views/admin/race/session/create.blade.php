@@ -1,33 +1,25 @@
 @extends('layouts.app')
 
-@section('title', __('Admin') . ' - ' . __('Template session') . ' - ' . __('Add session'))
+@section('title', __('Admin') . ' - ' . __('Race session') . ' - ' . __('Add session'))
 
 @section('nav-title', __('Admin'))
 
 @section('content')
 <div class="container">
 	<div class="row">
-		<form class="form-horizontal" action="{{ route('admin.template.session.store', [ 'template' => $template ]) }}" method="post">
+		<form class="form-horizontal" action="{{ route('admin.race.session.store', [ 'race' => $race ]) }}" method="post">
 			{{ csrf_field() }}
 
 			<h1 class="text-center">@lang('Add session')</h1>
 
-			@component('input.text')
-				@slot('type', 'number')
-				@slot('field', 'days')
-				@slot('label', __('Days before race day'))
-
-				required autofocus min="0" max="7"
-			@endcomponent
-
-			@component('input.time')
+			@component('input.datetime')
 				@slot('field', 'start_time')
 				@slot('label', __('Start time'))
 
-				required
+				required autofocus
 			@endcomponent
 
-			@component('input.time')
+			@component('input.datetime')
 				@slot('field', 'end_time')
 				@slot('label', __('End time'))
 
@@ -43,7 +35,7 @@
 
 			@component('input.submit')
 				@slot('label', __('Add session'))
-				@slot('cancel', route('admin.template.session.index', [ 'template' => $template->id ]))
+				@slot('cancel', route('admin.race.session.index', [ 'race' => $race->id ]))
 			@endcomponent
 		</form>
 	</div>

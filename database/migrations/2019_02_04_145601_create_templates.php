@@ -22,6 +22,7 @@ class CreateTemplates extends Migration
         Schema::create('template_sessions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('template_id')->unsigned();
+            $table->tinyInteger('days')->unsigned();
             $table->time('start_time');
             $table->time('end_time');
             $table->string('name');

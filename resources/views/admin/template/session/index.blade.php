@@ -20,6 +20,7 @@
 		<table class="table table-striped table-hover">
 		<thead>
 			<tr>
+				<th class="col-sm-1">@lang('Days')</th>
 				<th class="col-sm-2">@lang('Start time')</th>
 				<th class="col-sm-2">@lang('End time')</th>
 				<th>@lang('Name')</th>
@@ -33,6 +34,9 @@
 		<tbody>
 			@forelse( $sessions as $session )
 				<tr>
+					<td>
+						{{ $session->days }}
+					</td>
 					<td>
 						{{ $session->start_time }}
 					</td>

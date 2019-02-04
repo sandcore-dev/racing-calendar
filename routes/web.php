@@ -26,6 +26,8 @@ Route::group([ 'prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'm
 	Route::resource('season', 'SeasonController');
 	Route::resource('race', 'RaceController');
 	Route::post('race/copy-season', 'RaceController@copySeason')->name('race.copy-season');
+	Route::resource('race.session', 'RaceSessionController');
+	Route::post('race/session/apply-template', 'RaceSessionController@applyTemplate')->name('race.session.apply-template');
 	Route::resource('circuit', 'CircuitController');
 	Route::resource('country', 'CountryController');
 	Route::resource('location', 'LocationController');
