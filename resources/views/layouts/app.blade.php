@@ -53,6 +53,9 @@
                         <li class="{{ Route::currentRouteNamed('admin.location.*') ? 'active' : '' }}">
 							<a href="{{ route('admin.location.index') }}">@lang('Location')</a>
                         </li>
+                        <li class="{{ Route::currentRouteNamed('admin.template.*') ? 'active' : '' }}">
+							<a href="{{ route('admin.template.index') }}">@lang('Template')</a>
+                        </li>
                         @endauth
                     </ul>
 

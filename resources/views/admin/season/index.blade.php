@@ -12,13 +12,13 @@
 				{{ session('success') }}
 			</div>
 		@endif
-		
+
 		{{ $seasons->links() }}
-	
+
 		<table class="table table-striped table-hover">
 		<thead>
 			<tr>
-				<th>@lang('Jaar')</th>
+				<th>@lang('Year')</th>
 				<th class="col-sm-2 text-center">
 					<a href="{{ route('admin.season.create') }}" title="@lang('Add season')">
 						<span class="glyphicon glyphicon-plus"></span>
@@ -49,7 +49,7 @@
 			@endforelse
 		</tbody>
 		</table>
-		
+
 		{{ $seasons->links() }}
 	</div>
 </div>

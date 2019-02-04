@@ -29,6 +29,8 @@ Route::group([ 'prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'm
 	Route::resource('circuit', 'CircuitController');
 	Route::resource('country', 'CountryController');
 	Route::resource('location', 'LocationController');
+	Route::resource('template', 'TemplateController');
+	Route::resource('template.session', 'TemplateSessionController');
 });
 
 Route::get('/', 'CalendarController@index')->name('index');
