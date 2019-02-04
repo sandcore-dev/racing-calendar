@@ -70,25 +70,38 @@
 							</td>
 							@endif
 						</tr>
+						@if(!$race->sessions->isEmpty())
+							<tr class="collapse details{{ $index }}">
+								<td colspan="4" class="text-center h4">
+									@lang(':race timetable', [ 'race' => $race->name ])
+								</th>
+							</tr>
+							@foreach($race->sessions as $sessionIndex => $session)
+								<tr class="collapse details{{ $index }}">
+									<td>
+										<small>{{ $session->date }}</small>
+									</td>
+									<td>
+										<small>{{ $session->time }}</small>
+									</td>
+									<td colspan="2">
+										<small>{{ $session->name }}</small>
+									</td>
+								</tr>
+							@endforeach
+							<tr class="collapse details{{ $index }}">
+								<td colspan="4">
+									&nbsp;
+								</td>
+							</tr>
+						@endif
+						@if($race->sessions->count() && $race->sessions->count() % 2 != 0)
 						<tr class="hidden">
 							<td colspan="4">
 								&nbsp;
 							</td>
 						</tr>
-						<tr class="collapse details{{ $index }}">
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>
-								@if($race->remarks)
-								<div class="alert alert-warning">
-									<small>
-										{{ $race->remarks }}
-									</small>
-								</div>
-								@endif
-							</td>
-						</tr>
+						@endif
 					@endforeach
 				</tbody>
 				</table>

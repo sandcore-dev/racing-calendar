@@ -35,4 +35,34 @@ class RaceSession extends Model
 	{
 		return $this->belongsTo(Race::class);
 	}
+
+    /**
+	 * Get localized date.
+	 *
+	 * @return	string
+	 */
+	public function getDateAttribute()
+	{
+		return $this->start_time->formatLocalized('%d %B');
+	}
+
+	/**
+	 * Get localized short date.)
+	 *
+	 * @return	string
+	 */
+	public function getDateShortAttribute()
+	{
+		return $this->start_time->formatLocalized('%d %b');
+	}
+
+	/**
+	 * Get localized time.
+	 *
+	 * @return	string
+	 */
+	public function getTimeAttribute()
+	{
+		return $this->start_time->formatLocalized('%R') . '-' . $this->end_time->formatLocalized('%R');
+	}
 }
