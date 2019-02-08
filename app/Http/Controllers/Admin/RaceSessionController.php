@@ -19,7 +19,7 @@ class RaceSessionController extends Controller
     {
         return view('admin.race.session.index')->with([
             'race' => $race,
-            'sessions' => RaceSession::paginate(),
+            'sessions' => $race->sessions()->paginate(),
             'templates' => Template::all(),
          ]);
     }
