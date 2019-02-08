@@ -6,6 +6,7 @@ use App\Race;
 use App\RaceSession;
 use App\Template;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 
 class RaceSessionController extends Controller
@@ -82,10 +83,14 @@ class RaceSessionController extends Controller
      */
     public function store(Request $request, Race $race)
     {
+        $ruleUniqueSessionName = Rule::unique('race_sessions')->where(function ($query) use ($race) {
+            return $query->where('race_id', $race->id);
+        });
+
         $request->validate([
             'start_time'	=> [ 'required', 'date_format:Y-m-d H:i:s' ],
             'end_time'      => [ 'required', 'date_format:Y-m-d H:i:s' ],
-            'name'			=> [ 'required', 'unique:race_sessions,name' ],
+            'name'			=> [ 'required', $ruleUniqueSessionName ],
         ]);
 
         $data = $request->only('start_time', 'end_time', 'name');
@@ -130,10 +135,14 @@ class RaceSessionController extends Controller
      */
     public function update(Request $request, race $race, raceSession $session)
     {
+        $ruleUniqueSessionName = Rule::unique('race_sessions')->ignore($session->id)->where(function ($query) use ($race) {
+            return $query->where('race_id', $race->id);
+        });
+
         $request->validate([
             'start_time'	=> [ 'required', 'date_format:Y-m-d H:i:s' ],
             'end_time'      => [ 'required', 'date_format:Y-m-d H:i:s' ],
-            'name'			=> [ 'required', 'unique:race_sessions,name,' . $session->id ],
+            'name'			=> [ 'required', $ruleUniqueSessionName ],
         ]);
 
         $session->update($request->only('start_time', 'end_time', 'name'));

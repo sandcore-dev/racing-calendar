@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Admin') . ' - ' . __('race.session') . ' - ' . __('Edit race.session'))
+@section('title', __('Admin') . ' - ' . __('Race session') . ' - ' . __('Edit session'))
 
 @section('nav-title', __('Admin'))
 
