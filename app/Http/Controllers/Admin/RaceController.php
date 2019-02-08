@@ -26,7 +26,7 @@ class RaceController extends Controller
             'previousSeasons' => Season::has('races')->where('year', '<', $season->year)->get(),
 			'currentSeason'	  => $season,
 			'seasons'		  => Season::all(),
-			'races'			  => Race::bySeason($season)->paginate(),
+			'races'			  => Race::bySeason($season)->paginate(30),
         ]);
     }
 
