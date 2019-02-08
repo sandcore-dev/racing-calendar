@@ -74,7 +74,7 @@
 							<tr class="collapse details{{ $index }}">
 								<td colspan="4" class="text-center">
 									<div class="h4">
-										@lang(':race timetable', [ 'race' => $race->name ])
+										{{ $race->name }}
 									</div>
 									<div class="h5">
 										{{ $race->circuit->full_name }}
