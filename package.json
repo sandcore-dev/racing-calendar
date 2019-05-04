@@ -11,13 +11,16 @@
   },
   "devDependencies": {
     "axios": "^0.17",
-    "bootstrap-sass": "^3.4.0",
+    "bootstrap-sass": "^3.4.1",
     "cross-env": "^5.2.0",
-    "flag-icon-css": "^2.9.0",
-    "jquery": "^3.2",
-    "laravel-mix": "^4.0.14",
+    "jquery": "^3.4.1",
+    "laravel-mix": "^4.0.15",
     "lodash": "^4.17.11",
-    "vue": "^2.6.0"
+    "resolve-url-loader": "^2.3.1",
+    "sass": "^1.20.1",
+    "sass-loader": "^7.1.0",
+    "vue": "^2.6.10",
+    "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
     "flag-icon-css": "^2.9.0"
