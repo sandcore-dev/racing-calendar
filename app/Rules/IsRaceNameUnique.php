@@ -3,7 +3,7 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 class IsRaceNameUnique implements Rule
@@ -28,11 +28,13 @@ class IsRaceNameUnique implements Rule
      * @var integer
      */
     protected $race_id = 0;
-    
+
     /**
      * Create a new rule instance.
      *
-     * @return void
+     * @param $season_id
+     * @param $start_time
+     * @param int $race_id
      */
     public function __construct($season_id, $start_time, $race_id = 0)
     {
