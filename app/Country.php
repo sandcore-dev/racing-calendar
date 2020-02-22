@@ -2,10 +2,36 @@
 
 namespace App;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Monarobase\CountryList\CountryListFacade as Countries;
+use Monarobase\CountryList\CountryNotFoundException;
 
+/**
+ * App\Country
+ *
+ * @property int $id
+ * @property string $code
+ * @property string $name
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|Circuit[] $circuits
+ * @property-read int|null $circuits_count
+ * @property-read string $flag_class
+ * @property-read mixed $local_name
+ * @method static Builder|Country newModelQuery()
+ * @method static Builder|Country newQuery()
+ * @method static Builder|Country query()
+ * @method static Builder|Country whereCode($value)
+ * @method static Builder|Country whereCreatedAt($value)
+ * @method static Builder|Country whereId($value)
+ * @method static Builder|Country whereName($value)
+ * @method static Builder|Country whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class Country extends Model
 {
     /**
@@ -38,10 +64,11 @@ class Country extends Model
 	{
 		return $this->hasMany(Circuit::class);
 	}
-	
-	/**
-	 * Get the country name according to the default locale.
-	 */
+
+    /**
+     * Get the country name according to the default locale.
+     * @throws CountryNotFoundException
+     */
 	public function getLocalNameAttribute()
 	{
 		return Countries::getOne( $this->code, config('app.locale') );

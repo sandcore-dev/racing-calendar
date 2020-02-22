@@ -2,10 +2,40 @@
 
 namespace App;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * App\Season
+ *
+ * @property int $id
+ * @property string $year
+ * @property string|null $header_image
+ * @property string|null $footer_image
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read AccessToken $access_token
+ * @property-read string $footer_url
+ * @property-read string $header_url
+ * @property-read Collection|Location[] $locations
+ * @property-read int|null $locations_count
+ * @property-read Collection|Race[] $races
+ * @property-read int|null $races_count
+ * @method static Builder|Season newModelQuery()
+ * @method static Builder|Season newQuery()
+ * @method static Builder|Season query()
+ * @method static Builder|Season whereCreatedAt($value)
+ * @method static Builder|Season whereFooterImage($value)
+ * @method static Builder|Season whereHeaderImage($value)
+ * @method static Builder|Season whereId($value)
+ * @method static Builder|Season whereUpdatedAt($value)
+ * @method static Builder|Season whereYear($value)
+ * @mixin Eloquent
+ */
 class Season extends Model
 {
     /**
