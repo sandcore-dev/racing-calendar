@@ -53,7 +53,13 @@ class TemplateSessionController extends Controller
             'days' => ['required', 'integer'],
             'start_time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
             'end_time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
-            'name' => ['required', 'unique:template_sessions,name'],
+            'name' => [
+                'required',
+                Rule::unique('template_sessions', 'name')
+                    ->where(function (Builder $query) use ($template) {
+                        $query->where('template_id', $template->id);
+                    }),
+            ],
         ]);
 
         $data = $request->only('days', 'start_time', 'end_time', 'name');
