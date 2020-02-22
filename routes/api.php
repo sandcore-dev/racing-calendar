@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,8 +12,8 @@ use Illuminate\Http\Request;
 */
 
 Route::group([ 'middleware' => 'auth:api', 'namespace' => 'Api' ], function () {
-	Route::group([ 'prefix' => 'locations' ], function () {
-		Route::post('season/{season}', 'LocationsController@getBySeason');
-		Route::post('search', 'LocationsController@search');
-	});
+    Route::group([ 'prefix' => 'locations' ], function () {
+        Route::post('season/{season}', 'LocationsController@getBySeason');
+        Route::post('search', 'LocationsController@search');
+    });
 });

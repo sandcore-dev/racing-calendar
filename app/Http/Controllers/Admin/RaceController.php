@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 use App\Rules\IsRaceNameUnique;
-
 use App\Circuit;
 use App\Season;
 use App\Race;
@@ -22,7 +20,7 @@ class RaceController extends Controller
     {
         $season = $request->input('season')
             ? Season::find($request->input('season'))
-            : (Season::first() ?: new Season);
+            : (Season::first() ?: new Season());
 
         return view('admin.race.index')->with([
             'previousSeasons' => Season::has('races')->where('year', '<', $season->year)->get(),

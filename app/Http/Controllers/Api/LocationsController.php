@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 use App\Season;
 use App\Location;
 
@@ -39,7 +38,7 @@ class LocationsController extends Controller
         
         $keywords = preg_split('/\s+/', $request->input('keywords'), null, PREG_SPLIT_NO_EMPTY);
         
-        $location = new Location;
+        $location = new Location();
         
         $query = $location->newQuery();
         

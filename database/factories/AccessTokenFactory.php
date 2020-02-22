@@ -1,9 +1,11 @@
 <?php
 
-use Faker\Generator as Faker;
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-$factory->define(App\AccessToken::class, function (Faker $faker) {
+use Illuminate\Support\Str;
+
+$factory->define(App\AccessToken::class, function () {
     return [
-        'name' => str_random(10),
+        'name' => Str::random(10),
     ];
 });

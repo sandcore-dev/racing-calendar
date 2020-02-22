@@ -11,7 +11,7 @@ class TestDataSeeder extends Seeder
      */
     public function run()
     {
-		$this->call(UserDataSeeder::class);
+        $this->call(UserDataSeeder::class);
         
         $this->seedORM();
     }
@@ -21,14 +21,14 @@ class TestDataSeeder extends Seeder
      */
     protected function seedORM()
     {
-		$populator = populator();
-		
-		$populator
-			->add(App\Season::class, 3)
-			->add(App\Country::class, 22)
-			->add(App\Circuit::class, 22)
-			->add(App\Location::class, 8)
-			->add(App\Race::class, 22)
-			->seed();
+        $populator = populator();
+        
+        $populator
+            ->add(App\Season::class, 3)
+            ->add(App\Country::class, 22)
+            ->add(App\Circuit::class, 22)
+            ->add(App\Location::class, 8)
+            ->add(App\Race::class, 22)
+            ->seed();
     }
 }

@@ -142,7 +142,7 @@ class RaceSessionController extends Controller
     {
         $ruleUniqueSessionName = Rule::unique('race_sessions')
             ->ignore($session->id)
-            ->where(function (Builder  $query) use ($race) {
+            ->where(function (Builder $query) use ($race) {
                 return $query->where('race_id', $race->id);
             });
 

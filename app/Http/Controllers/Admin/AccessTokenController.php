@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Database\QueryException;
-
 use App\Http\Controllers\Controller;
-
 use App\AccessToken;
 use App\Season;
 

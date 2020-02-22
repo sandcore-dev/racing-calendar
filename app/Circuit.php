@@ -96,7 +96,7 @@ class Circuit extends Model
             $location .= ', ' . $this->area;
         }
         
-        $location .= ', '. __($this->country->name);
+        $location .= ', ' . __($this->country->name);
         
         return $location;
     }
