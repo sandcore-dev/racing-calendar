@@ -37,6 +37,10 @@ class Template extends Model
         'name',
     ];
 
+    protected $with = [
+        'sessions'
+    ];
+
     /**
      * Get sessions of this template.
      */

@@ -4,28 +4,33 @@ namespace App\Http\Controllers\Admin;
 
 use App\Template;
 use App\TemplateSession;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 class TemplateSessionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Template $template
+     * @return Factory|View
      */
     public function index(Template $template)
     {
         return view('admin.template.session.index')->with([
             'template' => $template,
-            'sessions' => TemplateSession::paginate(),
+            'sessions' => $template->sessions()->paginate(),
          ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Template $template
+     * @return Factory|View
      */
     public function create(Template $template)
     {
@@ -35,9 +40,9 @@ class TemplateSessionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Template  $template
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Template $template
+     * @return RedirectResponse
      */
     public function store(Request $request, Template $template)
     {
@@ -61,7 +66,7 @@ class TemplateSessionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\TemplateSession  $templateSession
+     * @param TemplateSession $templateSession
      */
     public function show(TemplateSession $templateSession)
     {
@@ -71,8 +76,9 @@ class TemplateSessionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\TemplateSession  $templateSession
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Template $template
+     * @param TemplateSession $session
+     * @return Factory|View
      */
     public function edit(Template $template, TemplateSession $session)
     {
@@ -85,9 +91,10 @@ class TemplateSessionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\TemplateSession  $templateSession
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Template $template
+     * @param TemplateSession $session
+     * @return RedirectResponse
      */
     public function update(Request $request, Template $template, TemplateSession $session)
     {
@@ -108,7 +115,7 @@ class TemplateSessionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\TemplateSession  $templateSession
+     * @param TemplateSession $templateSession
      */
     public function destroy(TemplateSession $templateSession)
     {
