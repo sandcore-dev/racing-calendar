@@ -2,6 +2,7 @@
 
 @section('title', config('app.name') . ' - ' . $season->year)
 @section('nav-title', $season->year)
+@section('image', env('APP_URL') . $season->header_url)
 
 @section('content')
 	<div class="container calendar">
