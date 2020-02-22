@@ -5,17 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Race;
 use App\RaceSession;
 use App\Template;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 class RaceSessionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Race $race
+     * @return Factory|View
      */
     public function index(Race $race)
     {
@@ -29,8 +33,8 @@ class RaceSessionController extends Controller
     /**
      * Apply template to race.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function applyTemplate(Request $request)
     {
@@ -71,7 +75,8 @@ class RaceSessionController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Race $race
+     * @return Factory|View
      */
     public function create(Race $race)
     {
@@ -81,9 +86,9 @@ class RaceSessionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Template $race
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Race $race
+     * @return RedirectResponse
      */
     public function store(Request $request, Race $race)
     {
@@ -120,8 +125,9 @@ class RaceSessionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\raceSession $raceSession
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Race $race
+     * @param RaceSession $session
+     * @return Factory|View
      */
     public function edit(Race $race, raceSession $session)
     {
@@ -134,9 +140,10 @@ class RaceSessionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\raceSession $raceSession
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Race $race
+     * @param RaceSession $session
+     * @return RedirectResponse
      */
     public function update(Request $request, race $race, raceSession $session)
     {
