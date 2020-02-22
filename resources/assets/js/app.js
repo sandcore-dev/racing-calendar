@@ -16,23 +16,23 @@ window.Vue = require('vue');
  */
 
 Vue.component(
-	'location-sync',
-	require('./components/LocationSync.vue')
+    'location-sync',
+    require('./components/LocationSync.vue').default
 );
 
 Vue.component(
-	'location-checkboxes',
-	require('./components/LocationCheckboxes.vue')
+    'location-checkboxes',
+    require('./components/LocationCheckboxes.vue').default
 );
 
 Vue.component(
-	'location-search',
-	require('./components/LocationSearch.vue')
+    'location-search',
+    require('./components/LocationSearch.vue').default
 );
 
 Vue.component(
-        'file-upload',
-        require('./components/FileUpload.vue')
+    'file-upload',
+    require('./components/FileUpload.vue').default
 );
 
 const app = new Vue({
