@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Storage;
  * @property-read int|null $locations_count
  * @property-read Collection|Race[] $races
  * @property-read int|null $races_count
+ * @property-read AccessToken $accessToken
  * @method static Builder|Season newModelQuery()
  * @method static Builder|Season newQuery()
  * @method static Builder|Season query()
@@ -47,7 +48,7 @@ class Season extends Model
         'year', 'access_token_id', 'header_image', 'footer_image',
     ];
 
-	/**
+    /**
      * The "booting" method of the model.
      *
      * @return void
@@ -62,57 +63,57 @@ class Season extends Model
     }
     
     /**
-	 * Get races of this season.
-	 */
-	public function races()
-	{
-		return $this->hasMany(Race::class);
-	}
-	
-	/**
-	 * Get available locations for this season.
-	 */
-	public function locations()
-	{
-		return $this->belongsToMany(Location::class)->withTimestamps();
-	}
-	
-	/**
+     * Get races of this season.
+     */
+    public function races()
+    {
+        return $this->hasMany(Race::class);
+    }
+    
+    /**
+     * Get available locations for this season.
+     */
+    public function locations()
+    {
+        return $this->belongsToMany(Location::class)->withTimestamps();
+    }
+    
+    /**
      * Get the access token associated with this season.
      */
-    public function access_token()
+    public function accessToken()
     {
         return $this->hasOne(AccessToken::class)->withDefault();
     }
     
     /**
      * Get the URL of the header image.
-     * 
+     *
      * @return string
      */
     public function getHeaderUrlAttribute()
     {
-		return $this->getImageUrl('header');
+        return $this->getImageUrl('header');
     }
     
     /**
      * Get the URL of the footer image.
-     * 
+     *
      * @return string
      */
     public function getFooterUrlAttribute()
     {
-		return $this->getImageUrl('footer');
+        return $this->getImageUrl('footer');
     }
     
     /**
      * Get the image URL of the section.
-     * 
-     * @param	string	$section
-     * @return	string
+     *
+     * @param   string  $section
+     * @return  string
      */
-    protected function getImageUrl( $section )
+    protected function getImageUrl($section)
     {
-		return $this->{$section . '_image'} ? Storage::url( $this->{$section . '_image'} ) : '';
+        return $this->{$section . '_image'} ? Storage::url($this->{$section . '_image'}) : '';
     }
 }

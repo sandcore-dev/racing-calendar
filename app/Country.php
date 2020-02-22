@@ -43,7 +43,7 @@ class Country extends Model
         'name', 'code',
     ];
 
-	/**
+    /**
      * The "booting" method of the model.
      *
      * @return void
@@ -57,30 +57,30 @@ class Country extends Model
         });
     }
 
-	/**
-	 * Get circuits in this country.
-	 */
-	public function circuits()
-	{
-		return $this->hasMany(Circuit::class);
-	}
+    /**
+     * Get circuits in this country.
+     */
+    public function circuits()
+    {
+        return $this->hasMany(Circuit::class);
+    }
 
     /**
      * Get the country name according to the default locale.
      * @throws CountryNotFoundException
      */
-	public function getLocalNameAttribute()
-	{
-		return Countries::getOne( $this->code, config('app.locale') );
-	}
+    public function getLocalNameAttribute()
+    {
+        return Countries::getOne($this->code, config('app.locale'));
+    }
 
-	/**
-	 * Get the flag class of this country.
-	 *
-	 * @return	string
-	 */
-	public function getFlagClassAttribute()
-	{
-		return 'flag-icon flag-icon-' . strtolower( $this->code );
-	}
+    /**
+     * Get the flag class of this country.
+     *
+     * @return  string
+     */
+    public function getFlagClassAttribute()
+    {
+        return 'flag-icon flag-icon-' . strtolower($this->code);
+    }
 }

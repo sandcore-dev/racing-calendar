@@ -58,7 +58,7 @@ class Location extends Model
      */
     public function races()
     {
-		return $this->hasMany(Race::class);
+        return $this->hasMany(Race::class);
     }
     
     /**
@@ -66,6 +66,6 @@ class Location extends Model
      */
     public function seasons()
     {
-		return $this->belongsToMany(Season::class)->withTimestamps();
+        return $this->belongsToMany(Season::class)->withTimestamps();
     }
 }

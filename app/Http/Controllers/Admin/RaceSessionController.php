@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Race;
 use App\RaceSession;
 use App\Template;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
@@ -14,7 +15,7 @@ class RaceSessionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Race $race)
     {
@@ -22,20 +23,21 @@ class RaceSessionController extends Controller
             'race' => $race,
             'sessions' => $race->sessions()->paginate(),
             'templates' => Template::all(),
-         ]);
+        ]);
     }
 
     /**
      * Apply template to race.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function applyTemplate(Request $request) {
+    public function applyTemplate(Request $request)
+    {
         $request->validate([
-            'race'      => [ 'required', 'integer', 'exists:races,id' ],
-            'template'  => [ 'required', 'integer', 'exists:templates,id' ],
-		]);
+            'race' => ['required', 'integer', 'exists:races,id'],
+            'template' => ['required', 'integer', 'exists:templates,id'],
+        ]);
 
         $race = Race::find($request->input('race'));
         $template = Template::find($request->input('template'));
@@ -61,13 +63,15 @@ class RaceSessionController extends Controller
             ]);
         });
 
-        return redirect()->route('admin.race.session.index', [ 'race' => $race->id ])->with( 'success', __('The template has been applied.') );
+        return redirect()
+            ->route('admin.race.session.index', ['race' => $race->id])
+            ->with('success', __('The template has been applied.'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create(Race $race)
     {
@@ -77,20 +81,20 @@ class RaceSessionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Templat  $race
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Template $race
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request, Race $race)
     {
-        $ruleUniqueSessionName = Rule::unique('race_sessions')->where(function ($query) use ($race) {
+        $ruleUniqueSessionName = Rule::unique('race_sessions')->where(function (Builder $query) use ($race) {
             return $query->where('race_id', $race->id);
         });
 
         $request->validate([
-            'start_time'	=> [ 'required', 'date_format:Y-m-d H:i:s' ],
-            'end_time'      => [ 'required', 'date_format:Y-m-d H:i:s' ],
-            'name'			=> [ 'required', $ruleUniqueSessionName ],
+            'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
+            'end_time' => ['required', 'date_format:Y-m-d H:i:s'],
+            'name' => ['required', $ruleUniqueSessionName],
         ]);
 
         $data = $request->only('start_time', 'end_time', 'name');
@@ -98,14 +102,15 @@ class RaceSessionController extends Controller
 
         $session = raceSession::create($data);
 
-        return redirect()->route('admin.race.session.index', [ 'race' => $race->id ])->with( 'success', __('The session :name has been added.', [ 'name' => $session->name ]) );
+        return redirect()
+            ->route('admin.race.session.index', ['race' => $race->id])
+            ->with('success', __('The session :name has been added.', ['name' => $session->name]));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\raceSession  $raceSession
-     * @return \Illuminate\Http\Response
+     * @param \App\raceSession $raceSession
      */
     public function show(RaceSession $raceSession)
     {
@@ -115,8 +120,8 @@ class RaceSessionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\raceSession  $raceSession
-     * @return \Illuminate\Http\Response
+     * @param \App\raceSession $raceSession
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Race $race, raceSession $session)
     {
@@ -129,32 +134,35 @@ class RaceSessionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\raceSession  $raceSession
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\raceSession $raceSession
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, race $race, raceSession $session)
     {
-        $ruleUniqueSessionName = Rule::unique('race_sessions')->ignore($session->id)->where(function ($query) use ($race) {
-            return $query->where('race_id', $race->id);
-        });
+        $ruleUniqueSessionName = Rule::unique('race_sessions')
+            ->ignore($session->id)
+            ->where(function (Builder  $query) use ($race) {
+                return $query->where('race_id', $race->id);
+            });
 
         $request->validate([
-            'start_time'	=> [ 'required', 'date_format:Y-m-d H:i:s' ],
-            'end_time'      => [ 'required', 'date_format:Y-m-d H:i:s' ],
-            'name'			=> [ 'required', $ruleUniqueSessionName ],
+            'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
+            'end_time' => ['required', 'date_format:Y-m-d H:i:s'],
+            'name' => ['required', $ruleUniqueSessionName],
         ]);
 
         $session->update($request->only('start_time', 'end_time', 'name'));
 
-        return redirect()->route('admin.race.session.index', [ 'race' => $race->id ])->with( 'success', __('The session :name has been edited.', [ 'name' => $session->name ]) );
+        return redirect()
+            ->route('admin.race.session.index', ['race' => $race->id])
+            ->with('success', __('The session :name has been edited.', ['name' => $session->name]));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\raceSession  $raceSession
-     * @return \Illuminate\Http\Response
+     * @param \App\raceSession $raceSession
      */
     public function destroy(RaceSession $raceSession)
     {

@@ -59,7 +59,7 @@
 								@if( $race->start_time->isPast() )
 									{{ $race->location->name }}
 								@else
-									<a href="{{ route('calendar.location.edit', [ 'token' => $race->season->access_token, 'race' => $race->id ]) }}">
+									<a href="{{ route('calendar.location.edit', [ 'token' => $race->season->accessToken, 'race' => $race->id ]) }}">
 										@if( $race->location->name )
 											{{ $race->location->name }}
 										@else
@@ -79,7 +79,7 @@
 									<div class="h5">
 										{{ $race->circuit->full_name }}
 									</div>
-								</th>
+								</td>
 							</tr>
 							@foreach($race->sessions as $sessionIndex => $session)
 								<tr class="collapse details{{ $index }}">

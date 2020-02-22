@@ -34,24 +34,24 @@ use Illuminate\Support\Carbon;
  */
 class TemplateSession extends Model
 {
-	/**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-		'template_id',
+        'template_id',
         'days',
-		'start_time',
-		'end_time',
+        'start_time',
+        'end_time',
         'name',
     ];
 
     /**
-	 * Get the template of this session.
-	 */
-	public function template()
-	{
-		return $this->belongsTo(Template::class);
-	}
+     * Get the template of this session.
+     */
+    public function template()
+    {
+        return $this->belongsTo(Template::class);
+    }
 }
