@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Template;
 use App\TemplateSession;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class TemplateSessionController extends Controller
@@ -23,7 +26,7 @@ class TemplateSessionController extends Controller
         return view('admin.template.session.index')->with([
             'template' => $template,
             'sessions' => $template->sessions()->paginate(),
-         ]);
+        ]);
     }
 
     /**
@@ -47,10 +50,10 @@ class TemplateSessionController extends Controller
     public function store(Request $request, Template $template)
     {
         $request->validate([
-            'days'          => [ 'required', 'integer' ],
-            'start_time'    => [ 'required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/' ],
-            'end_time'      => [ 'required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/' ],
-            'name'          => [ 'required', 'unique:template_sessions,name' ],
+            'days' => ['required', 'integer'],
+            'start_time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
+            'end_time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
+            'name' => ['required', 'unique:template_sessions,name'],
         ]);
 
         $data = $request->only('days', 'start_time', 'end_time', 'name');
@@ -59,8 +62,8 @@ class TemplateSessionController extends Controller
         $session = TemplateSession::create($data);
 
         return redirect()
-            ->route('admin.template.session.index', [ 'template' => $template->id ])
-            ->with('success', __('The session :name has been added.', [ 'name' => $session->name ]));
+            ->route('admin.template.session.index', ['template' => $template->id])
+            ->with('success', __('The session :name has been added.', ['name' => $session->name]));
     }
 
     /**
@@ -82,6 +85,10 @@ class TemplateSessionController extends Controller
      */
     public function edit(Template $template, TemplateSession $session)
     {
+        if ($session->template->id != $template->id) {
+            abort(Response::HTTP_BAD_REQUEST, 'This session does not belong to this template');
+        }
+
         return view('admin.template.session.edit')->with([
             'template' => $template,
             'session' => $session,
@@ -98,18 +105,29 @@ class TemplateSessionController extends Controller
      */
     public function update(Request $request, Template $template, TemplateSession $session)
     {
+        if ($session->template->id != $template->id) {
+            abort(Response::HTTP_BAD_REQUEST, 'This session does not belong to this template');
+        }
+
         $request->validate([
-            'days'          => [ 'required', 'integer' ],
-            'start_time'    => [ 'required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/' ],
-            'end_time'      => [ 'required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/' ],
-            'name'          => [ 'required', 'unique:template_sessions,name,' . $session->id ],
+            'days' => ['required', 'integer'],
+            'start_time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
+            'end_time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
+            'name' => [
+                'required',
+                Rule::unique('template_sessions', 'name')
+                    ->ignore($session->id)
+                    ->where(function (Builder $query) use ($template) {
+                        $query->where('template_id', $template->id);
+                    }),
+            ],
         ]);
 
         $session->update($request->only('days', 'start_time', 'end_time', 'name'));
 
         return redirect()
-            ->route('admin.template.session.index', [ 'template' => $template->id ])
-            ->with('success', __('The session :name has been edited.', [ 'name' => $session->name ]));
+            ->route('admin.template.session.index', ['template' => $template->id])
+            ->with('success', __('The session :name has been edited.', ['name' => $session->name]));
     }
 
     /**
