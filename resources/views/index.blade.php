@@ -47,7 +47,17 @@
 								</span>
 							</td>
 							<td>
-								{{ $race->time }}
+								@switch ($race->status)
+									@case('scheduled')
+										{{ $race->time }}
+										@break
+									@case('postponed')
+										<span class="text-warning">@lang('Postponed')</span>
+										@break
+									@case('cancelled')
+										<span class="text-danger">@lang('Cancelled')</span>
+										@break
+								@endswitch
 							</td>
 							<td>
 								<span class="{{ $race->circuit->country->flagClass }}" title="{{ $race->circuit->country->localName }}"></span>

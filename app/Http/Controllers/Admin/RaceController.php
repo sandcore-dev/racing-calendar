@@ -14,6 +14,7 @@ class RaceController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
@@ -127,9 +128,25 @@ class RaceController extends Controller
      */
     public function edit(Race $race)
     {
+        $statuses = [
+            [
+                'id' => 'scheduled',
+                'name' => __('Scheduled'),
+            ],
+            [
+                'id' => 'postponed',
+                'name' => __('Postponed'),
+            ],
+            [
+                'id' => 'cancelled',
+                'name' => __('Cancelled'),
+            ],
+        ];
+
         return view('admin.race.edit')->with([
             'race' => $race,
             'circuits' => Circuit::all(),
+            'statuses' => $statuses,
         ]);
     }
 
@@ -152,9 +169,10 @@ class RaceController extends Controller
             ],
             'circuit_id' => ['required', 'integer', 'exists:circuits,id'],
             'remarks' => ['string', 'nullable'],
+            'status' => ['required', 'string', 'in:scheduled,postponed,cancelled'],
         ]);
 
-        $race->update($request->only('season_id', 'start_time', 'name', 'circuit_id', 'remarks'));
+        $race->update($request->only('season_id', 'start_time', 'name', 'circuit_id', 'remarks', 'status'));
 
         return redirect()
             ->route('admin.race.index', ['season' => $race->season_id])

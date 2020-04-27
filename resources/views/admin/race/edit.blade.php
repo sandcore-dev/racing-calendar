@@ -54,6 +54,14 @@
 				@slot('value', $race->remarks);
 			@endcomponent
 
+			@component('input.select-array')
+				@slot('field', 'status')
+				@slot('label', __('Status'))
+				@slot('value', $race->status);
+
+				@slot('options', $statuses)
+			@endcomponent
+
 			@component('input.submit')
 				@slot('label', __('Edit race'))
 				@slot('cancel', route('admin.race.index', [ 'season' => $race->season->id ]))

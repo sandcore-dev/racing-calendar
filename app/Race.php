@@ -52,7 +52,7 @@ class Race extends Model
      * @var array
      */
     protected $fillable = [
-        'season_id', 'start_time', 'name', 'circuit_id', 'location_id', 'remarks',
+        'season_id', 'start_time', 'name', 'circuit_id', 'location_id', 'remarks', 'status',
     ];
 
     /**

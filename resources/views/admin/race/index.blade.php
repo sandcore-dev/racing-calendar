@@ -34,6 +34,7 @@
 		<thead>
 			<tr>
 				<th class="col-sm-2">@lang('Race time')</th>
+				<th class="col-sm-2">@lang('Status')</th>
 				<th>@lang('Name')</th>
 				<th class="col-sm-3">@lang('Circuit')</th>
 				<th class="col-sm-2 text-center">
@@ -48,6 +49,19 @@
 				<tr>
 					<td>
 						{{ $race->start_time }}
+					</td>
+					<td>
+						@switch($race->status)
+							@case('scheduled')
+								<span class="text-info">@lang('Scheduled')</span>
+								@break
+							@case('postponed')
+								<span class="text-warning">@lang('Postponed')</span>
+								@break
+							@case('cancelled')
+							<span class="text-danger">@lang('Cancelled')</span>
+								@break
+						@endswitch
 					</td>
 					<td>
 						<a href="{{ route('admin.race.edit', [ 'race' => $race->id ]) }}" title="@lang('Edit race')">
