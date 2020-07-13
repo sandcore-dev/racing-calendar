@@ -3,9 +3,11 @@
 		<div>
 			<div class="input-group">
 				<input v-model="search" type="text" class="form-control" id="location-search" name="location-search" :placeholder="placeholder" aria-describedby="location-search-icon">
-				<span id="location-search-icon" class="input-group-addon">
-					<span class="glyphicon glyphicon-search"></span>
-				</span>
+				<div id="location-search-icon" class="input-group-append">
+					<span class="input-group-text">
+						<span class="fa fa-search"></span>
+					</span>
+				</div>
 			</div>
 		</div>
 		<location-checkboxes :locations="results" v-on:checked="checked"/>

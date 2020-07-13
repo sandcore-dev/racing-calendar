@@ -7,23 +7,25 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<form class="form-horizontal" action="{{ route('admin.template.store') }}" method="post">
-			{{ csrf_field() }}
+		<div class="col">
+			<form action="{{ route('admin.template.store') }}" method="post">
+				{{ csrf_field() }}
 
-			<h1 class="text-center">@lang('Add template')</h1>
+				<h1 class="text-center">@lang('Add template')</h1>
 
-			@component('input.text')
-				@slot('field', 'name')
-				@slot('label', __('Name'))
+				@component('input.text')
+					@slot('field', 'name')
+					@slot('label', __('Name'))
 
-				required autofocus
-			@endcomponent
+					required autofocus
+				@endcomponent
 
-			@component('input.submit')
-				@slot('label', __('Add template'))
-				@slot('cancel', route('admin.template.index'))
-			@endcomponent
-		</form>
+				@component('input.submit')
+					@slot('label', __('Add template'))
+					@slot('cancel', route('admin.template.index'))
+				@endcomponent
+			</form>
+		</div>
 	</div>
 </div>
 @endsection

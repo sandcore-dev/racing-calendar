@@ -7,14 +7,14 @@
 @section('content')
 	<div class="container calendar">
 		@if( $season->header_url )
-		<div class="row">
-			<div class="col-sm-12">
-				<img class="header" src="{{ $season->header_url }}" alt="{{ $season->year }}">
+			<div class="row">
+				<div class="col-sm-12">
+					<img class="header" src="{{ $season->header_url }}" alt="{{ $season->year }}">
+				</div>
 			</div>
-		</div>
 		@endif
 
-		<div class="row">
+		<div class="row mt-3">
 			<div class="col-sm-12">
 				<table class="table table-striped">
 				<thead>
@@ -39,10 +39,10 @@
 					@foreach( $season->races as $index => $race )
 						<tr class="{{ $race->thisWeek ? 'warning' : '' }}" data-toggle="collapse" data-target=".details{{ $index }}">
 							<td>
-								<span class="hidden-xs">
+								<span class="d-none d-md-inline">
 									{{ $race->date }}
 								</span>
-								<span class="visible-xs-inline">
+								<span class="d-md-none">
 									{{ $race->dateShort }}
 								</span>
 							</td>
@@ -61,7 +61,7 @@
 							</td>
 							<td>
 								<span class="{{ $race->circuit->country->flagClass }}" title="{{ $race->circuit->country->localName }}"></span>
-								<span class="{{ $showLocations ? 'hidden-xs' : '' }}">
+								<span class="{{ $showLocations ? 'd-none d-md-inline' : '' }}">
 									{{ $race->circuit->city }}
 								</span>
 							</td>
@@ -75,7 +75,7 @@
 											@if( $race->location->name )
 												{{ $race->location->name }}
 											@else
-												<span class="glyphicon glyphicon-plus"></span>
+												<span class="fa fa-plus"></span>
 											@endif
 										</a>
 									@endif
@@ -114,7 +114,7 @@
 							</tr>
 						@endif
 						@if($race->sessions->count() && $race->sessions->count() % 2 != 0)
-						<tr class="hidden">
+						<tr class="d-none">
 							<td colspan="4">
 								&nbsp;
 							</td>

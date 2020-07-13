@@ -1,13 +1,13 @@
-<div class="form-group{{ $errors->has($field) ? ' has-error' : '' }}">
-    <div class="col-sm-6 col-sm-offset-4 checkbox">
+<div class="form-group row">
+    <div class="col-sm-6 offset-sm-4 checkbox">
     	<label>
 	        <input type="hidden" name="{{ $field }}" value="0">
-	        <input type="checkbox" name="{{ $field }}" value="1"{{ old($field, (isset($value) ? $value : '')) == 1 ? ' checked' : '' }}>
+	        <input class="{{ $errors->has($field) ? 'is-invalid' : '' }}" type="checkbox" name="{{ $field }}" value="1"{{ old($field, (isset($value) ? $value : '')) == 1 ? ' checked' : '' }}>
         	{{ $label }}
         </label>
 
         @if ($errors->has($field))
-            <span class="help-block">
+            <span class="is-invalid">
                 <strong>{{ $errors->first($field) }}</strong>
             </span>
         @endif

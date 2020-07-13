@@ -1,5 +1,5 @@
-<div class="form-group">
-	<div class="col-sm-6 col-sm-offset-4">
+<div class="form-group row">
+	<div class="col-sm-6 offset-sm-4">
 		<button type="submit" class="btn btn-primary">
 			{{ $label }}
 		</button>

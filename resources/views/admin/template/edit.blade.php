@@ -7,25 +7,27 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<form class="form-horizontal" action="{{ route('admin.template.update', [ 'template' => $template->id ]) }}" method="post">
-			{{ csrf_field() }}
-			{{ method_field('PUT') }}
+		<div class="col">
+			<form action="{{ route('admin.template.update', [ 'template' => $template->id ]) }}" method="post">
+				{{ csrf_field() }}
+				{{ method_field('PUT') }}
 
-			<h1 class="text-center">@lang('Edit template')</h1>
+				<h1 class="text-center">@lang('Edit template')</h1>
 
-			@component('input.text')
-				@slot('field', 'name')
-				@slot('label', __('Name'))
-				@slot('value', $template->name)
+				@component('input.text')
+					@slot('field', 'name')
+					@slot('label', __('Name'))
+					@slot('value', $template->name)
 
-				required autofocus
-			@endcomponent
+					required autofocus
+				@endcomponent
 
-			@component('input.submit')
-				@slot('label', __('Edit template'))
-				@slot('cancel', route('admin.template.index'))
-			@endcomponent
-		</form>
+				@component('input.submit')
+					@slot('label', __('Edit template'))
+					@slot('cancel', route('admin.template.index'))
+				@endcomponent
+			</form>
+		</div>
 	</div>
 </div>
 @endsection

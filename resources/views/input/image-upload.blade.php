@@ -1,5 +1,5 @@
-<div class="form-group{{ $errors->has($field) ? ' has-error' : '' }}">
-	<label for="{{ $field }}" class="col-sm-4 control-label">{{ $label }}</label>
+<div class="form-group row">
+	<label for="{{ $field }}" class="col-sm-4 col-form-label text-sm-right">{{ $label }}</label>
 
 	<div class="col-sm-6">
 		@if( isset($value) && $value )
@@ -9,9 +9,9 @@
 		@endif
 		
 		<file-upload>
-			<label class="btn btn-default">
+			<label class="btn btn-secondary">
 				@lang('Afbeelding selecteren')
-				<input id="{{ $field }}" type="file" name="{{ $field }}" accept="image/jpeg, image/png, image/gif" style="display: none;">
+				<input id="{{ $field }}" type="file" class="{{ $errors->has($field) ? 'is-invalid' : '' }}" name="{{ $field }}" accept="image/jpeg, image/png, image/gif" style="display: none;">
 			</label>
 		</file-upload>
 		
@@ -25,7 +25,7 @@
 		@endif
 
 		@if ($errors->has($field))
-			<span class="help-block">
+			<span class="is-invalid">
 				<strong>{{ $errors->first($field) }}</strong>
 			</span>
 		@endif

@@ -7,66 +7,68 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<form class="form-horizontal" action="{{ route('admin.race.update', [ 'race' => $race->id ]) }}" method="post">
-			{{ csrf_field() }}
-			{{ method_field('PUT') }}
+		<div class="col">
+			<form action="{{ route('admin.race.update', [ 'race' => $race->id ]) }}" method="post">
+				{{ csrf_field() }}
+				{{ method_field('PUT') }}
 
-			<h1 class="text-center">@lang('Edit race')</h1>
+				<h1 class="text-center">@lang('Edit race')</h1>
 
-			<input type="hidden" name="season_id" value="{{ $race->season->id }}">
+				<input type="hidden" name="season_id" value="{{ $race->season->id }}">
 
-			@component('input.text')
-				@slot('field', 'year')
-				@slot('label', __('Year'))
-				@slot('value', $race->season->year)
+				@component('input.text')
+					@slot('field', 'year')
+					@slot('label', __('Year'))
+					@slot('value', $race->season->year)
 
-				disabled
-			@endcomponent
+					disabled
+				@endcomponent
 
-			@component('input.datetime')
-				@slot('field', 'start_time')
-				@slot('label', __('Race time'))
-				@slot('value', $race->start_time);
+				@component('input.datetime')
+					@slot('field', 'start_time')
+					@slot('label', __('Race time'))
+					@slot('value', $race->start_time);
 
-				required
-			@endcomponent
+					required
+				@endcomponent
 
-			@component('input.text')
-				@slot('field', 'name')
-				@slot('label', __('Name'))
-				@slot('value', $race->name);
+				@component('input.text')
+					@slot('field', 'name')
+					@slot('label', __('Name'))
+					@slot('value', $race->name);
 
-				required
-			@endcomponent
+					required
+				@endcomponent
 
-			@component('input.select')
-				@slot('field', 'circuit_id')
-				@slot('label', __('Circuit'))
-				@slot('value', $race->circuit);
+				@component('input.select')
+					@slot('field', 'circuit_id')
+					@slot('label', __('Circuit'))
+					@slot('value', $race->circuit);
 
-				@slot('options', $circuits)
-				@slot('option_label', 'fullName')
-			@endcomponent
+					@slot('options', $circuits)
+					@slot('option_label', 'fullName')
+				@endcomponent
 
-			@component('input.textarea')
-				@slot('field', 'remarks')
-				@slot('label', __('Remarks'))
-				@slot('value', $race->remarks);
-			@endcomponent
+				@component('input.textarea')
+					@slot('field', 'remarks')
+					@slot('label', __('Remarks'))
+					@slot('value', $race->remarks);
+				@endcomponent
 
-			@component('input.select-array')
-				@slot('field', 'status')
-				@slot('label', __('Status'))
-				@slot('value', $race->status);
+				@component('input.select-array')
+					@slot('field', 'status')
+					@slot('label', __('Status'))
+					@slot('value', $race->status);
 
-				@slot('options', $statuses)
-			@endcomponent
+					@slot('options', $statuses)
+				@endcomponent
 
-			@component('input.submit')
-				@slot('label', __('Edit race'))
-				@slot('cancel', route('admin.race.index', [ 'season' => $race->season->id ]))
-			@endcomponent
-		</form>
+				@component('input.submit')
+					@slot('label', __('Edit race'))
+					@slot('cancel', route('admin.race.index', [ 'season' => $race->season->id ]))
+				@endcomponent
+			</form>
+		</div>
 	</div>
 </div>
 @endsection

@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "sandcore-dev/racing-calendar",
+    "description": "Calendar to manage events and associated gatherings.",
+    "keywords": ["framework", "laravel", "calendar"],
     "license": "MIT",
     "type": "project",
     "require": {
