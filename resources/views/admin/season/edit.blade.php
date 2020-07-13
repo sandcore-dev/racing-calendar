@@ -43,7 +43,7 @@
 				<div class="form-group row">
 					<label class="col-sm-4 text-sm-right">@lang('Locations')</label>
 
-					<location-sync class="col-sm-6" api-token="{{ auth()->user()->api_token }}" season-id="{{ $season->id }}" search-placeholder="@lang('Search for a location')"></location-sync>
+					<location-sync class="col-sm-6" season-id="{{ $season->id }}" search-placeholder="@lang('Search for a location')"></location-sync>
 				</div>
 
 				@component('input.submit')

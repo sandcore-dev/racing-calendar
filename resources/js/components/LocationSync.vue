@@ -2,13 +2,13 @@
 	<div>
 		<div class="row">
 			<location-checkboxes class="col-sm-6" :locations="locations" checked="yes"/>
-			<location-search class="col-sm-6" :season-id="seasonId" :api-token="apiToken" :placeholder="searchPlaceholder" v-on:add="addLocation"/>
+			<location-search class="col-sm-6" :season-id="seasonId" :placeholder="searchPlaceholder" v-on:add="addLocation"/>
 		</div>
 	</div>
 </template>
 
 <script>
-	import jquery from 'jquery';
+	import axios from 'axios';
 	
     export default {
 		data() {
@@ -17,7 +17,7 @@
 			};
 		},
 		
-		props: [ 'season-id', 'api-token', 'search-placeholder' ],
+		props: [ 'season-id', 'search-placeholder' ],
 		
 		mounted() {
 			this.populateLocations();
@@ -29,18 +29,14 @@
 			},
 			
 			populateLocations() {
-				var settings = {
-					url: '/api/locations/season/' + this.seasonId,
-					data: {
-						api_token: this.apiToken
-					}
-				};
-				
-				jquery.post( settings ).done( this.setLocations ).fail( this.logError );
+				axios
+					.post('/api/locations/season/' + this.seasonId)
+					.then(this.setLocations)
+					.catch(this.logError);
 			},
 			
 			setLocations( response ) {
-				this.locations = this.locations.concat( response.data );
+				this.locations = this.locations.concat( response.data.data );
 			},
 			
 			logError( jqXHR, status, message )

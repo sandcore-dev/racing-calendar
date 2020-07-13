@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="mt-3">
 		<div class="checkbox" v-for="(location, index) in locations" :key="location.id">
 			<label>
 				<input type="checkbox" name="locations[]" :index="index" :value="location.id" :checked="checked" v-on:change="hasBeenToggled">

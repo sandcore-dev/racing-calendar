@@ -2,6 +2,7 @@
 	<div>
 		<div>
 			<div class="input-group">
+				<!--suppress HtmlFormInputWithoutLabel -->
 				<input v-model="search" type="text" class="form-control" id="location-search" name="location-search" :placeholder="placeholder" aria-describedby="location-search-icon">
 				<div id="location-search-icon" class="input-group-append">
 					<span class="input-group-text">
@@ -16,7 +17,7 @@
 
 <script>
 	import lodash from 'lodash';
-	import jquery from 'jquery';
+	import axios from 'axios';
 	
     export default {
 		data() {
@@ -26,7 +27,7 @@
 			};
 		},
 		
-		props: [ 'season-id', 'api-token', 'placeholder' ],
+		props: [ 'season-id', 'placeholder' ],
 		
         watch: {
             search()
@@ -41,23 +42,20 @@
 				{
 					if( this.search.length < 2 )
 						return;
-					
-					var settings = {
-						url: '/api/locations/search',
-						data: {
-							api_token: this.apiToken,
+
+					axios
+						.post('/api/locations/search', {
 							keywords: this.search,
 							exclude_season: this.seasonId,
-						}
-					};
-					
-					jquery.post( settings ).done( this.showResults ).fail( this.logError );
+						})
+						.then(this.showResults)
+						.catch(this.logError);
 				},
 				500
 			),
 			
 			showResults( response ) {
-				this.results = response.data;
+				this.results = response.data.data;
 			},
 			
 			logError( jqXHR, status, message ) {
