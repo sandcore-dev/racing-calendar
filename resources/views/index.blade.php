@@ -97,7 +97,12 @@
 							@foreach($race->sessions as $sessionIndex => $session)
 								<tr class="collapse details{{ $index }}">
 									<td>
-										<small>{{ $session->date }}</small>
+										<small class="d-none d-md-inline">
+											{{ $session->date }}
+										</small>
+										<small class="d-md-none">
+											{{ $session->dateShort }}
+										</small>
 									</td>
 									<td>
 										<small>{{ $session->time }}</small>
@@ -107,7 +112,7 @@
 									</td>
 								</tr>
 							@endforeach
-							<tr class="collapse details{{ $index }}">
+							<tr class="collapse details{{ $index }} bg-white">
 								<td colspan="4">
 									&nbsp;
 								</td>
