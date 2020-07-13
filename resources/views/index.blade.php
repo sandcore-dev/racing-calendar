@@ -83,7 +83,7 @@
 							</td>
 							@endif
 						</tr>
-						@if(!$race->sessions->isEmpty())
+						@if($race->status === 'scheduled' && !$race->sessions->isEmpty())
 							<tr class="collapse details{{ $index }}">
 								<td colspan="4" class="text-center">
 									<div class="h4">
@@ -113,7 +113,7 @@
 								</td>
 							</tr>
 						@endif
-						@if($race->sessions->count() && $race->sessions->count() % 2 != 0)
+						@if($race->status === 'scheduled' && $race->sessions->count() && $race->sessions->count() % 2 != 0)
 						<tr class="d-none">
 							<td colspan="4">
 								&nbsp;
