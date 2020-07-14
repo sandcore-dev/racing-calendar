@@ -36,7 +36,7 @@ class CalendarController extends Controller
         }
 
         return view('index')->with([
-            'season' => $championship->seasons->first(),
+            'season' => $championship->seasons()->first(),
             'showLocations' => false,
         ]);
     }
@@ -53,7 +53,7 @@ class CalendarController extends Controller
         return view('index')->with([
             'championship' => $championship,
             'season' => $season,
-            'showLocations' => true,
+            'showLocations' => $season->locations()->count() > 0,
         ]);
     }
 
