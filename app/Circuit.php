@@ -2,11 +2,8 @@
 
 namespace App;
 
-use Eloquent;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 
 /**
  * App\Circuit
@@ -16,24 +13,26 @@ use Illuminate\Support\Carbon;
  * @property string $city
  * @property string|null $area
  * @property int $country_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Country $country
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Country $country
  * @property-read string $full_name
  * @property-read string $location
- * @property-read Collection|Race[] $races
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Race[] $races
  * @property-read int|null $races_count
- * @method static Builder|Circuit newModelQuery()
- * @method static Builder|Circuit newQuery()
- * @method static Builder|Circuit query()
- * @method static Builder|Circuit whereArea($value)
- * @method static Builder|Circuit whereCity($value)
- * @method static Builder|Circuit whereCountryId($value)
- * @method static Builder|Circuit whereCreatedAt($value)
- * @method static Builder|Circuit whereId($value)
- * @method static Builder|Circuit whereName($value)
- * @method static Builder|Circuit whereUpdatedAt($value)
- * @mixin Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereArea($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereCountryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereUpdatedAt($value)
+ * @mixin \Eloquent
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class Circuit extends Model
 {

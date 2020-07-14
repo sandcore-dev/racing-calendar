@@ -31,11 +31,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         @auth
-                            <li class="nav-item {{ Route::currentRouteNamed('admin.season.*') ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('admin.season.index') }}">@lang('Season')</a>
-                            </li>
-                            <li class="nav-item {{ Route::currentRouteNamed('admin.race.*') ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('admin.race.index') }}">@lang('Race')</a>
+                            <li class="nav-item {{ Route::currentRouteNamed('admin.championship.*') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.championship.index') }}">@lang('Championship')</a>
                             </li>
                             <li class="nav-item {{ Route::currentRouteNamed('admin.circuit.*') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.circuit.index') }}">@lang('Circuit')</a>

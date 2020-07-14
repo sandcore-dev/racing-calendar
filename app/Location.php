@@ -2,31 +2,30 @@
 
 namespace App;
 
-use Eloquent;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 
 /**
  * App\Location
  *
  * @property int $id
  * @property string $name
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Collection|Race[] $races
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Race[] $races
  * @property-read int|null $races_count
- * @property-read Collection|Season[] $seasons
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Season[] $seasons
  * @property-read int|null $seasons_count
- * @method static Builder|Location newModelQuery()
- * @method static Builder|Location newQuery()
- * @method static Builder|Location query()
- * @method static Builder|Location whereCreatedAt($value)
- * @method static Builder|Location whereId($value)
- * @method static Builder|Location whereName($value)
- * @method static Builder|Location whereUpdatedAt($value)
- * @mixin Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Location newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Location newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Location query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Location whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Location whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Location whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Location whereUpdatedAt($value)
+ * @mixin \Eloquent
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class Location extends Model
 {

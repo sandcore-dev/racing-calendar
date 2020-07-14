@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Championship;
 use App\Race;
 use App\RaceSession;
+use App\Season;
 use App\Template;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Query\Builder;
@@ -18,12 +20,16 @@ class RaceSessionController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Championship $championship
+     * @param Season $season
      * @param Race $race
      * @return Factory|View
      */
-    public function index(Race $race)
+    public function index(Championship $championship, Season $season, Race $race)
     {
         return view('admin.race.session.index')->with([
+            'championship' => $championship,
+            'season' => $season,
             'race' => $race,
             'sessions' => $race->sessions()->paginate(),
             'templates' => Template::all(),
@@ -34,16 +40,17 @@ class RaceSessionController extends Controller
      * Apply template to race.
      *
      * @param Request $request
+     * @param Championship $championship
+     * @param Season $season
+     * @param Race $race
      * @return RedirectResponse
      */
-    public function applyTemplate(Request $request)
+    public function applyTemplate(Request $request, Championship $championship, Season $season, Race $race)
     {
         $request->validate([
-            'race' => ['required', 'integer', 'exists:races,id'],
             'template' => ['required', 'integer', 'exists:templates,id'],
         ]);
 
-        $race = Race::find($request->input('race'));
         $template = Template::find($request->input('template'));
 
         $template->sessions->each(function ($session) use ($race) {
@@ -59,7 +66,7 @@ class RaceSessionController extends Controller
             $start_time->hour($start_hour)->minute($start_min);
             $end_time->hour($end_hour)->minute($end_min);
 
-            RaceSession::create([
+            $race->sessions()->create([
                 'race_id' => $race->id,
                 'start_time' => $start_time,
                 'end_time' => $end_time,
@@ -68,29 +75,38 @@ class RaceSessionController extends Controller
         });
 
         return redirect()
-            ->route('admin.race.session.index', ['race' => $race->id])
+            ->route('admin.race.session.index', ['championship' => $championship, 'season' => $season, 'race' => $race])
             ->with('success', __('The template has been applied.'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param Championship $championship
+     * @param Season $season
      * @param Race $race
      * @return Factory|View
      */
-    public function create(Race $race)
+    public function create(Championship $championship, Season $season, Race $race)
     {
-        return view('admin.race.session.create')->with('race', $race);
+        return view('admin.race.session.create')
+            ->with([
+                'championship' => $championship,
+                'season' => $season,
+                'race' => $race,
+            ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
+     * @param Championship $championship
+     * @param Season $season
      * @param Race $race
      * @return RedirectResponse
      */
-    public function store(Request $request, Race $race)
+    public function store(Request $request, Championship $championship, Season $season, Race $race)
     {
         $ruleUniqueSessionName = Rule::unique('race_sessions')->where(function (Builder $query) use ($race) {
             return $query->where('race_id', $race->id);
@@ -105,10 +121,11 @@ class RaceSessionController extends Controller
         $data = $request->only('start_time', 'end_time', 'name');
         $data['race_id'] = $race->id;
 
-        $session = raceSession::create($data);
+        /** @var RaceSession $session */
+        $session = $race->sessions()->create($data);
 
         return redirect()
-            ->route('admin.race.session.index', ['race' => $race->id])
+            ->route('admin.race.session.index', ['championship' => $championship, 'season' => $season, 'race' => $race])
             ->with('success', __('The session :name has been added.', ['name' => $session->name]));
     }
 
@@ -125,13 +142,17 @@ class RaceSessionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
+     * @param Championship $championship
+     * @param Season $season
      * @param Race $race
      * @param RaceSession $session
      * @return Factory|View
      */
-    public function edit(Race $race, raceSession $session)
+    public function edit(Championship $championship, Season $season, Race $race, RaceSession $session)
     {
         return view('admin.race.session.edit')->with([
+            'championship' => $championship,
+            'season' => $season,
             'race' => $race,
             'session' => $session,
         ]);
@@ -141,11 +162,13 @@ class RaceSessionController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
+     * @param Championship $championship
+     * @param Season $season
      * @param Race $race
      * @param RaceSession $session
      * @return RedirectResponse
      */
-    public function update(Request $request, race $race, raceSession $session)
+    public function update(Request $request, Championship $championship, Season $season, Race $race, RaceSession $session)
     {
         $ruleUniqueSessionName = Rule::unique('race_sessions')
             ->ignore($session->id)
@@ -162,7 +185,7 @@ class RaceSessionController extends Controller
         $session->update($request->only('start_time', 'end_time', 'name'));
 
         return redirect()
-            ->route('admin.race.session.index', ['race' => $race->id])
+            ->route('admin.race.session.index', ['championship' => $championship, 'season' => $season, 'race' => $race])
             ->with('success', __('The session :name has been edited.', ['name' => $session->name]));
     }
 

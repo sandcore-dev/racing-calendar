@@ -22,12 +22,29 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
-Route::group([ 'prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => 'auth' ], function () {
-    Route::resource('season', 'SeasonController');
-    Route::resource('race', 'RaceController');
-    Route::post('race/copy-season', 'RaceController@copySeason')->name('race.copy-season');
-    Route::resource('race.session', 'RaceSessionController');
-    Route::post('race/session/apply-template', 'RaceSessionController@applyTemplate')->name('race.session.apply-template');
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => 'auth'], function () {
+    Route::resource('championship', 'ChampionshipController')
+        ->except(['show', 'destroy']);
+
+    Route::prefix('championship/{championship}')
+        ->group(function () {
+            Route::resource('season', 'SeasonController');
+
+            Route::prefix('season/{season:id}')
+                ->group(function () {
+                    Route::resource('race', 'RaceController');
+                    Route::post('copy-season', 'RaceController@copySeason')->name('race.copy-season');
+
+                    Route::prefix('race/{race:id}')
+                        ->as('race.')
+                        ->group(function () {
+                            Route::resource('session', 'RaceSessionController');
+                            Route::post('session/apply-template', 'RaceSessionController@applyTemplate')
+                                ->name('session.apply-template');
+                        });
+                });
+        });
+
     Route::resource('circuit', 'CircuitController');
     Route::resource('country', 'CountryController');
     Route::resource('location', 'LocationController');
@@ -35,8 +52,17 @@ Route::group([ 'prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'm
     Route::resource('template.session', 'TemplateSessionController');
 });
 
-Route::get('/', 'CalendarController@index')->name('index');
-Route::get('/{access_token}', 'CalendarController@calendar')->name('calendar');
+Route::domain('{championship:domain}')
+    ->where(['championship' => '[a-z0-9.-]+'])
+    ->group(function () {
+        Route::get('/', 'CalendarController@index')->name('index');
 
-Route::get('/{access_token}/{race}/location', 'CalendarController@editLocation')->name('calendar.location.edit');
-Route::put('/{access_token}/{race}/location', 'CalendarController@updateLocation')->name('calendar.location.update');
+        Route::prefix('{season:access_token}')->group(function () {
+            Route::get('/', 'CalendarController@calendar')->name('calendar');
+
+            Route::prefix('{race:id}')->group(function () {
+                Route::get('location', 'CalendarController@editLocation')->name('calendar.location.edit');
+                Route::put('location', 'CalendarController@updateLocation')->name('calendar.location.update');
+            });
+        });
+    });

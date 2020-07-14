@@ -2,40 +2,43 @@
 
 namespace App;
 
-use Eloquent;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Season
  *
  * @property int $id
+ * @property int $championship_id
  * @property string $year
  * @property string|null $header_image
  * @property string|null $footer_image
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read AccessToken $access_token
+ * @property string|null $access_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Championship $championship
  * @property-read string $footer_url
  * @property-read string $header_url
- * @property-read Collection|Location[] $locations
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Location[] $locations
  * @property-read int|null $locations_count
- * @property-read Collection|Race[] $races
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Race[] $races
  * @property-read int|null $races_count
- * @property-read AccessToken $accessToken
- * @method static Builder|Season newModelQuery()
- * @method static Builder|Season newQuery()
- * @method static Builder|Season query()
- * @method static Builder|Season whereCreatedAt($value)
- * @method static Builder|Season whereFooterImage($value)
- * @method static Builder|Season whereHeaderImage($value)
- * @method static Builder|Season whereId($value)
- * @method static Builder|Season whereUpdatedAt($value)
- * @method static Builder|Season whereYear($value)
- * @mixin Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Season newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Season newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Season query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereAccessToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereChampionshipId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereFooterImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereHeaderImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereYear($value)
+ * @mixin \Eloquent
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class Season extends Model
 {
@@ -45,7 +48,7 @@ class Season extends Model
      * @var array
      */
     protected $fillable = [
-        'year', 'access_token_id', 'header_image', 'footer_image',
+        'year', 'access_token', 'header_image', 'footer_image',
     ];
 
     /**
@@ -60,6 +63,16 @@ class Season extends Model
         static::addGlobalScope('sortByYear', function (Builder $builder) {
             $builder->orderBy('year', 'desc');
         });
+    }
+
+    /**
+     * Get championship this season belongs to.
+     *
+     * @return BelongsTo
+     */
+    public function championship(): BelongsTo
+    {
+        return $this->belongsTo(Championship::class);
     }
     
     /**
@@ -76,14 +89,6 @@ class Season extends Model
     public function locations()
     {
         return $this->belongsToMany(Location::class)->withTimestamps();
-    }
-    
-    /**
-     * Get the access token associated with this season.
-     */
-    public function accessToken()
-    {
-        return $this->hasOne(AccessToken::class)->withDefault();
     }
     
     /**

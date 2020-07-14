@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Admin') . ' - ' . __('Season'))
+@section('title', __('Admin') . ' - ' . $championship->name . ' - '  . __('Seasons'))
 
 @section('nav-title', __('Admin'))
 
@@ -8,11 +8,19 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
+			<h1 class="text-center">{{ $championship->name }}</h1>
+
 			@if( session('success') )
 				<div class="alert alert-success">
 					{{ session('success') }}
 				</div>
 			@endif
+
+			<nav class="row mt-3 mb-3">
+				<div class="col text-center">
+					<a class="btn btn-primary" href="{{ route('admin.championship.index') }}">@lang('Back to championship index')</a>
+				</div>
+			</nav>
 
 			{{ $seasons->links() }}
 
@@ -21,9 +29,11 @@
 				<tr>
 					<th>@lang('Year')</th>
 					<th class="col-sm-2 text-center">
-						<a href="{{ route('admin.season.create') }}" title="@lang('Add season')">
-							<span class="fa fa-plus"></span>
-						</a>
+						@if($championship)
+							<a href="{{ route('admin.season.create', ['championship' => $championship]) }}" title="@lang('Add season')">
+								<span class="fa fa-plus"></span>
+							</a>
+						@endif
 					</th>
 				</tr>
 				</thead>
@@ -31,13 +41,16 @@
 				@forelse( $seasons as $season )
 					<tr>
 						<td>
-							<a href="{{ route('admin.season.edit', [ 'season' => $season->id ]) }}" title="@lang('Edit season')">
+							<a href="{{ route('admin.season.edit', [ 'championship' => $championship, 'season' => $season ]) }}" title="@lang('Edit season')">
 								{{ $season->year }}
 							</a>
 						</td>
 						<td class="text-center">
-							<a href="{{ route('admin.season.edit', [ 'season' => $season->id ]) }}" title="@lang('Edit season')">
+							<a href="{{ route('admin.season.edit', [ 'championship' => $championship, 'season' => $season ]) }}" title="@lang('Edit season')">
 								<span class="fa fa-edit"></span>
+							</a>
+							<a href="{{ route('admin.race.index', [ 'championship' => $championship, 'season' => $season ]) }}" title="@lang('Season races')">
+								<span class="fa fa-table"></span>
 							</a>
 						</td>
 					</tr>

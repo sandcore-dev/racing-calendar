@@ -2,36 +2,35 @@
 
 namespace App;
 
-use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 
 /**
  * App\RaceSession
  *
  * @property int $id
  * @property int $race_id
- * @property Carbon $start_time
- * @property Carbon $end_time
+ * @property \Illuminate\Support\Carbon $start_time
+ * @property \Illuminate\Support\Carbon $end_time
  * @property string $name
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string $date
  * @property-read string $date_short
  * @property-read string $time
- * @property-read Race $race
- * @method static Builder|RaceSession newModelQuery()
- * @method static Builder|RaceSession newQuery()
- * @method static Builder|RaceSession query()
- * @method static Builder|RaceSession whereCreatedAt($value)
- * @method static Builder|RaceSession whereEndTime($value)
- * @method static Builder|RaceSession whereId($value)
- * @method static Builder|RaceSession whereName($value)
- * @method static Builder|RaceSession whereRaceId($value)
- * @method static Builder|RaceSession whereStartTime($value)
- * @method static Builder|RaceSession whereUpdatedAt($value)
- * @mixin Eloquent
+ * @property-read \App\Race $race
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereEndTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereRaceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereStartTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereUpdatedAt($value)
+ * @mixin \Eloquent
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class RaceSession extends Model
 {

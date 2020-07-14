@@ -8,7 +8,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
-			<form action="{{ route('admin.race.update', [ 'race' => $race->id ]) }}" method="post">
+			<form action="{{ route('admin.race.update', ['championship' => $championship, 'season' => $season, 'race' => $race]) }}" method="post">
 				{{ csrf_field() }}
 				{{ method_field('PUT') }}
 
@@ -65,7 +65,7 @@
 
 				@component('input.submit')
 					@slot('label', __('Edit race'))
-					@slot('cancel', route('admin.race.index', [ 'season' => $race->season->id ]))
+					@slot('cancel', route('admin.race.index', ['championship' => $championship, 'season' => $season]))
 				@endcomponent
 			</form>
 		</div>

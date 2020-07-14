@@ -8,26 +8,19 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
+			<h1 class="text-center">@lang(':season :championship', ['season' => $season->year, 'championship' => $championship->name])</h1>
+
 			@if( session('success') )
 				<div class="alert alert-success">
 					{{ session('success') }}
 				</div>
 			@endif
 
-			<form action="{{ route('admin.race.index') }}" method="get">
-				<select name="season" onchange="return this.form.submit();">
-					@forelse( $seasons as $season )
-						<option{{ $season->is( $currentSeason ) ? ' selected' : '' }} value="{{ $season->id }}">{{ $season->year }}</option>
-					@empty
-						<option value="0">@lang('No seasons have been found')</option>
-					@endforelse
-				</select>
-				<noscript>
-					<button type="submit" class="btn btn-primary">
-						@lang('Send')
-					</button>
-				</noscript>
-			</form>
+			<nav class="row mt-3 mb-3">
+				<div class="col text-center">
+					<a class="btn btn-primary" href="{{ route('admin.season.index', ['championship' => $championship]) }}">@lang('Back to season index')</a>
+				</div>
+			</nav>
 
 			{{ $races->links() }}
 
@@ -39,7 +32,7 @@
 					<th>@lang('Name')</th>
 					<th class="col-sm-3">@lang('Circuit')</th>
 					<th class="col-sm-2 text-center">
-						<a href="{{ route('admin.race.create', [ 'season' => $currentSeason->id ]) }}" title="@lang('Add race')">
+						<a href="{{ route('admin.race.create', [ 'championship' => $championship, 'season' => $season ]) }}" title="@lang('Add race')">
 							<span class="fa fa-plus"></span>
 						</a>
 					</th>
@@ -65,7 +58,7 @@
 							@endswitch
 						</td>
 						<td>
-							<a href="{{ route('admin.race.edit', [ 'race' => $race->id ]) }}" title="@lang('Edit race')">
+							<a href="{{ route('admin.race.edit', ['championship' => $championship, 'season' => $season, 'race' => $race]) }}" title="@lang('Edit race')">
 								{{ $race->name }}
 							</a>
 						</td>
@@ -73,28 +66,27 @@
 							{{ $race->circuit->name }}
 						</td>
 						<td class="text-center">
-							<a href="{{ route('admin.race.edit', [ 'race' => $race->id ]) }}" title="@lang('Edit race')">
+							<a href="{{ route('admin.race.edit', ['championship' => $championship, 'season' => $season, 'race' => $race]) }}" title="@lang('Edit race')">
 								<span class="fa fa-edit"></span>
 							</a>
 							&nbsp;
-							<a href="{{ route('admin.race.session.index', [ 'race' => $race->id ]) }}" title="@lang('To race sessions')">
+							<a href="{{ route('admin.race.session.index', ['championship' => $championship, 'season' => $season, 'race' => $race]) }}" title="@lang('To race sessions')">
 								<span class="fa fa-th-list"></span>
 							</a>
 						</td>
 					</tr>
 				@empty
 					<tr>
-						<td colspan="4" class="text-center">
+						<td colspan="5" class="text-center">
 							<p>
 								@lang('No races have been found')
 							</p>
-							@if($previousSeasons)
+							@if($previousSeasons->count())
 								<p>
 									@lang('Copy races from season:')
 								</p>
-								<form action="{{ route('admin.race.copy-season') }}" method="post">
+								<form action="{{ route('admin.race.copy-season', ['championship' => $championship, 'season' => $season]) }}" method="post">
 									{{ csrf_field() }}
-									<input type="hidden" name="season" value="{{ $currentSeason->id }}"/>
 									<select name="copyFromSeason">
 										@foreach($previousSeasons as $previousSeason)
 											<option value="{{ $previousSeason->id }}">{{ $previousSeason->year }}</option>

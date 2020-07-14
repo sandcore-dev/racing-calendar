@@ -71,7 +71,7 @@
 									@if( $race->start_time->isPast() )
 										{{ $race->location->name }}
 									@else
-										<a href="{{ route('calendar.location.edit', [ 'access_token' => $race->season->accessToken, 'race' => $race->id ]) }}">
+										<a href="{{ route('calendar.location.edit', [ 'championship' => $championship, 'season' => $season, 'race' => $race ]) }}">
 											@if( $race->location->name )
 												{{ $race->location->name }}
 											@else

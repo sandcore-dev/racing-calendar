@@ -8,7 +8,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
-			<form action="{{ route('admin.race.session.store', [ 'race' => $race ]) }}" method="post">
+			<form action="{{ route('admin.race.session.store', ['championship' => $championship, 'season' => $season, 'race' => $race]) }}" method="post">
 				{{ csrf_field() }}
 
 				<h1 class="text-center">@lang('Add session')</h1>
@@ -36,7 +36,7 @@
 
 				@component('input.submit')
 					@slot('label', __('Add session'))
-					@slot('cancel', route('admin.race.session.index', [ 'race' => $race->id ]))
+					@slot('cancel', route('admin.race.session.index', ['championship' => $championship, 'season' => $season, 'race' => $race]))
 				@endcomponent
 			</form>
 		</div>

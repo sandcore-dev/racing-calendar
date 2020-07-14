@@ -2,11 +2,8 @@
 
 namespace App;
 
-use Eloquent;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 use Monarobase\CountryList\CountryListFacade as Countries;
 use Monarobase\CountryList\CountryNotFoundException;
 
@@ -16,21 +13,23 @@ use Monarobase\CountryList\CountryNotFoundException;
  * @property int $id
  * @property string $code
  * @property string $name
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Collection|Circuit[] $circuits
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Circuit[] $circuits
  * @property-read int|null $circuits_count
  * @property-read string $flag_class
  * @property-read mixed $local_name
- * @method static Builder|Country newModelQuery()
- * @method static Builder|Country newQuery()
- * @method static Builder|Country query()
- * @method static Builder|Country whereCode($value)
- * @method static Builder|Country whereCreatedAt($value)
- * @method static Builder|Country whereId($value)
- * @method static Builder|Country whereName($value)
- * @method static Builder|Country whereUpdatedAt($value)
- * @mixin Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Country newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Country newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Country query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Country whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Country whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Country whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Country whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Country whereUpdatedAt($value)
+ * @mixin \Eloquent
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class Country extends Model
 {

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Championship;
+use App\Season;
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\AccessToken;
-use App\Season;
 use App\Race;
+use Illuminate\View\View;
 
 class CalendarController extends Controller
 {
@@ -14,86 +18,89 @@ class CalendarController extends Controller
      * If logged in: redirect to most recent calendar.
      * If not logged in: show most recent calendar without locations.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @param Championship $championship
+     * @return Renderable|RedirectResponse
      */
-    public function index()
+    public function index(Championship $championship)
     {
-        if (!Season::count()) {
+        if (!$championship->seasons()->count()) {
             return view('empty');
         }
 
-        if (Auth::check() && $season = Season::has('accessToken')->first()) {
-            return redirect()->route('calendar', [ 'access_token' => $season->accessToken->name ]);
+        if (Auth::check() && $season = $championship->seasons()->whereNotNull('access_token')->first()) {
+            return redirect()
+                ->route('calendar', [
+                    'championship' => $championship,
+                    'season' => $season,
+                ]);
         }
-            
+
         return view('index')->with([
-            'season'        => Season::first(),
+            'season' => $championship->seasons->first(),
             'showLocations' => false,
         ]);
     }
-    
+
     /**
      * Show calendar.
      *
-     * @param   \App\AccessToken            $access_token
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Championship $championship
+     * @param Season $season
+     * @return Renderable
      */
-    public function calendar(AccessToken $access_token)
+    public function calendar(Championship $championship, Season $season)
     {
         return view('index')->with([
-            'season'        => $access_token->season,
+            'championship' => $championship,
+            'season' => $season,
             'showLocations' => true,
         ]);
     }
-    
+
     /**
      * Show location edit form.
      *
-     * @param   \App\AccessToken    $access_token
-     * @param   \App\Race           $race
+     * @param Championship $championship
+     * @param Season $season
+     * @param Race $race
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
-    public function editLocation(AccessToken $access_token, Race $race)
+    public function editLocation(Championship $championship, Season $season, Race $race)
     {
-        if (!$race->season->is($access_token->season)) {
-            abort(404);
-        }
-        
         return view('location.edit')->with([
+            'championship' => $championship,
+            'season' => $season,
             'race' => $race,
         ]);
     }
-      
+
     /**
      * Update location.
      *
-     * @param   \App\AccessToken            $access_token
-     * @param   \App\Race                   $race
-     * @param   \Illuminate\Http\Request    $request
+     * @param Championship $championship
+     * @param Season $season
+     * @param Race $race
+     * @param Request $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function updateLocation(AccessToken $access_token, Race $race, Request $request)
+    public function updateLocation(Championship $championship, Season $season, Race $race, Request $request)
     {
-        if (!$race->season->is($access_token->season)) {
-            abort(404);
-        }
-        
         $request->validate([
-            'location'          => [ 'integer', 'exists:locations,id' ],
-            'erase_location'    => [ 'boolean' ],
+            'location' => ['integer', 'exists:locations,id'],
+            'erase_location' => ['boolean'],
         ]);
-        
+
         if ($location = $request->input('location')) {
             $race->location()->associate($location);
         } elseif ($request->input('erase_location')) {
             $race->location()->dissociate();
         }
-        
+
         $race->save();
-        
+
         return redirect()
-            ->route('calendar', [ 'access_token' => $race->season->accessToken ]);
+            ->route('calendar', ['championship' => $championship, 'season' => $season]);
     }
 }

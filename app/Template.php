@@ -2,29 +2,27 @@
 
 namespace App;
 
-use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 
 /**
  * App\Template
  *
  * @property int $id
  * @property string $name
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Collection|TemplateSession[] $sessions
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\TemplateSession[] $sessions
  * @property-read int|null $sessions_count
- * @method static Builder|Template newModelQuery()
- * @method static Builder|Template newQuery()
- * @method static Builder|Template query()
- * @method static Builder|Template whereCreatedAt($value)
- * @method static Builder|Template whereId($value)
- * @method static Builder|Template whereName($value)
- * @method static Builder|Template whereUpdatedAt($value)
- * @mixin Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template whereUpdatedAt($value)
+ * @mixin \Eloquent
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class Template extends Model
 {

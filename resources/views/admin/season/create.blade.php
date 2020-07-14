@@ -8,10 +8,18 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
-			<form action="{{ route('admin.season.store') }}" method="post" enctype="multipart/form-data">
+			<form action="{{ route('admin.season.store', ['championship' => $championship]) }}" method="post" enctype="multipart/form-data">
 				{{ csrf_field() }}
 
 				<h1 class="text-center">@lang('Add season')</h1>
+
+				@component('input.text')
+					@slot('field', 'name')
+					@slot('label', __('Name'))
+					@slot('value', $championship->name)
+
+					disabled
+				@endcomponent
 
 				@component('input.text')
 					@slot('type', 'number')
@@ -33,7 +41,7 @@
 
 				@component('input.submit')
 					@slot('label', __('Add season'))
-					@slot('cancel', route('admin.season.index'))
+					@slot('cancel', route('admin.season.index', ['championship' => $championship]))
 				@endcomponent
 			</form>
 		</div>

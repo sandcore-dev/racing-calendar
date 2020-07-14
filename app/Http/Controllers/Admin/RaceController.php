@@ -2,57 +2,57 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Championship;
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Rules\IsRaceNameUnique;
 use App\Circuit;
 use App\Season;
 use App\Race;
+use Illuminate\Validation\Rule;
 
 class RaceController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Championship $championship
+     * @param Season $season
+     * @return Renderable
      */
-    public function index(Request $request)
+    public function index(Championship $championship, Season $season)
     {
-        $season = $request->input('season')
-            ? Season::find($request->input('season'))
-            : (Season::first() ?: new Season());
-
         return view('admin.race.index')->with([
-            'previousSeasons' => Season::has('races')->where('year', '<', $season->year)->get(),
-            'currentSeason' => $season,
-            'seasons' => Season::all(),
-            'races' => Race::bySeason($season)->paginate(30),
+            'championship' => $championship,
+            'previousSeasons' => $championship->seasons()->where('year', '<', $season->year)->get(),
+            'season' => $season,
+            'races' => $season->races()->paginate(30),
         ]);
     }
 
     /**
      * Copy races from the given season.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Championship $championship
+     * @param Season $season
+     * @return RedirectResponse
      */
-    public function copySeason(Request $request)
+    public function copySeason(Request $request, Championship $championship, Season $season)
     {
         $request->validate([
-            'season' => ['required', 'integer', 'exists:seasons,id', 'different:copyFromSeason'],
-            'copyFromSeason' => ['required', 'integer', 'exists:seasons,id', 'different:season'],
+            'copyFromSeason' => ['required', 'integer', 'exists:seasons,id', Rule::notIn([$season->id])],
         ]);
 
-        $season = Season::find($request->input('season'));
         $copyFromSeason = Season::find($request->input('copyFromSeason'));
 
         $copyFromSeason->races->each(function (Race $race) use ($season) {
             $start_time = clone $race->start_time;
             $start_time->year($season->year);
 
-            Race::create([
-                'season_id' => $season->id,
+            $season->races()->create([
                 'start_time' => $start_time,
                 'name' => $race->name,
                 'circuit_id' => $race->circuit_id,
@@ -61,24 +61,22 @@ class RaceController extends Controller
         });
 
         return redirect()
-            ->route('admin.race.index', ['season' => $season->id])
+            ->route('admin.race.index', ['championship' => $championship, 'season' => $season])
             ->with('success', __('The races from :year have been copied.', ['year' => $copyFromSeason->year]));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Championship $championship
+     * @param Season $season
+     * @return Renderable
      */
-    public function create(Request $request)
+    public function create(Championship $championship, Season $season)
     {
-        $request->validate([
-            'season' => ['required', 'integer', 'exists:seasons,id'],
-        ]);
-
         return view('admin.race.create')->with([
-            'season' => Season::findOrFail($request->input('season')),
+            'championship' => $championship,
+            'season' => $season,
             'circuits' => Circuit::all(),
         ]);
     }
@@ -86,13 +84,14 @@ class RaceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Championship $championship
+     * @param Season $season
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request, Championship $championship, Season $season)
     {
         $request->validate([
-            'season_id' => ['required', 'integer', 'exists:seasons,id'],
             'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
             'name' => [
                 'required',
@@ -103,17 +102,18 @@ class RaceController extends Controller
             'remarks' => ['string', 'nullable'],
         ]);
 
-        $race = Race::create($request->only('season_id', 'start_time', 'name', 'circuit_id', 'remarks'));
+        /** @var Race $race */
+        $race = $season->races()->create($request->only('start_time', 'name', 'circuit_id', 'remarks'));
 
         return redirect()
-            ->route('admin.race.index', ['season' => $race->season_id])
+            ->route('admin.race.index', ['championship' => $championship, 'season' => $season, 'race' => $race])
             ->with('success', __('The race :name has been added.', ['name' => $race->name]));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param \App\Race $race
+     * @param Race $race
      */
     public function show(Race $race)
     {
@@ -123,10 +123,12 @@ class RaceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Race $race
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Championship $championship
+     * @param Season $season
+     * @param Race $race
+     * @return Renderable
      */
-    public function edit(Race $race)
+    public function edit(Championship $championship, Season $season, Race $race)
     {
         $statuses = [
             [
@@ -144,6 +146,8 @@ class RaceController extends Controller
         ];
 
         return view('admin.race.edit')->with([
+            'championship' => $championship,
+            'season' => $season,
             'race' => $race,
             'circuits' => Circuit::all(),
             'statuses' => $statuses,
@@ -153,14 +157,15 @@ class RaceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Race $race
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Championship $championship
+     * @param Season $season
+     * @param Race $race
+     * @return RedirectResponse
      */
-    public function update(Request $request, Race $race)
+    public function update(Request $request, Championship $championship, Season $season, Race $race)
     {
         $request->validate([
-            'season_id' => ['required', 'integer', 'exists:seasons,id'],
             'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
             'name' => [
                 'required',
@@ -172,17 +177,17 @@ class RaceController extends Controller
             'status' => ['required', 'string', 'in:scheduled,postponed,cancelled'],
         ]);
 
-        $race->update($request->only('season_id', 'start_time', 'name', 'circuit_id', 'remarks', 'status'));
+        $race->update($request->only('start_time', 'name', 'circuit_id', 'remarks', 'status'));
 
         return redirect()
-            ->route('admin.race.index', ['season' => $race->season_id])
+            ->route('admin.race.index', ['championship' => $championship, 'season' => $season])
             ->with('success', __('The race :name has been changed.', ['name' => $race->name]));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Race $race
+     * @param Race $race
      */
     public function destroy(Race $race)
     {

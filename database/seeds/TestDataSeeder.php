@@ -24,6 +24,7 @@ class TestDataSeeder extends Seeder
         $populator = populator();
         
         $populator
+            ->add(App\Championship::class, 3)
             ->add(App\Season::class, 3)
             ->add(App\Country::class, 22)
             ->add(App\Circuit::class, 22)

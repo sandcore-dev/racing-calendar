@@ -8,7 +8,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
-			<form action="{{ route('calendar.location.update', [ 'access_token' => $race->season->accessToken, 'race' => $race->id ]) }}" method="post">
+			<form action="{{ route('calendar.location.update', [ 'championship' => $championship, 'season' => $season, 'race' => $race ]) }}" method="post">
 				{{ csrf_field() }}
 				{{ method_field('PUT') }}
 
@@ -65,10 +65,10 @@
 
 				<div class="form-group row">
 					<div class="col-sm-6 offset-sm-4">
-						<a class="btn btn-primary" href="{{ route('calendar', [ 'access_token' => $race->season->accessToken ]) }}">{{ __('Cancel') }}</a>
+						<a class="btn btn-primary" href="{{ route('calendar', [ 'championship' => $championship, 'season' => $season ]) }}">{{ __('Cancel') }}</a>
 
 						@if( $race->location->id )
-							<button class="btn btn-danger pull-right" type="submit" name="erase_location" value="1">
+							<button class="btn btn-danger float-right" type="submit" name="erase_location" value="1">
 								@lang('Erase current location')
 							</button>
 						@endif

@@ -2,47 +2,48 @@
 
 namespace App;
 
-use Eloquent;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 
 /**
  * App\Race
  *
  * @property int $id
- * @property Carbon $start_time
+ * @property \Illuminate\Support\Carbon $start_time
  * @property string $name
  * @property int $season_id
  * @property int $circuit_id
  * @property int|null $location_id
  * @property string $remarks
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Circuit $circuit
+ * @property string $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Circuit $circuit
  * @property-read string $date
  * @property-read string $date_short
  * @property-read bool $this_week
  * @property-read string $time
- * @property-read Location|null $location
- * @property-read Season $season
- * @property-read Collection|RaceSession[] $sessions
+ * @property-read \App\Location|null $location
+ * @property-read \App\Season $season
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\RaceSession[] $sessions
  * @property-read int|null $sessions_count
- * @method static Builder|Race bySeason(Season $season)
- * @method static Builder|Race newModelQuery()
- * @method static Builder|Race newQuery()
- * @method static Builder|Race query()
- * @method static Builder|Race whereCircuitId($value)
- * @method static Builder|Race whereCreatedAt($value)
- * @method static Builder|Race whereId($value)
- * @method static Builder|Race whereLocationId($value)
- * @method static Builder|Race whereName($value)
- * @method static Builder|Race whereRemarks($value)
- * @method static Builder|Race whereSeasonId($value)
- * @method static Builder|Race whereStartTime($value)
- * @method static Builder|Race whereUpdatedAt($value)
- * @mixin Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race bySeason(\App\Season $season)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereCircuitId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereLocationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereRemarks($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereSeasonId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereStartTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereUpdatedAt($value)
+ * @mixin \Eloquent
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class Race extends Model
 {

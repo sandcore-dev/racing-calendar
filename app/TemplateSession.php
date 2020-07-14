@@ -2,10 +2,7 @@
 
 namespace App;
 
-use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 
 /**
  * App\TemplateSession
@@ -16,21 +13,23 @@ use Illuminate\Support\Carbon;
  * @property string $start_time
  * @property string $end_time
  * @property string $name
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Template $template
- * @method static Builder|TemplateSession newModelQuery()
- * @method static Builder|TemplateSession newQuery()
- * @method static Builder|TemplateSession query()
- * @method static Builder|TemplateSession whereCreatedAt($value)
- * @method static Builder|TemplateSession whereDays($value)
- * @method static Builder|TemplateSession whereEndTime($value)
- * @method static Builder|TemplateSession whereId($value)
- * @method static Builder|TemplateSession whereName($value)
- * @method static Builder|TemplateSession whereStartTime($value)
- * @method static Builder|TemplateSession whereTemplateId($value)
- * @method static Builder|TemplateSession whereUpdatedAt($value)
- * @mixin Eloquent
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Template $template
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\TemplateSession newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\TemplateSession newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\TemplateSession query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\TemplateSession whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\TemplateSession whereDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\TemplateSession whereEndTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\TemplateSession whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\TemplateSession whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\TemplateSession whereStartTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\TemplateSession whereTemplateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\TemplateSession whereUpdatedAt($value)
+ * @mixin \Eloquent
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class TemplateSession extends Model
 {
