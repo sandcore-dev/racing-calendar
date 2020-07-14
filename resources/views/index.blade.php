@@ -40,7 +40,7 @@
 				</thead>
 				<tbody>
 					@foreach( $season->races as $index => $race )
-						<tr class="{{ $race->thisWeek ? 'warning' : '' }}" data-toggle="collapse" data-target=".details{{ $index }}">
+						<tr class="{{ $race->thisWeek ? 'this-week' : '' }}" data-toggle="collapse" data-target=".details{{ $index }}">
 							<td>
 								<span class="d-none d-md-inline">
 									{{ $race->date }}
