@@ -1,8 +1,11 @@
 @extends('layouts.app')
 
-@section('title', config('app.name') . ' - ' . $season->year)
-@section('nav-title', $season->year)
-@section('image', env('APP_URL') . $season->header_url)
+@section('title', __(':season :championship', ['championship' => $championship->name, 'season' => $season->year]) . ' - ' . config('app.name'))
+@section('nav-title', __(':season :championship', ['championship' => $championship->name, 'season' => $season->year]))
+
+@if($season->header_url)
+	@section('image', asset($season->header_url))
+@endif
 
 @section('content')
 	<div class="container calendar">

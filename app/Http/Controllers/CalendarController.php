@@ -24,7 +24,7 @@ class CalendarController extends Controller
     public function index(Championship $championship)
     {
         if (!$championship->seasons()->count()) {
-            return view('empty');
+            return view('empty')->with('championship', $championship);
         }
 
         if (Auth::check() && $season = $championship->seasons()->whereNotNull('access_token')->first()) {
@@ -36,6 +36,7 @@ class CalendarController extends Controller
         }
 
         return view('index')->with([
+            'championship' => $championship,
             'season' => $championship->seasons()->first(),
             'showLocations' => false,
         ]);

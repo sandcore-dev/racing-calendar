@@ -1,4 +1,5 @@
 {
+	":season :championship": ":championship :season",
 	"Championship": "Kampioenschap",
 	"Season": "Seizoen",
 	"Seasons": "Seizoenen",
