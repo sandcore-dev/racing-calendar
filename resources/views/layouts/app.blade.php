@@ -49,28 +49,37 @@
                         @endauth
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        @guest
-                            <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-                        @else
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
+                                @guest
+                                    @lang('Racing series')
+                                @else
+                                    {{ Auth::user()->name }}
+                                @endguest
+                            </a>
 
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @foreach(\App\Championship::others()->get() as $otherChampionship)
+                                    <a class="dropdown-item" href="{{ route('index', ['championship' => $otherChampionship]) }}" target="_blank">
+                                        {{ $otherChampionship->name }}
+                                    </a>
+                                @endforeach
+                                <div class="dropdown-divider"></div>
+                                @guest
+                                    <a class="dropdown-item" href="{{ route('login') }}">Login</a>
+                                @else
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
-                                                 document.getElementById('logout-form').submit();">
+                                                 document.getElementById('logout-form2').submit();">
                                         Logout
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    <form id="logout-form2" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         {{ csrf_field() }}
                                     </form>
-                                </div>
-                            </li>
-                        @endguest
-
+                                @endguest
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>

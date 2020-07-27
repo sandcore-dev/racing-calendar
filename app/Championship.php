@@ -2,8 +2,10 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
 
 /**
  * App\Championship
@@ -17,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $seasons_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Championship newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Championship newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Championship others()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Championship query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Championship whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Championship whereDomain($value)
@@ -34,5 +37,12 @@ class Championship extends Model
     public function seasons(): HasMany
     {
         return $this->hasMany(Season::class);
+    }
+
+    public function scopeOthers(Builder $query): Builder
+    {
+        return $query
+            ->where('domain', '!=', app(Request::class)->getHost())
+            ->orderBy('name');
     }
 }
