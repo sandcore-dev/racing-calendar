@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $season_id
  * @property int $circuit_id
  * @property int|null $location_id
- * @property string $remarks
+ * @property string|null $remarks
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

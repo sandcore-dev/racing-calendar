@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\Storage;
  * App\Models\Season
  *
  * @property int $id
- * @property int $championship_id
+ * @property int|null $championship_id
  * @property string $year
  * @property string|null $header_image
  * @property string|null $footer_image
  * @property string|null $access_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Championship $championship
+ * @property-read \App\Models\Championship|null $championship
  * @property-read string $footer_url
  * @property-read string $header_url
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
