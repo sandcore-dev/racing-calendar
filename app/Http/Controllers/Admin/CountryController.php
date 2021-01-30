@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Country;
+use App\Models\Country;
 use Countries;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -45,12 +45,12 @@ class CountryController extends Controller
         $request->validate([
             'code'      => [ 'required', 'size:2', 'unique:countries' ],
         ]);
-        
+
         $country = Country::create([
             'code'  => $request->input('code'),
             'name'  => Countries::getOne($request->input('code'), config('app.locale')),
         ]);
-        
+
         return redirect()
             ->route('admin.country.index')
             ->with('success', __('The country :name has been added.', [ 'name' => $country->name ]));
@@ -90,10 +90,12 @@ class CountryController extends Controller
             'name'      => [ 'required', 'min:2', 'unique:countries,name,' . $country->id ],
             'code'      => [ 'required', 'size:2', 'unique:countries,code,' . $country->id ],
         ]);
-        
+
         $country->update($request->only('name', 'code'));
-        
-        return redirect()->route('admin.country.index')->with('success', __('The country :name has been updated.', [ 'name' => $country->name ]));
+
+        return redirect()
+            ->route('admin.country.index')
+            ->with('success', __('The country :name has been updated.', [ 'name' => $country->name ]));
     }
 
     /**

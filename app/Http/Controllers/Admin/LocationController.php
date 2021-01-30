@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Location;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -39,9 +39,9 @@ class LocationController extends Controller
         $request->validate([
             'name'      => [ 'required', 'min:2', 'unique:locations' ],
         ]);
-        
+
         $location = Location::create($request->only('name'));
-        
+
         return redirect()
             ->route('admin.location.index')
             ->with('success', __('The location :name has been added.', [ 'name' => $location->name ]));
@@ -50,7 +50,7 @@ class LocationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Location  $location
+     * @param  \App\Models\Location  $location
      */
     public function show(Location $location)
     {
@@ -60,7 +60,7 @@ class LocationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Location  $location
+     * @param  \App\Models\Location  $location
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Location $location)
@@ -72,7 +72,7 @@ class LocationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Location  $location
+     * @param  \App\Models\Location  $location
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Location $location)
@@ -80,9 +80,9 @@ class LocationController extends Controller
         $request->validate([
             'name'      => [ 'required', 'min:2', 'unique:locations,name,' . $location->id ],
         ]);
-        
+
         $location->update($request->only('name', 'code'));
-        
+
         return redirect()
             ->route('admin.location.index')
             ->with('success', __('The location :name has been updated.', [ 'name' => $location->name ]));
@@ -91,7 +91,7 @@ class LocationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Location  $location
+     * @param  \App\Models\Location  $location
      */
     public function destroy(Location $location)
     {

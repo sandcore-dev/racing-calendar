@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Circuit;
-use App\Country;
+use App\Models\Circuit;
+use App\Models\Country;
 
 class CircuitController extends Controller
 {
@@ -43,16 +43,18 @@ class CircuitController extends Controller
             'area'          => [ 'nullable', 'min:2' ],
             'country_id'    => [ 'required', 'integer', 'exists:countries,id' ],
         ]);
-        
+
         $circuit = Circuit::create($request->only('name', 'city', 'area', 'country_id'));
-        
-        return redirect()->route('admin.circuit.index')->with('success', __('The circuit :name has been added.', [ 'name' => $circuit->name ]));
+
+        return redirect()
+            ->route('admin.circuit.index')
+            ->with('success', __('The circuit :name has been added.', [ 'name' => $circuit->name ]));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Circuit  $circuit
+     * @param  \App\Models\Circuit  $circuit
      */
     public function show(Circuit $circuit)
     {
@@ -62,7 +64,7 @@ class CircuitController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Circuit  $circuit
+     * @param  \App\Models\Circuit  $circuit
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Circuit $circuit)
@@ -77,7 +79,7 @@ class CircuitController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Circuit  $circuit
+     * @param  \App\Models\Circuit  $circuit
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Circuit $circuit)
@@ -88,9 +90,9 @@ class CircuitController extends Controller
             'area'          => [ 'nullable', 'min:2' ],
             'country_id'    => [ 'required', 'integer', 'exists:countries,id' ],
         ]);
-        
+
         $circuit->update($request->only('name', 'city', 'area', 'country_id'));
-        
+
         return redirect()->route('admin.circuit.index')
             ->with('success', __('The circuit :name has been changed.', [ 'name' => $circuit->name ]));
     }
@@ -98,7 +100,7 @@ class CircuitController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Circuit  $circuit
+     * @param  \App\Models\Circuit  $circuit
      */
     public function destroy(Circuit $circuit)
     {

@@ -1,17 +1,24 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+use App\Models\Circuit;
+use App\Models\Country;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(App\Circuit::class, function (Faker $faker) {
-    $city       = $faker->unique()->city;
-    $country    = App\Country::count() ? App\Country::inRandomOrder()->first() : factory(App\Country::class)->create();
-    
-    return [
-        'name'          => $city . ' Raceway',
-        'city'          => $city,
-        'area'          => null,
-        'country_id'    => $country->id,
-    ];
-});
+class CircuitFactory extends Factory
+{
+    protected $model = Circuit::class;
+
+    public function definition(): array
+    {
+        return [
+            'name' => function (array $attributes) {
+                return $attributes['city'] . 'Raceway';
+            },
+            'city' => $this->faker->unique()->city,
+            'area' => $this->faker->optional(75)->city,
+            'country_id' => Country::factory(),
+        ];
+    }
+}

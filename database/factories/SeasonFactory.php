@@ -1,14 +1,23 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+use App\Models\Championship;
+use App\Models\Season;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(App\Season::class, function (Faker $faker) {
-    return [
-        'access_token_id'   => factory(App\AccessToken::class)->create()->id,
-        'year'              => $faker->unique()->year(),
-        'header_image'      => null,
-        'footer_image'      => null,
-    ];
-});
+class SeasonFactory extends Factory
+{
+    protected $model = Season::class;
+
+    public function definition(): array
+    {
+        return [
+            'championship_id' => Championship::factory(),
+            'year' => $this->faker->unique()->year(),
+            'header_image' => null,
+            'footer_image' => null,
+            'access_token' => $this->faker->optional()->randomAscii,
+        ];
+    }
+}

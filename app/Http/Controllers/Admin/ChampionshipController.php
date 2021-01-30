@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Championship;
+use App\Models\Championship;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -53,7 +53,7 @@ class ChampionshipController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Championship $championship
+     * @param \App\Models\Championship $championship
      * @return Renderable
      */
     public function edit(Championship $championship)
@@ -65,7 +65,7 @@ class ChampionshipController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Championship $championship
+     * @param \App\Models\Championship $championship
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Championship $championship)

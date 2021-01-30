@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Championship;
-use App\Season;
+use App\Models\Championship;
+use App\Models\Season;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Race;
+use App\Models\Race;
 use Illuminate\View\View;
 
 class CalendarController extends Controller

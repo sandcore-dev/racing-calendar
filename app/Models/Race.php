@@ -1,12 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Race
+ * App\Models\Race
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon $start_time
@@ -18,35 +21,37 @@ use Illuminate\Database\Eloquent\Builder;
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Circuit $circuit
+ * @property-read \App\Models\Circuit $circuit
  * @property-read string $date
  * @property-read string $date_short
  * @property-read bool $this_week
  * @property-read string $time
- * @property-read \App\Location|null $location
- * @property-read \App\Season $season
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\RaceSession[] $sessions
+ * @property-read \App\Models\Location|null $location
+ * @property-read Season $season
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RaceSession[] $sessions
  * @property-read int|null $sessions_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race bySeason(\App\Season $season)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereCircuitId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereLocationId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereRemarks($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereSeasonId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereStartTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Race whereUpdatedAt($value)
+ * @method static Builder|Race bySeason(Season $season)
+ * @method static Builder|Race newModelQuery()
+ * @method static Builder|Race newQuery()
+ * @method static Builder|Race query()
+ * @method static Builder|Race whereCircuitId($value)
+ * @method static Builder|Race whereCreatedAt($value)
+ * @method static Builder|Race whereId($value)
+ * @method static Builder|Race whereLocationId($value)
+ * @method static Builder|Race whereName($value)
+ * @method static Builder|Race whereRemarks($value)
+ * @method static Builder|Race whereSeasonId($value)
+ * @method static Builder|Race whereStartTime($value)
+ * @method static Builder|Race whereStatus($value)
+ * @method static Builder|Race whereUpdatedAt($value)
  * @mixin \Eloquent
  * @noinspection PhpFullyQualifiedNameUsageInspection
  * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class Race extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -68,7 +73,7 @@ class Race extends Model
      *
      * @return void
      */
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -80,7 +85,7 @@ class Race extends Model
     /**
      * Get the season of this race.
      */
-    public function season()
+    public function season(): BelongsTo
     {
         return $this->belongsTo(Season::class);
     }
@@ -88,7 +93,7 @@ class Race extends Model
     /**
      * Get the circuit of this race.
      */
-    public function circuit()
+    public function circuit(): BelongsTo
     {
         return $this->belongsTo(Circuit::class);
     }
@@ -96,15 +101,16 @@ class Race extends Model
     /**
      * Get the location of this race.
      */
-    public function location()
+    public function location(): BelongsTo
     {
-        return $this->belongsTo(Location::class)->withDefault();
+        return $this->belongsTo(Location::class)
+            ->withDefault();
     }
 
     /**
      * Get the sessions of this race.
      */
-    public function sessions()
+    public function sessions(): HasMany
     {
         return $this->hasMany(RaceSession::class);
     }
@@ -114,7 +120,7 @@ class Race extends Model
      *
      * @return  string
      */
-    public function getDateAttribute()
+    public function getDateAttribute(): string
     {
         return $this->start_time->formatLocalized('%d %B');
     }
@@ -124,7 +130,7 @@ class Race extends Model
      *
      * @return  string
      */
-    public function getDateShortAttribute()
+    public function getDateShortAttribute(): string
     {
         return $this->start_time->formatLocalized('%d %b');
     }
@@ -134,7 +140,7 @@ class Race extends Model
      *
      * @return  string
      */
-    public function getTimeAttribute()
+    public function getTimeAttribute(): string
     {
         return $this->start_time->formatLocalized('%R');
     }
@@ -144,7 +150,7 @@ class Race extends Model
      *
      * @return  boolean
      */
-    public function getThisWeekAttribute()
+    public function getThisWeekAttribute(): bool
     {
         $diffInDays = $this->start_time->diffInDays(null, false);
         return 0 >= $diffInDays && $diffInDays > -7;
@@ -155,7 +161,7 @@ class Race extends Model
      *
      * @param string $value The value to sanitize.
      */
-    public function setRemarksAttribute($value)
+    public function setRemarksAttribute(string $value): void
     {
         $this->attributes['remarks'] = strip_tags($value);
     }
@@ -166,9 +172,9 @@ class Race extends Model
      * @param Builder $query
      * @param Season $season
      *
-     * @return    Builder
+     * @return Builder
      */
-    public function scopeBySeason(Builder $query, Season $season)
+    public function scopeBySeason(Builder $query, Season $season): Builder
     {
         return $query->where('season_id', $season->id);
     }

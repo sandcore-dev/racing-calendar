@@ -1,12 +1,19 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+use App\Models\Country;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(App\Country::class, function (Faker $faker) {
-    return [
-        'code'  => $faker->unique()->countryCode,
-        'name'  => $faker->unique()->country,
-    ];
-});
+class CountryFactory extends Factory
+{
+    protected $model = Country::class;
+
+    public function definition(): array
+    {
+        return [
+            'code' => $this->faker->unique()->countryCode,
+            'name' => $this->faker->unique()->country,
+        ];
+    }
+}

@@ -1,11 +1,13 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\RaceSession
+ * App\Models\RaceSession
  *
  * @property int $id
  * @property int $race_id
@@ -17,23 +19,25 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read string $date
  * @property-read string $date_short
  * @property-read string $time
- * @property-read \App\Race $race
- * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereEndTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereRaceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereStartTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\RaceSession whereUpdatedAt($value)
+ * @property-read \App\Models\Race $race
+ * @method static \Illuminate\Database\Eloquent\Builder|RaceSession newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RaceSession newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RaceSession query()
+ * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereEndTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereRaceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereStartTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereUpdatedAt($value)
  * @mixin \Eloquent
  * @noinspection PhpFullyQualifiedNameUsageInspection
  * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class RaceSession extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -59,7 +63,7 @@ class RaceSession extends Model
     /**
      * Get the template of this session.
      */
-    public function race()
+    public function race(): BelongsTo
     {
         return $this->belongsTo(Race::class);
     }
@@ -69,7 +73,7 @@ class RaceSession extends Model
      *
      * @return  string
      */
-    public function getDateAttribute()
+    public function getDateAttribute(): string
     {
         return $this->start_time->formatLocalized('%d %B');
     }
@@ -79,7 +83,7 @@ class RaceSession extends Model
      *
      * @return  string
      */
-    public function getDateShortAttribute()
+    public function getDateShortAttribute(): string
     {
         return $this->start_time->formatLocalized('%d %b');
     }
@@ -89,7 +93,7 @@ class RaceSession extends Model
      *
      * @return  string
      */
-    public function getTimeAttribute()
+    public function getTimeAttribute(): string
     {
         return $this->start_time->formatLocalized('%R') . '-' . $this->end_time->formatLocalized('%R');
     }

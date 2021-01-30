@@ -1,38 +1,42 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Monarobase\CountryList\CountryListFacade as Countries;
 use Monarobase\CountryList\CountryNotFoundException;
 
 /**
- * App\Country
+ * App\Models\Country
  *
  * @property int $id
  * @property string $code
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Circuit[] $circuits
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Circuit[] $circuits
  * @property-read int|null $circuits_count
  * @property-read string $flag_class
- * @property-read mixed $local_name
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Country newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Country newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Country query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Country whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Country whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Country whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Country whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Country whereUpdatedAt($value)
+ * @property-read string $local_name
+ * @method static Builder|Country newModelQuery()
+ * @method static Builder|Country newQuery()
+ * @method static Builder|Country query()
+ * @method static Builder|Country whereCode($value)
+ * @method static Builder|Country whereCreatedAt($value)
+ * @method static Builder|Country whereId($value)
+ * @method static Builder|Country whereName($value)
+ * @method static Builder|Country whereUpdatedAt($value)
  * @mixin \Eloquent
  * @noinspection PhpFullyQualifiedNameUsageInspection
  * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class Country extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -47,7 +51,7 @@ class Country extends Model
      *
      * @return void
      */
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -59,7 +63,7 @@ class Country extends Model
     /**
      * Get circuits in this country.
      */
-    public function circuits()
+    public function circuits(): HasMany
     {
         return $this->hasMany(Circuit::class);
     }
@@ -68,7 +72,7 @@ class Country extends Model
      * Get the country name according to the default locale.
      * @throws CountryNotFoundException
      */
-    public function getLocalNameAttribute()
+    public function getLocalNameAttribute(): string
     {
         return Countries::getOne($this->code, config('app.locale'));
     }
@@ -78,7 +82,7 @@ class Country extends Model
      *
      * @return  string
      */
-    public function getFlagClassAttribute()
+    public function getFlagClassAttribute(): string
     {
         return 'flag-icon flag-icon-' . strtolower($this->code);
     }

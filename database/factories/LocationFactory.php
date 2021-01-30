@@ -1,11 +1,18 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+use App\Models\Location;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(App\Location::class, function (Faker $faker) {
-    return [
-        'name' => $faker->unique()->firstName(),
-    ];
-});
+class LocationFactory extends Factory
+{
+    protected $model = Location::class;
+
+    public function definition(): array
+    {
+        return [
+            'name' => $this->faker->unique()->firstName(),
+        ];
+    }
+}

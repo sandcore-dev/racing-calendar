@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Championship;
+use App\Models\Championship;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Rules\IsRaceNameUnique;
-use App\Circuit;
-use App\Season;
-use App\Race;
+use App\Models\Circuit;
+use App\Models\Season;
+use App\Models\Race;
 use Illuminate\Validation\Rule;
 
 class RaceController extends Controller

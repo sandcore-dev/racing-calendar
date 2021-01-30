@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Template;
-use App\TemplateSession;
+use App\Models\Template;
+use App\Models\TemplateSession;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\RedirectResponse;

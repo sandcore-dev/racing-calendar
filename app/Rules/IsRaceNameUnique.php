@@ -14,14 +14,14 @@ class IsRaceNameUnique implements Rule
      * @var integer
      */
     protected $season_id;
-    
+
     /**
      * Start time.
      *
      * @var string
      */
     protected $start_time;
-    
+
     /**
      * Race ID.
      *

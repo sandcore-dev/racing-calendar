@@ -59,7 +59,7 @@
                             </a>
 
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @foreach(\App\Championship::others()->get() as $otherChampionship)
+                                @foreach(\App\Models\Championship::others()->get() as $otherChampionship)
                                     <a class="dropdown-item" href="{{ route('index', ['championship' => $otherChampionship]) }}" target="_blank">
                                         {{ $otherChampionship->name }}
                                     </a>

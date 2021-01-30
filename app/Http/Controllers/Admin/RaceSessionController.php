@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Championship;
-use App\Race;
-use App\RaceSession;
-use App\Season;
-use App\Template;
+use App\Models\Championship;
+use App\Models\Race;
+use App\Models\RaceSession;
+use App\Models\Season;
+use App\Models\Template;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -132,7 +132,7 @@ class RaceSessionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\raceSession $raceSession
+     * @param \App\Models\RaceSession $raceSession
      */
     public function show(RaceSession $raceSession)
     {
@@ -192,7 +192,7 @@ class RaceSessionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\raceSession $raceSession
+     * @param \App\Models\RaceSession $raceSession
      */
     public function destroy(RaceSession $raceSession)
     {

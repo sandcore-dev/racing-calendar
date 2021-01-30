@@ -1,14 +1,17 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * App\Season
+ * App\Models\Season
  *
  * @property int $id
  * @property int $championship_id
@@ -18,30 +21,32 @@ use Illuminate\Support\Facades\Storage;
  * @property string|null $access_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Championship $championship
+ * @property-read \App\Models\Championship $championship
  * @property-read string $footer_url
  * @property-read string $header_url
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Location[] $locations
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
  * @property-read int|null $locations_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Race[] $races
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Race[] $races
  * @property-read int|null $races_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Season newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Season newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Season query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereAccessToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereChampionshipId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereFooterImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereHeaderImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Season whereYear($value)
+ * @method static Builder|Season newModelQuery()
+ * @method static Builder|Season newQuery()
+ * @method static Builder|Season query()
+ * @method static Builder|Season whereAccessToken($value)
+ * @method static Builder|Season whereChampionshipId($value)
+ * @method static Builder|Season whereCreatedAt($value)
+ * @method static Builder|Season whereFooterImage($value)
+ * @method static Builder|Season whereHeaderImage($value)
+ * @method static Builder|Season whereId($value)
+ * @method static Builder|Season whereUpdatedAt($value)
+ * @method static Builder|Season whereYear($value)
  * @mixin \Eloquent
  * @noinspection PhpFullyQualifiedNameUsageInspection
  * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class Season extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -56,7 +61,7 @@ class Season extends Model
      *
      * @return void
      */
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -74,50 +79,51 @@ class Season extends Model
     {
         return $this->belongsTo(Championship::class);
     }
-    
+
     /**
      * Get races of this season.
      */
-    public function races()
+    public function races(): HasMany
     {
         return $this->hasMany(Race::class);
     }
-    
+
     /**
      * Get available locations for this season.
      */
-    public function locations()
+    public function locations(): BelongsToMany
     {
-        return $this->belongsToMany(Location::class)->withTimestamps();
+        return $this->belongsToMany(Location::class)
+            ->withTimestamps();
     }
-    
+
     /**
      * Get the URL of the header image.
      *
      * @return string
      */
-    public function getHeaderUrlAttribute()
+    public function getHeaderUrlAttribute(): string
     {
         return $this->getImageUrl('header');
     }
-    
+
     /**
      * Get the URL of the footer image.
      *
      * @return string
      */
-    public function getFooterUrlAttribute()
+    public function getFooterUrlAttribute(): string
     {
         return $this->getImageUrl('footer');
     }
-    
+
     /**
      * Get the image URL of the section.
      *
      * @param   string  $section
      * @return  string
      */
-    protected function getImageUrl($section)
+    protected function getImageUrl(string $section): string
     {
         return $this->{$section . '_image'} ? Storage::url($this->{$section . '_image'}) : '';
     }

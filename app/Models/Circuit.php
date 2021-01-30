@@ -1,12 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Circuit
+ * App\Models\Circuit
  *
  * @property int $id
  * @property string $name
@@ -15,27 +18,29 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int $country_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Country $country
+ * @property-read \App\Models\Country $country
  * @property-read string $full_name
  * @property-read string $location
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Race[] $races
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Race[] $races
  * @property-read int|null $races_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereArea($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereCity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereCountryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Circuit whereUpdatedAt($value)
+ * @method static Builder|Circuit newModelQuery()
+ * @method static Builder|Circuit newQuery()
+ * @method static Builder|Circuit query()
+ * @method static Builder|Circuit whereArea($value)
+ * @method static Builder|Circuit whereCity($value)
+ * @method static Builder|Circuit whereCountryId($value)
+ * @method static Builder|Circuit whereCreatedAt($value)
+ * @method static Builder|Circuit whereId($value)
+ * @method static Builder|Circuit whereName($value)
+ * @method static Builder|Circuit whereUpdatedAt($value)
  * @mixin \Eloquent
  * @noinspection PhpFullyQualifiedNameUsageInspection
  * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
  */
 class Circuit extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -50,14 +55,14 @@ class Circuit extends Model
      *
      * @var array
      */
-    protected $_with = [ 'country' ];
-    
+    protected $with = ['country'];
+
     /**
      * The "booting" method of the model.
      *
      * @return void
      */
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -69,43 +74,43 @@ class Circuit extends Model
     /**
      * Get the races held at this circuit.
      */
-    public function races()
+    public function races(): HasMany
     {
         return $this->hasMany(Race::class);
     }
-    
+
     /**
      * Get the country of this circuit.
      */
-    public function country()
+    public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
     }
-    
+
     /**
      * Get full location of this circuit.
      *
      * @return string
      */
-    public function getLocationAttribute()
+    public function getLocationAttribute(): string
     {
         $location = $this->city;
-        
+
         if ($this->area) {
             $location .= ', ' . $this->area;
         }
-        
+
         $location .= ', ' . __($this->country->name);
-        
+
         return $location;
     }
-    
+
     /**
      * Get full name of this circuit.
      *
      * @return string
      */
-    public function getFullNameAttribute()
+    public function getFullNameAttribute(): string
     {
         return $this->name . ', ' . $this->location;
     }

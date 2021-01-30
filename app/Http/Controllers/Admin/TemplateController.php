@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Template;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -50,7 +50,7 @@ class TemplateController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Template  $template
+     * @param  \App\Models\Template  $template
      */
     public function show(Template $template)
     {
@@ -60,7 +60,7 @@ class TemplateController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Template  $template
+     * @param  \App\Models\Template  $template
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Template $template)
@@ -72,7 +72,7 @@ class TemplateController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Template  $template
+     * @param  \App\Models\Template  $template
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Template $template)
@@ -91,7 +91,7 @@ class TemplateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Template  $template
+     * @param  \App\Models\Template  $template
      */
     public function destroy(Template $template)
     {
