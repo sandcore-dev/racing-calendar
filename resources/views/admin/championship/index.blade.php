@@ -31,16 +31,13 @@
 				@forelse( $championships as $championship )
 					<tr>
 						<td>
-							<a href="{{ route('admin.championship.edit', [ 'championship' => $championship ]) }}" title="@lang('Edit championship')">
+							<a href="{{ route('admin.season.index', [ 'championship' => $championship ]) }}" title="@lang('Championship seasons')">
 								{{ $championship->name }}
 							</a>
 						</td>
 						<td class="text-center">
 							<a href="{{ route('admin.championship.edit', [ 'championship' => $championship ]) }}" title="@lang('Edit championship')">
 								<span class="fa fa-edit"></span>
-							</a>
-							<a href="{{ route('admin.season.index', [ 'championship' => $championship ]) }}" title="@lang('Championship seasons')">
-								<span class="fa fa-table"></span>
 							</a>
 						</td>
 					</tr>

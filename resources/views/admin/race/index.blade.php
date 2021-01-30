@@ -58,7 +58,7 @@
 							@endswitch
 						</td>
 						<td>
-							<a href="{{ route('admin.race.edit', ['championship' => $championship, 'season' => $season, 'race' => $race]) }}" title="@lang('Edit race')">
+							<a href="{{ route('admin.race.session.index', ['championship' => $championship, 'season' => $season, 'race' => $race]) }}" title="@lang('To race sessions')">
 								{{ $race->name }}
 							</a>
 						</td>
@@ -68,10 +68,6 @@
 						<td class="text-center">
 							<a href="{{ route('admin.race.edit', ['championship' => $championship, 'season' => $season, 'race' => $race]) }}" title="@lang('Edit race')">
 								<span class="fa fa-edit"></span>
-							</a>
-							&nbsp;
-							<a href="{{ route('admin.race.session.index', ['championship' => $championship, 'season' => $season, 'race' => $race]) }}" title="@lang('To race sessions')">
-								<span class="fa fa-th-list"></span>
 							</a>
 						</td>
 					</tr>
@@ -87,11 +83,13 @@
 								</p>
 								<form action="{{ route('admin.race.copy-season', ['championship' => $championship, 'season' => $season]) }}" method="post">
 									{{ csrf_field() }}
-									<select name="copyFromSeason">
-										@foreach($previousSeasons as $previousSeason)
-											<option value="{{ $previousSeason->id }}">{{ $previousSeason->year }}</option>
-										@endforeach
-									</select>
+									<label>
+										<select name="copyFromSeason">
+											@foreach($previousSeasons as $previousSeason)
+												<option value="{{ $previousSeason->id }}">{{ $previousSeason->year }}</option>
+											@endforeach
+										</select>
+									</label>
 									<button type="submit" class="btn btn-primary">
 										@lang('Send')
 									</button>
