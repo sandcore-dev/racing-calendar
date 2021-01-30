@@ -14,11 +14,15 @@ class CircuitFactory extends Factory
     {
         return [
             'name' => function (array $attributes) {
-                return $attributes['city'] . 'Raceway';
+                return $attributes['city'] . ' ' . $this->faker->randomElement(['Raceway', 'Circuit', 'Street Course']);
             },
             'city' => $this->faker->unique()->city,
             'area' => $this->faker->optional(75)->city,
-            'country_id' => Country::factory(),
+            'country_id' => function () {
+                return !Country::count() || $this->faker->optional(25)->boolean
+                    ? Country::factory()
+                    : Country::inRandomOrder()->first();
+            },
         ];
     }
 }

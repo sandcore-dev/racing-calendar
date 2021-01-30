@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Race;
 use App\Models\RaceSession;
 use DateInterval;
+use DateTimeImmutable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RaceSessionFactory extends Factory
@@ -27,7 +28,7 @@ class RaceSessionFactory extends Factory
             'race_id' => Race::factory(),
             'start_time' => $this->faker->dateTime,
             'end_time' => function (array $attributes) {
-                return $attributes['start_time']->add(new DateInterval('P2H'));
+                return DateTimeImmutable::createFromMutable($attributes['start_time'])->add(new DateInterval('PT2H'));
             },
             'name' => $this->faker->randomElement(['Practice', 'Qualifying', 'Race']),
         ];

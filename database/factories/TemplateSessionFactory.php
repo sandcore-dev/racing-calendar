@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Template;
 use App\Models\TemplateSession;
 use DateInterval;
+use DateTimeImmutable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TemplateSessionFactory extends Factory
@@ -28,7 +29,8 @@ class TemplateSessionFactory extends Factory
             'days' => $this->faker->numberBetween(1, 3),
             'start_time' => $this->faker->time(),
             'end_time' => function (array $attributes) {
-                return $attributes['end_time']->add(new DateInterval('P1H'));
+                return (new DateTimeImmutable($attributes['start_time']))
+                    ->add(new DateInterval('PT1H'));
             },
             'name' => $this->faker->words(3, true),
         ];

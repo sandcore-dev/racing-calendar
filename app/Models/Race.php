@@ -159,11 +159,14 @@ class Race extends Model
     /**
      * Sanitize and set remarks.
      *
-     * @param string $value The value to sanitize.
+     * @param string|null $value The value to sanitize.
+     * @return string|null
      */
-    public function setRemarksAttribute(string $value): void
+    public function setRemarksAttribute(?string $value): ?string
     {
-        $this->attributes['remarks'] = strip_tags($value);
+        return $this->attributes['remarks'] = $value === null
+            ? null
+            : strip_tags($value);
     }
 
     /**

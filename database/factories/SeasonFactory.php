@@ -17,7 +17,7 @@ class SeasonFactory extends Factory
             'year' => $this->faker->unique()->year(),
             'header_image' => null,
             'footer_image' => null,
-            'access_token' => $this->faker->optional()->randomAscii,
+            'access_token' => $this->faker->unique()->bothify('##??##??'),
         ];
     }
 }

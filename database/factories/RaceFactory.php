@@ -15,13 +15,13 @@ class RaceFactory extends Factory
     public function definition(): array
     {
         return [
-            'start_time' => $this->faker->time(),
+            'start_time' => $this->faker->dateTime,
             'name' => $this->faker->unique()->company . ' Grand Prix',
             'season_id' => Season::factory(),
             'circuit_id' => Circuit::factory(),
             'location_id' => Location::factory(),
             'remarks' => $this->faker->optional(75)->sentence,
-            'status' => $this->faker->optional(75)->randomElement(['scheduled', 'postponed', 'cancelled']),
+            'status' => $this->faker->randomElement(['scheduled', 'postponed', 'cancelled']),
         ];
     }
 }

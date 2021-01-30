@@ -13,7 +13,7 @@ class ChampionshipFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->company . ' Championship',
-            'domain' => $this->faker->unique()->domainName,
+            'domain' => $this->faker->unique()->domainWord . '.' . parse_url(config('app.url'), PHP_URL_HOST),
         ];
     }
 }

@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Championship;
-use App\Models\Circuit;
-use App\Models\Country;
 use App\Models\Location;
 use App\Models\Race;
 use App\Models\RaceSession;
@@ -29,27 +27,18 @@ class DatabaseSeeder extends Seeder
 
         Template::factory()
             ->has(
-                TemplateSession::factory(),
+                TemplateSession::factory()
+                    ->count(5),
                 'sessions'
             )
             ->count(5)
             ->create();
 
-        Championship::factory()
-            ->count(5)
+        $championshipFactory = Championship::factory()
             ->has(
                 Season::factory()
                     ->has(
                         Race::factory()
-                            ->for(
-                                Circuit::factory()
-                                    ->for(
-                                        Country::factory()
-                                    )
-                            )
-                            ->for(
-                                Location::factory()
-                            )
                             ->has(
                                 RaceSession::factory()
                                     ->count(5),
@@ -62,7 +51,14 @@ class DatabaseSeeder extends Seeder
                             ->count(10)
                     )
                     ->count(5)
-            )
+            );
+
+        $championshipFactory
+            ->state(['domain' => parse_url(config('app.url'), PHP_URL_HOST)])
+            ->create();
+
+        $championshipFactory
+            ->count(5)
             ->create();
     }
 }
