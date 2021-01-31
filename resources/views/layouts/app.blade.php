@@ -124,9 +124,3 @@
     </div>
 </body>
 </html>
-<script>
-      import DarkModeSwitch from "../../js/components/DarkModeSwitch";
-      export default {
-            components: {DarkModeSwitch}
-      }
-</script>
