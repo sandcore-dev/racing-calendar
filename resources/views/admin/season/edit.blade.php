@@ -26,13 +26,13 @@
 				@component('input.image-upload')
 					@slot('field', 'header_image')
 					@slot('label', __('Header image'))
-					@slot('value', $season->header_image);
+					@slot('value', $season->header_image)
 				@endcomponent
 
 				@component('input.image-upload')
 					@slot('field', 'footer_image')
 					@slot('label', __('Footer image'))
-					@slot('value', $season->footer_image);
+					@slot('value', $season->footer_image)
 				@endcomponent
 
 				@component('input.checkbox')

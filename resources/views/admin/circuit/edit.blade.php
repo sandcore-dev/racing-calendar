@@ -41,7 +41,7 @@
 					@slot('label', __('Country'))
 					@slot('value', $circuit->country)
 
-					@slot('options', $countries);
+					@slot('options', $countries)
 				@endcomponent
 
 				@component('input.submit')

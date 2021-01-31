@@ -36,7 +36,7 @@
 					@slot('field', 'country_id')
 					@slot('label', __('Country'))
 
-					@slot('options', $countries);
+					@slot('options', $countries)
 				@endcomponent
 
 				@component('input.submit')

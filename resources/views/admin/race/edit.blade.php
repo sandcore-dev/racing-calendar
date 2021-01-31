@@ -27,7 +27,7 @@
 				@component('input.datetime')
 					@slot('field', 'start_time')
 					@slot('label', __('Race time'))
-					@slot('value', $race->start_time);
+					@slot('value', $race->start_time)
 
 					required
 				@endcomponent
@@ -35,7 +35,7 @@
 				@component('input.text')
 					@slot('field', 'name')
 					@slot('label', __('Name'))
-					@slot('value', $race->name);
+					@slot('value', $race->name)
 
 					required
 				@endcomponent
@@ -43,7 +43,7 @@
 				@component('input.select')
 					@slot('field', 'circuit_id')
 					@slot('label', __('Circuit'))
-					@slot('value', $race->circuit);
+					@slot('value', $race->circuit)
 
 					@slot('options', $circuits)
 					@slot('option_label', 'fullName')
@@ -52,13 +52,13 @@
 				@component('input.textarea')
 					@slot('field', 'remarks')
 					@slot('label', __('Remarks'))
-					@slot('value', $race->remarks);
+					@slot('value', $race->remarks)
 				@endcomponent
 
 				@component('input.select-array')
 					@slot('field', 'status')
 					@slot('label', __('Status'))
-					@slot('value', $race->status);
+					@slot('value', $race->status)
 
 					@slot('options', $statuses)
 				@endcomponent
