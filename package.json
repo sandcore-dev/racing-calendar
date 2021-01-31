@@ -18,13 +18,14 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.15.2",
         "axios": "^0.21.1",
         "bootstrap": "^4.6.0",
+        "flag-icon-css": "^2.9.0",
         "jquery": "^3.2",
         "lodash": "^4.17.20",
         "popper.js": "^1.12",
-        "@fortawesome/fontawesome-free": "^5.15.2",
-        "flag-icon-css": "^2.9.0",
+        "store2": "^2.12.0",
         "vue": "^2.6.12"
     }
 }

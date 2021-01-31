@@ -59,6 +59,10 @@
                             </li>
                         @endforeach
                             <li class="dropdown-divider d-md-none"></li>
+                            <div class="nav-item d-md-none">
+                                <dark-mode-switch></dark-mode-switch>
+                            </div>
+                            <li class="dropdown-divider d-md-none"></li>
                             <li class="nav-item d-md-none">
                                 @guest
                                     <a class="nav-link" href="{{ route('login') }}">Login</a>
@@ -92,6 +96,10 @@
                                     </a>
                                 @endforeach
                                 <div class="dropdown-divider"></div>
+                                    <div class="dropdown-item">
+                                        <dark-mode-switch></dark-mode-switch>
+                                    </div>
+                                <div class="dropdown-divider"></div>
                                 @guest
                                     <a class="dropdown-item" href="{{ route('login') }}">Login</a>
                                 @else
@@ -116,3 +124,9 @@
     </div>
 </body>
 </html>
+<script>
+      import DarkModeSwitch from "../../js/components/DarkModeSwitch";
+      export default {
+            components: {DarkModeSwitch}
+      }
+</script>
