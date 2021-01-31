@@ -13,3 +13,48 @@ img
 .this-week * {
 	background-color: #fcf8e3;
 }
+
+body.dark {
+	@extend .bg-dark;
+	@extend .text-light;
+
+	.navbar {
+		@extend .navbar-dark;
+	}
+
+	.dropdown-menu,
+	.page-link {
+		@extend .bg-dark;
+	}
+
+	.page-item.active .page-link {
+		@extend .bg-primary;
+	}
+
+	.dropdown-item {
+		@extend .text-light;
+
+		&:hover {
+			@extend .bg-dark;
+		}
+	}
+
+	.table {
+		@extend .table-dark;
+	}
+
+	.form-control {
+		@extend .bg-secondary;
+		@extend .text-light;
+	}
+
+	.card {
+		@extend .bg-dark;
+		@extend .text-light;
+		@extend .border-light;
+
+		.card-header {
+			@extend .border-light;
+		}
+	}
+}

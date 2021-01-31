@@ -18,7 +18,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light border-bottom mb-3">
+        <nav class="navbar navbar-expand-md border-bottom mb-3">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     @yield('nav-title', config('app.name', 'Laravel'))
