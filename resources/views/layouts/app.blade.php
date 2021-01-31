@@ -47,9 +47,36 @@
                                 <a class="nav-link" href="{{ route('admin.template.index') }}">@lang('Template')</a>
                             </li>
                         @endauth
+                        <?php $otherChampionships = \App\Models\Championship::others()->get(); ?>
+                            @if($otherChampionships->count())
+                                <li class="dropdown-divider d-md-none"></li>
+                            @endif
+                        @foreach($otherChampionships as $otherChampionship)
+                            <li class="nav-item d-md-none">
+                                <a class="nav-link" href="{{ route('index', ['championship' => $otherChampionship]) }}" target="_blank">
+                                    {{ $otherChampionship->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                            <li class="dropdown-divider d-md-none"></li>
+                            <li class="nav-item d-md-none">
+                                @guest
+                                    <a class="nav-link" href="{{ route('login') }}">Login</a>
+                                @else
+                                    <a class="nav-link" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                             document.getElementById('logout-form2').submit();">
+                                        Logout
+                                    </a>
+
+                                    <form id="logout-form2" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                @endguest
+                            </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown d-none d-md-inline">
                             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
                                 @guest
                                     @lang('Racing series')
@@ -58,7 +85,7 @@
                                 @endguest
                             </a>
 
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 @foreach(\App\Models\Championship::others()->get() as $otherChampionship)
                                     <a class="dropdown-item" href="{{ route('index', ['championship' => $otherChampionship]) }}" target="_blank">
                                         {{ $otherChampionship->name }}
