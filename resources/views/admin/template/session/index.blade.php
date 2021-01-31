@@ -21,11 +21,11 @@
 			<table class="table table-striped table-hover">
 				<thead>
 				<tr>
-					<th class="col-sm-1">@lang('Days')</th>
-					<th class="col-sm-2">@lang('Start time')</th>
-					<th class="col-sm-2">@lang('End time')</th>
+					<th>@lang('Days')</th>
+					<th>@lang('Start time')</th>
+					<th>@lang('End time')</th>
 					<th>@lang('Name')</th>
-					<th class="col-sm-2 text-center">
+					<th class="text-center">
 						<a href="{{ route('admin.template.session.create', [ 'template' => $template->id ]) }}" title="@lang('Add session')">
 							<span class="fa fa-plus"></span>
 						</a>

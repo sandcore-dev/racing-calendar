@@ -20,7 +20,7 @@
 				<thead>
 				<tr>
 					<th>@lang('Name')</th>
-					<th class="col-sm-2 text-center">
+					<th class="text-center">
 						<a href="{{ route('admin.championship.create') }}" title="@lang('Add championship')">
 							<span class="fa fa-plus"></span>
 						</a>

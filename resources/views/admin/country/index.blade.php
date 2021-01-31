@@ -21,7 +21,7 @@
 				<tr>
 					<th>@lang('Country')</th>
 					<th>@lang('Code')</th>
-					<th class="col-sm-2 text-center">
+					<th class="text-center">
 						<a href="{{ route('admin.country.create') }}" title="@lang('Add country')">
 							<span class="fa fa-plus"></span>
 						</a>

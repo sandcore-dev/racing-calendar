@@ -23,7 +23,7 @@
 					<th>@lang('City')</th>
 					<th>@lang('Area')</th>
 					<th>@lang('Country')</th>
-					<th class="col-sm-2 text-center">
+					<th class="text-center">
 						<a href="{{ route('admin.circuit.create') }}" title="@lang('Add circuit')">
 							<span class="fa fa-plus"></span>
 						</a>

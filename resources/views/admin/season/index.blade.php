@@ -28,7 +28,7 @@
 				<thead>
 				<tr>
 					<th>@lang('Year')</th>
-					<th class="col-sm-2 text-center">
+					<th class="text-center">
 						@if($championship)
 							<a href="{{ route('admin.season.create', ['championship' => $championship]) }}" title="@lang('Add season')">
 								<span class="fa fa-plus"></span>

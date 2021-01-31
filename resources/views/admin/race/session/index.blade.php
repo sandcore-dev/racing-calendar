@@ -30,10 +30,10 @@
 			<table class="table table-striped table-hover">
 				<thead>
 				<tr>
-					<th class="col-sm-2">@lang('Start time')</th>
-					<th class="col-sm-2">@lang('End time')</th>
+					<th>@lang('Start time')</th>
+					<th>@lang('End time')</th>
 					<th>@lang('Name')</th>
-					<th class="col-sm-2 text-center">
+					<th class="text-center">
 						<a href="{{ route('admin.race.session.create', ['championship' => $championship, 'season' => $season, 'race' => $race]) }}" title="@lang('Add session')">
 							<span class="fa fa-plus"></span>
 						</a>
@@ -69,11 +69,13 @@
 							@if($templates)
 								<form action="{{ route('admin.race.session.apply-template', ['championship' => $championship, 'season' => $season, 'race' => $race]) }}" method="post">
 									{{ csrf_field() }}
-									<select name="template">
-										@foreach($templates as $template)
-											<option value="{{ $template->id }}">{{ $template->name }}</option>
-										@endforeach
-									</select>
+									<label>
+										<select name="template">
+											@foreach($templates as $template)
+												<option value="{{ $template->id }}">{{ $template->name }}</option>
+											@endforeach
+										</select>
+									</label>
 									<button type="submit" class="btn btn-primary">
 										@lang('Apply template')
 									</button>

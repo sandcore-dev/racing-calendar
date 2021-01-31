@@ -20,7 +20,7 @@
 				<thead>
 				<tr>
 					<th>@lang('Location')</th>
-					<th class="col-sm-2 text-center">
+					<th class="text-center">
 						<a href="{{ route('admin.location.create') }}" title="@lang('Add location')">
 							<span class="fa fa-plus"></span>
 						</a>

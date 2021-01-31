@@ -20,7 +20,7 @@
 				<thead>
 				<tr>
 					<th>@lang('Name')</th>
-					<th class="col-sm-2 text-center">
+					<th class="text-center">
 						<a href="{{ route('admin.template.create') }}" title="@lang('Add template')">
 							<span class="fa fa-plus"></span>
 						</a>
@@ -31,17 +31,13 @@
 				@forelse( $templates as $template )
 					<tr>
 						<td>
-							<a href="{{ route('admin.template.edit', [ 'template' => $template->id ]) }}" title="@lang('Edit template')">
+							<a href="{{ route('admin.template.session.index', [ 'template' => $template->id ]) }}" title="@lang('To template sessions')">
 								{{ $template->name }}
 							</a>
 						</td>
 						<td class="text-center">
 							<a href="{{ route('admin.template.edit', [ 'template' => $template->id ]) }}" title="@lang('Edit template')">
 								<span class="fa fa-edit"></span>
-							</a>
-							&nbsp;
-							<a href="{{ route('admin.template.session.index', [ 'template' => $template->id ]) }}" title="@lang('To template sessions')">
-								<span class="fa fa-th-list"></span>
 							</a>
 						</td>
 					</tr>
