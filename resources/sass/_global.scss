@@ -18,6 +18,10 @@ img
 	@extend .navbar-light;
 }
 
+.dark-mode-switch {
+	cursor: pointer;
+}
+
 body.dark {
 	@extend .bg-dark;
 	@extend .text-light;
@@ -39,7 +43,7 @@ body.dark {
 		@extend .text-light;
 
 		&:hover {
-			@extend .bg-dark;
+			@extend .bg-secondary;
 		}
 	}
 

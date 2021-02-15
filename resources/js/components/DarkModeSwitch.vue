@@ -1,8 +1,10 @@
 <template>
-    <div class="custom-control custom-switch">
+    <div class="custom-control custom-switch" @click="enabled = !enabled">
         <input type="checkbox" class="custom-control-input" v-model="enabled" id="dark-mode"/>
         <label class="custom-control-label" for="dark-mode">
-            Dark mode
+            <slot>
+                Dark mode
+            </slot>
         </label>
     </div>
 </template>
@@ -23,7 +25,7 @@ export default {
 
       watch: {
             enabled(value) {
-                  store2.set('dark-mode', value);
+                  store2.set('dark-mode', value ? 'true' : 'false');
 
                   if (value) {
                         document.body.classList.add('dark');
@@ -37,7 +39,7 @@ export default {
       methods: {
             isDarkModeEnabled() {
                   if (store2.has('dark-mode')) {
-                        return store2.get('dark-mode');
+                        return store2.get('dark-mode') === 'true';
                   }
 
                   return window.matchMedia

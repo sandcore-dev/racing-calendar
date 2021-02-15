@@ -60,7 +60,9 @@
                         @endforeach
                             <li class="dropdown-divider d-md-none"></li>
                             <div class="nav-item d-md-none">
-                                <dark-mode-switch></dark-mode-switch>
+                                <dark-mode-switch>
+                                    @lang('Dark mode')
+                                </dark-mode-switch>
                             </div>
                             <li class="dropdown-divider d-md-none"></li>
                             <li class="nav-item d-md-none">
@@ -96,8 +98,10 @@
                                     </a>
                                 @endforeach
                                 <div class="dropdown-divider"></div>
-                                    <div class="dropdown-item">
-                                        <dark-mode-switch></dark-mode-switch>
+                                    <div class="dropdown-item dark-mode-switch">
+                                        <dark-mode-switch>
+                                            @lang('Dark mode')
+                                        </dark-mode-switch>
                                     </div>
                                 <div class="dropdown-divider"></div>
                                 @guest
