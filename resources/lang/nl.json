@@ -58,5 +58,15 @@
 	"Search for a location": "Zoek naar een locatie",
 	"Erase current location": "Wis huidige locatie",
 	"The selected location is invalid.": "De geselecteerde locatie is ongeldig.",
-	"To template sessions": "Naar template-sessies"
+	"To template sessions": "Naar template-sessies",
+	"Racing series": "Raceklassen",
+	"Login": "Inloggen",
+	"Logout": "Uitloggen",
+	"E-mail address": "E-mailadres",
+	"Password": "Wachtwoord",
+	"Confirm password": "Herhaal wachtwoord",
+	"Remember me": "Onthoud mij",
+	"Forgot password?": "Wachtwoord vergeten?",
+	"Reset password": "Wachtwoord opnieuw instellen",
+	"Send password reset link": "Stuur link"
 }

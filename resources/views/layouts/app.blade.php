@@ -101,12 +101,14 @@
                                     </div>
                                 <div class="dropdown-divider"></div>
                                 @guest
-                                    <a class="dropdown-item" href="{{ route('login') }}">Login</a>
+                                    <a class="dropdown-item" href="{{ route('login') }}">
+                                        @lang('Login')
+                                    </a>
                                 @else
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                  document.getElementById('logout-form2').submit();">
-                                        Logout
+                                        @lang('Logout')
                                     </a>
 
                                     <form id="logout-form2" action="{{ route('logout') }}" method="POST" style="display: none;">
