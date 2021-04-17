@@ -115,7 +115,7 @@
 									</td>
 								</tr>
 							@endforeach
-							<tr class="collapse details{{ $index }} bg-white">
+							<tr class="collapse details{{ $index }} timetable-footer">
 								<td colspan="4">
 									&nbsp;
 								</td>

@@ -14,6 +14,10 @@ img
 	background-color: #fcf8e3;
 }
 
+.timetable-footer {
+	@extend .bg-white;
+}
+
 .navbar {
 	@extend .navbar-light;
 }
@@ -64,5 +68,13 @@ body.dark {
 		.card-header {
 			@extend .border-light;
 		}
+	}
+
+	.this-week * {
+		background-color: darken($purple, 25%);
+	}
+
+	.timetable-footer {
+		@extend .bg-dark;
 	}
 }
