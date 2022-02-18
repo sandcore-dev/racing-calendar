@@ -24,6 +24,9 @@ Route::prefix('admin')
 
                 Route::prefix('season/{season:id}')
                     ->group(function () {
+                        Route::resource('image', Admin\Season\ImageController::class)
+                            ->only(['index']);
+
                         Route::resource('race', Admin\RaceController::class);
 
                         Route::post('copy-season', [Admin\RaceController::class, 'copySeason'])

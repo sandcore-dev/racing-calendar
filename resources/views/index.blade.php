@@ -3,6 +3,8 @@
 @section('title', __(':season :championship', ['championship' => $championship->name, 'season' => $season->year]) . ' - ' . config('app.name'))
 @section('nav-title', __(':season :championship', ['championship' => $championship->name, 'season' => $season->year]))
 
+@yield($icon)
+
 @if($season->header_url)
 	@section('image', asset($season->header_url))
 @endif

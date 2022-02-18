@@ -14,20 +14,23 @@ use Illuminate\Support\Facades\Storage;
  * App\Models\Season
  *
  * @property int $id
- * @property int|null $championship_id
+ * @property int $championship_id
  * @property string $year
  * @property string|null $header_image
+ * @property string|null $icon_image
  * @property string|null $footer_image
  * @property string|null $access_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Championship|null $championship
- * @property-read string $footer_url
- * @property-read string $header_url
+ * @property-read \App\Models\Championship $championship
+ * @property-read string|null $footer_url
+ * @property-read string|null $header_url
+ * @property-read string|null $icon_url
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
  * @property-read int|null $locations_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Race[] $races
  * @property-read int|null $races_count
+ * @method static \Database\Factories\SeasonFactory factory(...$parameters)
  * @method static Builder|Season newModelQuery()
  * @method static Builder|Season newQuery()
  * @method static Builder|Season query()
@@ -36,6 +39,7 @@ use Illuminate\Support\Facades\Storage;
  * @method static Builder|Season whereCreatedAt($value)
  * @method static Builder|Season whereFooterImage($value)
  * @method static Builder|Season whereHeaderImage($value)
+ * @method static Builder|Season whereIconImage($value)
  * @method static Builder|Season whereId($value)
  * @method static Builder|Season whereUpdatedAt($value)
  * @method static Builder|Season whereYear($value)
@@ -47,20 +51,14 @@ class Season extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'year', 'access_token', 'header_image', 'footer_image',
+        'year',
+        'access_token',
+        'icon_image',
+        'header_image',
+        'footer_image',
     ];
 
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
     protected static function boot(): void
     {
         parent::boot();
@@ -72,10 +70,8 @@ class Season extends Model
 
     /**
      * Get championship this season belongs to.
-     *
-     * @return BelongsTo
      */
-    public function championship(): BelongsTo
+    public function championship(): BelongsTo|Championship
     {
         return $this->belongsTo(Championship::class);
     }
@@ -83,7 +79,7 @@ class Season extends Model
     /**
      * Get races of this season.
      */
-    public function races(): HasMany
+    public function races(): HasMany|Race
     {
         return $this->hasMany(Race::class);
     }
@@ -91,40 +87,43 @@ class Season extends Model
     /**
      * Get available locations for this season.
      */
-    public function locations(): BelongsToMany
+    public function locations(): BelongsToMany|Location
     {
         return $this->belongsToMany(Location::class)
             ->withTimestamps();
     }
 
     /**
-     * Get the URL of the header image.
-     *
-     * @return string
+     * Get the URL of the icon image.
      */
-    public function getHeaderUrlAttribute(): string
+    public function getIconUrlAttribute(): ?string
+    {
+        return $this->getImageUrl('icon');
+    }
+
+    /**
+     * Get the URL of the header image.
+     */
+    public function getHeaderUrlAttribute(): ?string
     {
         return $this->getImageUrl('header');
     }
 
     /**
      * Get the URL of the footer image.
-     *
-     * @return string
      */
-    public function getFooterUrlAttribute(): string
+    public function getFooterUrlAttribute(): ?string
     {
         return $this->getImageUrl('footer');
     }
 
     /**
      * Get the image URL of the section.
-     *
-     * @param   string  $section
-     * @return  string
      */
-    protected function getImageUrl(string $section): string
+    protected function getImageUrl(string $section): ?string
     {
-        return $this->{$section . '_image'} ? Storage::url($this->{$section . '_image'}) : '';
+        return $this->{$section . '_image'}
+            ? Storage::url($this->{$section . '_image'})
+            : null;
     }
 }

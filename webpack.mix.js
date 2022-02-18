@@ -11,4 +11,6 @@ mix.vue();
 
 if (mix.inProduction()) {
     mix.version();
+} else {
+    mix.sourceMaps();
 }
