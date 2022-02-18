@@ -48,13 +48,38 @@ class ImageController extends Controller
             ? Storage::path($season->header_image)
             : Storage::path($season->{$field});
 
-        $image = $imageManager->make($path)
-            ->crop(
-                (int)$request->input('width'),
-                (int)$request->input('height'),
-                (int)$request->input('left'),
-                (int)$request->input('top')
-            );
+        $width = (int)$request->input('width');
+        $height = (int)$request->input('height');
+
+        $image = $imageManager->make($path);
+
+        $image->crop(
+            $width,
+            $height,
+            (int)$request->input('left'),
+            (int)$request->input('top')
+        );
+
+        $image->text(
+            $season->year,
+            $width * 0.5,
+            $height * 0.95,
+            function ($font) use ($width) {
+                if (!config('app.font')) {
+                    return;
+                }
+
+                $font->file(
+                    Storage::disk('fonts')
+                        ->path(config('app.font'))
+                );
+
+                $font->size($width * 0.25);
+                $font->color('#ffffff');
+                $font->align('center');
+                $font->valign('bottom');
+            }
+        );
 
         $newPath = 'public/images/' . Str::random(40) . '.png';
         Storage::put($newPath, $image->stream('png'));

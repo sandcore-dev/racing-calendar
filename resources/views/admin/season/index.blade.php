@@ -49,6 +49,10 @@
 							<a href="{{ route('admin.season.edit', [ 'championship' => $championship, 'season' => $season ]) }}" title="@lang('Edit season')">
 								<span class="fa fa-edit"></span>
 							</a>
+							&nbsp;
+							<a href="{{ route('admin.image.index', [ 'championship' => $championship, 'season' => $season ]) }}" title="@lang('Edit season images')">
+								<span class="fa fa-image"></span>
+							</a>
 						</td>
 					</tr>
 				@empty

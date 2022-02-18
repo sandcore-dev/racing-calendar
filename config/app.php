@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'font' => 'Formula1-Black.ttf',
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
