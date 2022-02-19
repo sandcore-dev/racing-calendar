@@ -7,6 +7,9 @@
 
     @isset($icon)
     <link rel="icon" href="{{ $icon }}">
+    <link rel="shortcut icon" href="{{ $icon }}">
+    <link rel="apple-touch-icon" href="{{ $icon }}">
+    <link rel="apple-touch-icon-precomposed" href="{{ $icon }}">
     @endisset
 
     <!-- CSRF Token -->

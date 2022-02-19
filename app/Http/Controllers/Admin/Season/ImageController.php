@@ -24,6 +24,7 @@ class ImageController extends Controller
 
                     'back' => route('admin.season.index', ['championship' => $championship]),
 
+                    'iconUrl' => $season->icon_url,
                     'headerUrl' => $season->header_url,
                     'footerUrl' => $season->footer_url,
                 ]
@@ -66,16 +67,16 @@ class ImageController extends Controller
                 $width * 0.5,
                 $height * 0.95,
                 function ($font) use ($width) {
-                    if (!config('app.font')) {
+                    if (!config('app.font.name')) {
                         return;
                     }
 
                     $font->file(
                         Storage::disk('fonts')
-                            ->path(config('app.font'))
+                            ->path(config('app.font.name'))
                     );
 
-                    $font->size($width * 0.25);
+                    $font->size($width * config('app.font.ratio', 0.3));
                     $font->color('#ffffff');
                     $font->align('center');
                     $font->valign('bottom');
@@ -94,7 +95,7 @@ class ImageController extends Controller
         $season->save();
 
         return [
-            $field => Storage::url($season->{$field}),
+            'url' => Storage::url($season->{$field}),
         ];
     }
 }

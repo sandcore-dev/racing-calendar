@@ -15,7 +15,10 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
-    'font' => 'Formula1-Black.ttf',
+    'font' => [
+        'name' => env('FONT_NAME'),
+        'ratio' => env('FONT_RATIO', 0.3),
+    ],
 
     /*
     |--------------------------------------------------------------------------

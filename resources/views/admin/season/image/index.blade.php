@@ -25,6 +25,7 @@
                                 name="icon"
                                 src="{{ $headerUrl }}"
                                 alt="@lang('Icon image')"
+                                current-image="{{ $iconUrl }}"
                         ></image-crop>
                     </div>
                 @endisset

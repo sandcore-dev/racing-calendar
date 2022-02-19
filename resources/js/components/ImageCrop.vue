@@ -1,11 +1,35 @@
 <template>
   <div>
+    <div
+      class="row"
+      v-if="currentImage || newImage"
+    >
+      <div
+        class="col text-center"
+        v-if="currentImage"
+      >
+        <img
+          :src="currentImage"
+          alt="current image"
+        >
+      </div>
+      <div
+        class="col text-center"
+        v-if="newImage"
+      >
+        <img
+          :src="newImage"
+          alt="new image"
+        >
+      </div>
+    </div>
     <vue-cropper
       ref="cropper"
       :src="src"
       :alt="alt"
       :zoomable="false"
       @ready="init"
+      :view-mode="1"
     />
     <div
       class="text-center"
@@ -62,11 +86,17 @@ export default {
             type: String,
             default: 'Save',
         },
+
+        currentImage: {
+            type: String,
+            default: null,
+        },
     },
 
     data() {
         return {
             showButton: false,
+            newImage: null,
         };
     },
 
@@ -95,7 +125,8 @@ export default {
                     name: this.name,
                     ...this.getCropBoxData(),
                 })
-                .then(() => {
+                .then((response) => {
+                    this.newImage = response.data.url;
                 })
                 .catch(() => {
                 });
@@ -103,6 +134,7 @@ export default {
 
         getCropBoxData() {
             const { cropper } = this.$refs;
+            const canvas = cropper.getCanvasData();
             const cropBox = cropper.getCropBoxData();
             const image = cropper.getImageData();
 
@@ -110,8 +142,8 @@ export default {
             const verticalRatio = image.naturalHeight / image.height;
 
             return {
-                top: cropBox.top * verticalRatio,
-                left: cropBox.left * horizontalRatio,
+                top: (cropBox.top - canvas.top) * verticalRatio,
+                left: (cropBox.left - canvas.left) * horizontalRatio,
                 width: cropBox.width * horizontalRatio,
                 height: cropBox.height * verticalRatio,
             };
