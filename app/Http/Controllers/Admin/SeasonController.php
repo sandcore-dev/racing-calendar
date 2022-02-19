@@ -80,20 +80,22 @@ class SeasonController extends Controller
 
     public function update(Request $request, Championship $championship, Season $season): RedirectResponse
     {
-        $request->validate([
-                               'year' => [
-                                   'required',
-                                   'integer',
-                                   'between:1970,9999',
-                                   Rule::unique('seasons', 'year')
-                                       ->where('championship_id', $championship->id)
-                                       ->ignoreModel($season),
-                               ],
-                               'header_image' => ['nullable', 'image'],
-                               'footer_image' => ['nullable', 'image'],
-                               'regenerate_token' => ['required', 'boolean'],
-                               'locations.*' => ['integer', 'exists:locations,id'],
-                           ]);
+        $request->validate(
+            [
+                'year' => [
+                    'required',
+                    'integer',
+                    'between:1970,9999',
+                    Rule::unique('seasons', 'year')
+                        ->where('championship_id', $championship->id)
+                        ->ignoreModel($season),
+                ],
+                'header_image' => ['nullable', 'image'],
+                'footer_image' => ['nullable', 'image'],
+                'regenerate_token' => ['required', 'boolean'],
+                'locations.*' => ['integer', 'exists:locations,id'],
+            ]
+        );
 
         $data = $request->only('year');
 
@@ -103,7 +105,7 @@ class SeasonController extends Controller
 
         foreach (['header_image', 'footer_image'] as $field) {
             if ($request->file($field)) {
-                if ($data[$field] = $request->file($field)->store('public/images') && $season->{$field}) {
+                if (($data[$field] = $request->file($field)->store('public/images')) && $season->{$field}) {
                     Storage::delete($season->{$field});
                 }
             } elseif ($request->input('remove_' . $field) && $season->{$field}) {

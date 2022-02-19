@@ -60,26 +60,28 @@ class ImageController extends Controller
             (int)$request->input('top')
         );
 
-        $image->text(
-            $season->year,
-            $width * 0.5,
-            $height * 0.95,
-            function ($font) use ($width) {
-                if (!config('app.font')) {
-                    return;
+        if ($name === 'icon') {
+            $image->text(
+                $season->year,
+                $width * 0.5,
+                $height * 0.95,
+                function ($font) use ($width) {
+                    if (!config('app.font')) {
+                        return;
+                    }
+
+                    $font->file(
+                        Storage::disk('fonts')
+                            ->path(config('app.font'))
+                    );
+
+                    $font->size($width * 0.25);
+                    $font->color('#ffffff');
+                    $font->align('center');
+                    $font->valign('bottom');
                 }
-
-                $font->file(
-                    Storage::disk('fonts')
-                        ->path(config('app.font'))
-                );
-
-                $font->size($width * 0.25);
-                $font->color('#ffffff');
-                $font->align('center');
-                $font->valign('bottom');
-            }
-        );
+            );
+        }
 
         $newPath = 'public/images/' . Str::random(40) . '.png';
         Storage::put($newPath, $image->stream('png'));
