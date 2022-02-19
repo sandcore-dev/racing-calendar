@@ -20,7 +20,8 @@ Route::prefix('admin')
 
         Route::prefix('championship/{championship}')
             ->group(function () {
-                Route::resource('season', Admin\SeasonController::class);
+                Route::resource('season', Admin\SeasonController::class)
+                    ->only(['index', 'create', 'store', 'edit', 'update']);
 
                 Route::prefix('season/{season:id}')
                     ->group(function () {

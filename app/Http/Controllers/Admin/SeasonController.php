@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Championship;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
@@ -13,52 +14,37 @@ use Illuminate\Validation\Rule;
 
 class SeasonController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param Championship $championship
-     * @return Renderable
-     */
-    public function index(Championship $championship)
+    public function index(Championship $championship): Renderable
     {
-        return view('admin.season.index')->with([
-            'championship' => $championship,
-            'seasons' => $championship->seasons()->paginate(),
-        ]);
+        return view('admin.season.index')->with(
+            [
+                'championship' => $championship,
+                'seasons' => $championship->seasons()->paginate(),
+            ]
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param Championship $championship
-     * @return Renderable
-     */
-    public function create(Championship $championship)
+    public function create(Championship $championship): Renderable
     {
         return view('admin.season.create')
             ->with('championship', $championship);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param Championship $championship
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request, Championship $championship)
+    public function store(Request $request, Championship $championship): RedirectResponse
     {
-        $request->validate([
-            'year' => [
-                'required',
-                'integer',
-                'between:1970,9999',
-                Rule::unique('seasons', 'year')
-                    ->where('championship_id', $championship->id),
-            ],
-            'header_image' => ['nullable', 'image'],
-            'footer_image' => ['nullable', 'image'],
-        ]);
+        $request->validate(
+            [
+                'year' => [
+                    'required',
+                    'integer',
+                    'between:1970,9999',
+                    Rule::unique('seasons', 'year')
+                        ->where('championship_id', $championship->id),
+                ],
+                'header_image' => ['nullable', 'image'],
+                'footer_image' => ['nullable', 'image'],
+            ]
+        );
 
         $data = $request->only('year');
 
@@ -73,61 +59,41 @@ class SeasonController extends Controller
 
         return redirect()
             ->route('admin.season.index', ['championship' => $championship])
-            ->with('success', __('The season :season has been added.', [
-                'season' => $season->year,
-            ]));
+            ->with(
+                'success',
+                __('The season :season has been added.', [
+                    'season' => $season->year,
+                ])
+            );
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\Season $season
-     */
-    public function show(Season $season)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Championship $championship
-     * @param \App\Models\Season $season
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit(Championship $championship, Season $season)
+    public function edit(Championship $championship, Season $season): Renderable
     {
         return view('admin.season.edit')
-            ->with([
-                'championship' => $championship,
-                'season' => $season,
-            ]);
+            ->with(
+                [
+                    'championship' => $championship,
+                    'season' => $season,
+                ]
+            );
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param Championship $championship
-     * @param \App\Models\Season $season
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(Request $request, Championship $championship, Season $season)
+    public function update(Request $request, Championship $championship, Season $season): RedirectResponse
     {
         $request->validate([
-            'year' => [
-                'required',
-                'integer',
-                'between:1970,9999',
-                Rule::unique('seasons', 'year')
-                    ->where('championship_id', $championship->id)
-                    ->ignoreModel($season)
-            ],
-            'header_image' => ['nullable', 'image'],
-            'footer_image' => ['nullable', 'image'],
-            'regenerate_token' => ['required', 'boolean'],
-            'locations.*' => ['integer', 'exists:locations,id'],
-        ]);
+                               'year' => [
+                                   'required',
+                                   'integer',
+                                   'between:1970,9999',
+                                   Rule::unique('seasons', 'year')
+                                       ->where('championship_id', $championship->id)
+                                       ->ignoreModel($season),
+                               ],
+                               'header_image' => ['nullable', 'image'],
+                               'footer_image' => ['nullable', 'image'],
+                               'regenerate_token' => ['required', 'boolean'],
+                               'locations.*' => ['integer', 'exists:locations,id'],
+                           ]);
 
         $data = $request->only('year');
 
@@ -137,10 +103,10 @@ class SeasonController extends Controller
 
         foreach (['header_image', 'footer_image'] as $field) {
             if ($request->file($field)) {
-                if ($data[$field] = $request->file($field)->store('public/images')) {
+                if ($data[$field] = $request->file($field)->store('public/images') && $season->{$field}) {
                     Storage::delete($season->{$field});
                 }
-            } elseif ($request->input('remove_' . $field)) {
+            } elseif ($request->input('remove_' . $field) && $season->{$field}) {
                 Storage::delete($season->{$field});
             }
         }
@@ -152,16 +118,6 @@ class SeasonController extends Controller
         return redirect()
             ->route('admin.season.index', ['championship' => $championship])
             ->with('success', __('The season :season has been edited.', ['season' => $season->year]));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Season $season
-     */
-    public function destroy(Season $season)
-    {
-        //
     }
 
     protected function generateAccessToken(): string
