@@ -1,11 +1,17 @@
-/* eslint-disable no-unused-vars */
 import Vue from 'vue';
+import { createInertiaApp } from '@inertiajs/inertia-vue';
 import 'bootstrap';
 
-const files = require.context('./components', true, /\.vue$/i);
-files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+createInertiaApp({
+    // eslint-disable-next-line import/no-dynamic-require,global-require
+    resolve: (name) => require(`./views/${name}`),
+    setup({
+        el, App, props, plugin,
+    }) {
+        Vue.use(plugin);
 
-// noinspection JSUnusedLocalSymbols
-const app = new Vue({
-    el: '#app',
+        new Vue({
+            render: (h) => h(App, props),
+        }).$mount(el);
+    },
 });
