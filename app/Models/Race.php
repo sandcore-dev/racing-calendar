@@ -52,27 +52,18 @@ class Race extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'season_id', 'start_time', 'name', 'circuit_id', 'location_id', 'remarks', 'status',
+        'season_id',
+        'start_time',
+        'name',
+        'circuit_id',
+        'location_id',
+        'remarks',
+        'status',
     ];
 
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
     protected $dates = ['start_time'];
 
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
     protected static function boot(): void
     {
         parent::boot();
@@ -82,86 +73,53 @@ class Race extends Model
         });
     }
 
-    /**
-     * Get the season of this race.
-     */
     public function season(): BelongsTo
     {
         return $this->belongsTo(Season::class);
     }
 
-    /**
-     * Get the circuit of this race.
-     */
     public function circuit(): BelongsTo
     {
         return $this->belongsTo(Circuit::class);
     }
 
-    /**
-     * Get the location of this race.
-     */
     public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class)
             ->withDefault();
     }
 
-    /**
-     * Get the sessions of this race.
-     */
     public function sessions(): HasMany
     {
         return $this->hasMany(RaceSession::class);
     }
 
-    /**
-     * Get localized date.
-     *
-     * @return  string
-     */
+    public function scopeBySeason(Builder $query, Season $season): Builder
+    {
+        return $query->where('season_id', $season->id);
+    }
+
     public function getDateAttribute(): string
     {
         return $this->start_time->formatLocalized('%d %B');
     }
 
-    /**
-     * Get localized date.
-     *
-     * @return  string
-     */
     public function getDateShortAttribute(): string
     {
         return $this->start_time->formatLocalized('%d %b');
     }
 
-    /**
-     * Get localized time.
-     *
-     * @return  string
-     */
     public function getTimeAttribute(): string
     {
         return $this->start_time->formatLocalized('%R');
     }
 
-    /**
-     * Is the start time within 7 days?
-     *
-     * @return  boolean
-     */
     public function getThisWeekAttribute(): bool
     {
         $diffInDays = $this->start_time->diffInDays(null, false);
         return 0 >= $diffInDays && $diffInDays > -7;
     }
 
-    /**
-     * Sanitize and set remarks.
-     *
-     * @param string|null $value The value to sanitize.
-     * @return string|null
-     */
     public function setRemarksAttribute(?string $value): ?string
     {
         return $this->attributes['remarks'] = $value === null
@@ -169,16 +127,18 @@ class Race extends Model
             : strip_tags($value);
     }
 
-    /**
-     * Scope to season.
-     *
-     * @param Builder $query
-     * @param Season $season
-     *
-     * @return Builder
-     */
-    public function scopeBySeason(Builder $query, Season $season): Builder
+    public function getCountryFlagAttribute(): string
     {
-        return $query->where('season_id', $season->id);
+        return $this->circuit->country->flag_class;
+    }
+
+    public function getCountryLocalNameAttribute(): string
+    {
+        return $this->circuit->country->local_name;
+    }
+
+    public function getCircuitCityAttribute(): string
+    {
+        return $this->circuit->city;
     }
 }

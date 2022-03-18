@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Championship;
 use App\Models\Season;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Race;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Lang;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CalendarController extends Controller
 {
@@ -18,12 +19,8 @@ class CalendarController extends Controller
      * If logged in: redirect to most recent calendar.
      * If not logged in: show most recent calendar without locations.
      */
-    public function index(Championship $championship): Renderable|RedirectResponse
+    public function index(Championship $championship): Response|RedirectResponse
     {
-        if (!$championship->seasons()->count()) {
-            return view('empty')->with('championship', $championship);
-        }
-
         if (
             Auth::check()
             && $season = $championship->seasons()
@@ -37,17 +34,37 @@ class CalendarController extends Controller
                 ]);
         }
 
-        $season = $championship->seasons()->first();
+        /** @var Season $season */
+        $season = $championship->seasons()->firstOrFail();
 
-        return view('index')
-            ->with(
-                [
-                    'icon' => $season?->icon_url,
-                    'championship' => $championship,
-                    'season' => $season,
-                    'showLocations' => false,
-                ]
-            );
+        return Inertia::render(
+            'Index',
+            [
+                'title' => "{$championship->name} {$season->year}",
+
+                'iconUrl' => $season->icon_url,
+                'headerUrl' => $season->header_url,
+                'footerUrl' => $season->footer_url,
+
+                'labels' => [
+                    'date' => Lang::get('Date'),
+                    'race_time' => Lang::get('Race time'),
+                    'race' => Lang::get('Race'),
+                ],
+
+                'items' => $season->races->map(function (Race $race) {
+                    return $race->only(
+                        [
+                            'id',
+                            'start_time',
+                            'country_flag',
+                            'country_local_name',
+                            'circuit_city',
+                        ]
+                    );
+                }),
+            ]
+        );
     }
 
     /**

@@ -14,7 +14,7 @@
       for="dark-mode"
     >
       <slot>
-        Dark mode
+        {{ label }}
       </slot>
     </label>
   </div>
@@ -24,6 +24,13 @@
 import store2 from 'store2';
 
 export default {
+    props: {
+        label: {
+            type: String,
+            default: 'Dark mode',
+        },
+    },
+
     data() {
         return {
             enabled: null,

@@ -1,10 +1,16 @@
 import Vue from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue';
-import 'bootstrap';
+// import 'bootstrap';
+
+import Layout from '@/layouts/Layout.vue';
 
 createInertiaApp({
-    // eslint-disable-next-line import/no-dynamic-require,global-require
-    resolve: (name) => require(`./views/${name}`),
+    resolve: (name) => {
+        // eslint-disable-next-line import/no-dynamic-require,global-require
+        const page = require(`./views/${name}`).default;
+        page.layout = page.layout || Layout;
+        return page;
+    },
     setup({
         el, App, props, plugin,
     }) {

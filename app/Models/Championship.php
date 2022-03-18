@@ -16,8 +16,10 @@ use Illuminate\Http\Request;
  * @property string $domain
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $url
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Season[] $seasons
  * @property-read int|null $seasons_count
+ * @method static \Database\Factories\ChampionshipFactory factory(...$parameters)
  * @method static Builder|Championship newModelQuery()
  * @method static Builder|Championship newQuery()
  * @method static Builder|Championship others()
@@ -35,9 +37,12 @@ class Championship extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'domain'];
+    protected $fillable = [
+        'name',
+        'domain',
+    ];
 
-    public function seasons(): HasMany
+    public function seasons(): HasMany|Season
     {
         return $this->hasMany(Season::class);
     }
@@ -47,5 +52,10 @@ class Championship extends Model
         return $query
             ->where('domain', '!=', app(Request::class)->getHost())
             ->orderBy('name');
+    }
+
+    public function getUrlAttribute(): string
+    {
+        return route('index', ['championship' => $this]);
     }
 }
