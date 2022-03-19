@@ -50,6 +50,8 @@ class CalendarController extends Controller
                     'date' => Lang::get('Date'),
                     'race_time' => Lang::get('Race time'),
                     'race' => Lang::get('Race'),
+                    'cancelled' => Lang::get('Cancelled'),
+                    'postponed' => Lang::get('Postponed'),
                 ],
 
                 'items' => $season->races->map(function (Race $race) {
@@ -62,6 +64,7 @@ class CalendarController extends Controller
                             'circuit_city',
                             'details',
                             'this_week',
+                            'status',
                         ]
                     );
                 }),

@@ -5,6 +5,11 @@
     :items="items"
     :tbody-tr-class="getRowClass"
   >
+    <template #cell(start_time)="data">
+      <span :class="getCellClass(data.item)">
+        {{ data.value }}
+      </span>
+    </template>
     <template #cell(race)="data">
       <i
         :class="data.item.country_flag"
@@ -18,7 +23,7 @@
       <b-button
         size="sm"
         @click="data.toggleDetails()"
-        v-show="data.item.details.sessions.length"
+        v-show="showDetailsButton(data.item)"
       >
         <i
           class="fa fa-chevron-down"
@@ -135,13 +140,29 @@ export default {
         },
 
         showTime(value, key, item) {
-            return this.getDateTime(item.start_time).toLocaleString(DateTime.TIME_24_SIMPLE);
+            return item.status === 'scheduled'
+                ? this.getDateTime(item.start_time).toLocaleString(DateTime.TIME_24_SIMPLE)
+                : this.labels[item.status];
         },
 
         getRowClass(item) {
             return item.this_week
                 ? 'this-week'
                 : '';
+        },
+
+        getCellClass(item) {
+            if (item.status === 'scheduled') {
+                return null;
+            }
+
+            return item.status === 'cancelled'
+                ? 'text-danger'
+                : 'text-warning';
+        },
+
+        showDetailsButton(item) {
+            return item.status === 'scheduled' && item.details.sessions.length;
         },
     },
 };
