@@ -10,24 +10,25 @@
         :text="dropdownTitle"
         right
       >
-        <b-dropdown-item
+        <Link
           v-for="dropdownItem in dropdownItems"
           :key="dropdownItem.id"
+          class="dropdown-item"
+          :href="dropdownItem.url"
         >
-          <Link :href="dropdownItem.url">
-            {{ dropdownItem.label }}
-          </Link>
-        </b-dropdown-item>
+          {{ dropdownItem.label }}
+        </Link>
         <b-dropdown-divider />
         <b-dropdown-item>
           <dark-mode-switch />
         </b-dropdown-item>
         <b-dropdown-divider />
-        <b-dropdown-item>
-          <Link :href="sessionAction.url">
-            {{ sessionAction.label }}
-          </Link>
-        </b-dropdown-item>
+        <Link
+          :href="sessionAction.url"
+          class="dropdown-item"
+        >
+          {{ sessionAction.label }}
+        </Link>
       </b-nav-item-dropdown>
     </b-navbar-nav>
   </b-navbar>
