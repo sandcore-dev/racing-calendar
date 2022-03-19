@@ -3,6 +3,7 @@
     striped
     :fields="fields"
     :items="items"
+    :tbody-tr-class="getRowClass"
   >
     <template #cell(race)="data">
       <i
@@ -135,6 +136,12 @@ export default {
 
         showTime(value, key, item) {
             return this.getDateTime(item.start_time).toLocaleString(DateTime.TIME_24_SIMPLE);
+        },
+
+        getRowClass(item) {
+            return item.this_week
+                ? 'this-week'
+                : '';
         },
     },
 };

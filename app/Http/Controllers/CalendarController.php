@@ -61,6 +61,7 @@ class CalendarController extends Controller
                             'country_local_name',
                             'circuit_city',
                             'details',
+                            'this_week',
                         ]
                     );
                 }),
