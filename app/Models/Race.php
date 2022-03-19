@@ -22,15 +22,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Circuit $circuit
+ * @property-read string $circuit_city
+ * @property-read string $country_flag
+ * @property-read string $country_local_name
  * @property-read string $date
  * @property-read string $date_short
+ * @property-read array $details
+ * @property-read string|null $location_name
  * @property-read bool $this_week
  * @property-read string $time
  * @property-read \App\Models\Location|null $location
- * @property-read Season $season
+ * @property-read \App\Models\Season $season
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RaceSession[] $sessions
  * @property-read int|null $sessions_count
- * @method static Builder|Race bySeason(Season $season)
+ * @method static Builder|Race bySeason(\App\Models\Season $season)
+ * @method static \Database\Factories\RaceFactory factory(...$parameters)
  * @method static Builder|Race newModelQuery()
  * @method static Builder|Race newQuery()
  * @method static Builder|Race query()
@@ -160,5 +166,10 @@ class Race extends Model
                 );
             }),
         ];
+    }
+
+    public function getLocationNameAttribute(): ?string
+    {
+        return $this->location->name;
     }
 }

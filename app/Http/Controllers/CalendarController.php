@@ -37,6 +37,11 @@ class CalendarController extends Controller
         /** @var Season $season */
         $season = $championship->seasons()->firstOrFail();
 
+        return $this->calendar($championship, $season, false);
+    }
+
+    public function calendar(Championship $championship, Season $season, bool $showLocations = true): Response
+    {
         return Inertia::render(
             'Index',
             [
@@ -52,9 +57,12 @@ class CalendarController extends Controller
                     'race' => Lang::get('Race'),
                     'cancelled' => Lang::get('Cancelled'),
                     'postponed' => Lang::get('Postponed'),
+                    'location' => Lang::get('Location'),
                 ],
 
-                'items' => $season->races->map(function (Race $race) {
+                'showLocations' => $showLocations,
+
+                'items' => $season->races->map(function (Race $race) use ($showLocations) {
                     return $race->only(
                         [
                             'id',
@@ -65,6 +73,9 @@ class CalendarController extends Controller
                             'details',
                             'this_week',
                             'status',
+                            $showLocations
+                                ? 'location_name'
+                                : null,
                         ]
                     );
                 }),
@@ -72,25 +83,6 @@ class CalendarController extends Controller
         );
     }
 
-    /**
-     * Show calendar.
-     */
-    public function calendar(Championship $championship, Season $season): Renderable
-    {
-        return view('index')
-            ->with(
-                [
-                    'icon' => $season->icon_url,
-                    'championship' => $championship,
-                    'season' => $season,
-                    'showLocations' => $season->locations()->count() > 0,
-                ]
-            );
-    }
-
-    /**
-     * Show location edit form.
-     */
     public function editLocation(Championship $championship, Season $season, Race $race): Renderable
     {
         return view('location.edit')
@@ -103,9 +95,6 @@ class CalendarController extends Controller
             );
     }
 
-    /**
-     * Update location.
-     */
     public function updateLocation(
         Championship $championship,
         Season $season,

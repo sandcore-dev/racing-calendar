@@ -89,6 +89,11 @@ export default {
             type: Object,
             required: true,
         },
+
+        showLocations: {
+            type: Boolean,
+            required: true,
+        },
     },
 
     computed: {
@@ -120,8 +125,15 @@ export default {
                 {
                     key: 'race',
                     label: this.labels.race,
-                    class: 'text-nowrap col-7',
+                    class: 'text-nowrap col-5',
                 },
+                !this.showLocations
+                    ? null
+                    : {
+                        key: 'location_name',
+                        label: this.labels.location,
+                        class: 'col-2',
+                    },
             ];
         },
     },
