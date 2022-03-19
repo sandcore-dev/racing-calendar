@@ -1,22 +1,53 @@
 <template>
   <b-table-lite
-    :items="items"
+    striped
     :fields="fields"
+    :items="items"
   >
-    <template #cell(race)="race">
+    <template #cell(race)="data">
       <i
-        :class="race.item.country_flag"
+        :class="data.item.country_flag"
         v-v-b-tooltip.hover.left
-        :title="race.item.country_local_name"
+        :title="data.item.country_local_name"
       />
-      {{ race.item.circuit_city }}
+      {{ data.item.circuit_city }}
+    </template>
+
+    <template #cell(details)="data">
+      <b-button
+        size="sm"
+        @click="data.toggleDetails()"
+        v-show="data.item.details.sessions.length"
+      >
+        <i
+          class="fa fa-chevron-down"
+          v-show="!data.detailsShowing"
+        />
+        <i
+          class="fa fa-chevron-up"
+          v-show="data.detailsShowing"
+        />
+      </b-button>
+    </template>
+
+    <template #row-details="data">
+      <race-details
+        :country-flag="data.item.country_flag"
+        :details="data.item.details"
+      />
     </template>
   </b-table-lite>
 </template>
 
 <script>
-import { BTableLite, VBTooltip } from 'bootstrap-vue';
+import {
+    BButton,
+    BTableLite,
+    VBTooltip,
+} from 'bootstrap-vue';
 import { DateTime } from 'luxon';
+
+import RaceDetails from '@/components/Race/Details.vue';
 
 export default {
     directives: {
@@ -24,7 +55,10 @@ export default {
     },
 
     components: {
+        BButton,
         BTableLite,
+
+        RaceDetails,
     },
 
     props: {
@@ -58,22 +92,29 @@ export default {
                     key: 'date_short',
                     label: this.labels.date,
                     formatter: this.showDateShort,
-                    class: 'nowrap d-lg-none',
+                    class: 'text-nowrap d-lg-none col-2',
                 },
                 {
                     key: 'date_long',
                     label: this.labels.date,
                     formatter: this.showDateLong,
-                    class: 'nowrap d-none d-lg-table-cell',
+                    class: 'text-nowrap d-none d-lg-table-cell col-2',
                 },
                 {
                     key: 'start_time',
                     label: this.labels.race_time,
                     formatter: this.showTime,
+                    class: 'col-2',
+                },
+                {
+                    key: 'details',
+                    label: '',
+                    class: 'text-center col-1',
                 },
                 {
                     key: 'race',
                     label: this.labels.race,
+                    class: 'text-nowrap col-7',
                 },
             ];
         },
@@ -85,7 +126,7 @@ export default {
         },
 
         showDateShort(value, key, item) {
-            return this.getDateTime(item.start_time).toFormat('dd MMM');
+            return this.getDateTime(item.start_time).toFormat('dd MMM').replace('.', '');
         },
 
         showDateLong(value, key, item) {

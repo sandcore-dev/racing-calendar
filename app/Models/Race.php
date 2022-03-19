@@ -64,12 +64,10 @@ class Race extends Model
 
     protected $dates = ['start_time'];
 
-    protected static function boot(): void
+    protected static function booted(): void
     {
-        parent::boot();
-
-        static::addGlobalScope('sortByStartTime', function (Builder $builder) {
-            $builder->orderBy('start_time', 'asc');
+        static::addGlobalScope('orderByStartTime', function (Builder $query) {
+            $query->orderBy('start_time');
         });
     }
 
@@ -140,5 +138,27 @@ class Race extends Model
     public function getCircuitCityAttribute(): string
     {
         return $this->circuit->city;
+    }
+
+    public function getDetailsAttribute(): array
+    {
+        return [
+            'title' => $this->name,
+            'circuit' => $this->circuit->only(
+                [
+                    'name',
+                    'location',
+                ]
+            ),
+            'sessions' => $this->sessions->map(function (RaceSession $session) {
+                return $session->only(
+                    [
+                        'start_time',
+                        'end_time',
+                        'name',
+                    ]
+                );
+            }),
+        ];
     }
 }

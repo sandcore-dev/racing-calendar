@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,11 +39,6 @@ class RaceSession extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'race_id',
         'start_time',
@@ -50,49 +46,33 @@ class RaceSession extends Model
         'name',
     ];
 
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
     protected $dates = [
         'start_time',
         'end_time',
     ];
 
-    /**
-     * Get the template of this session.
-     */
-    public function race(): BelongsTo
+    protected static function booted(): void
+    {
+        static::addGlobalScope('orderByStartTime', function (Builder $query) {
+            return $query->orderBy('start_time');
+        });
+    }
+
+    public function race(): BelongsTo|Race
     {
         return $this->belongsTo(Race::class);
     }
 
-    /**
-     * Get localized date.
-     *
-     * @return  string
-     */
     public function getDateAttribute(): string
     {
         return $this->start_time->formatLocalized('%d %B');
     }
 
-    /**
-     * Get localized short date.)
-     *
-     * @return  string
-     */
     public function getDateShortAttribute(): string
     {
         return $this->start_time->formatLocalized('%d %b');
     }
 
-    /**
-     * Get localized time.
-     *
-     * @return  string
-     */
     public function getTimeAttribute(): string
     {
         return $this->start_time->formatLocalized('%R') . '-' . $this->end_time->formatLocalized('%R');

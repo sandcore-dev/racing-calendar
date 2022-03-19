@@ -60,6 +60,7 @@ class CalendarController extends Controller
                             'country_flag',
                             'country_local_name',
                             'circuit_city',
+                            'details',
                         ]
                     );
                 }),
