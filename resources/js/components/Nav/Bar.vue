@@ -5,6 +5,20 @@
         {{ title }}
       </Link>
     </b-navbar-brand>
+    <b-navbar-nav v-if="adminItems.length">
+      <b-nav-item
+        v-for="item in adminItems"
+        :key="item.url"
+        :active="item.active"
+      >
+        <Link
+          :href="item.url"
+          class="nav-link"
+        >
+          {{ item.label }}
+        </Link>
+      </b-nav-item>
+    </b-navbar-nav>
     <b-navbar-nav class="ml-auto">
       <b-nav-item-dropdown
         :text="dropdownTitle"
@@ -39,6 +53,7 @@ import {
     BNavbar,
     BNavbarBrand,
     BNavbarNav,
+    BNavItem,
     BNavItemDropdown,
     BDropdownDivider,
     BDropdownItem,
@@ -52,6 +67,7 @@ export default {
         BNavbar,
         BNavbarBrand,
         BNavbarNav,
+        BNavItem,
         BNavItemDropdown,
         BDropdownDivider,
         BDropdownItem,
@@ -82,6 +98,11 @@ export default {
 
         sessionAction: {
             type: Object,
+            required: true,
+        },
+
+        adminItems: {
+            type: Array,
             required: true,
         },
     },

@@ -30,6 +30,7 @@
         :dropdown-title="dropdownTitle"
         :dropdown-items="dropdownItems"
         :session-action="sessionAction"
+        :admin-items="adminItems"
       />
       <slot />
     </b-container>
@@ -77,6 +78,11 @@ export default {
 
         sessionAction: {
             type: Object,
+            required: true,
+        },
+
+        adminItems: {
+            type: Array,
             required: true,
         },
     },
