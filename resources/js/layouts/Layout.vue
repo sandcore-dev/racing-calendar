@@ -25,7 +25,7 @@
     </Head>
     <b-container>
       <nav-bar
-        :title="title"
+        :title="navBarTitle"
         :url="navBarUrl"
         :dropdown-title="dropdownTitle"
         :dropdown-items="dropdownItems"
@@ -54,6 +54,13 @@ export default {
         title: {
             type: String,
             required: true,
+        },
+
+        navBarTitle: {
+            type: String,
+            default() {
+                return this.title;
+            },
         },
 
         navBarUrl: {
