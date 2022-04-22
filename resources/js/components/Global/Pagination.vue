@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav v-show="showPagination">
     <ul class="pagination">
       <li
         class="page-item"
@@ -65,11 +65,20 @@ export default {
             type: Array,
             required: true,
         },
+
+        alwaysShowPagination: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
         pages() {
             return this.links.slice(1, -1);
+        },
+
+        showPagination() {
+            return this.alwaysShowPagination || this.pages.length > 1;
         },
     },
 
