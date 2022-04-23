@@ -32,19 +32,28 @@
         :session-action="sessionAction"
         :admin-items="adminItems"
       />
+      <b-alert
+        v-for="(message, variant) in messages"
+        :key="variant"
+        :variant="variant"
+        :show="!!message"
+      >
+        {{ message }}
+      </b-alert>
       <slot />
     </b-container>
   </div>
 </template>
 
 <script>
-import { BContainer } from 'bootstrap-vue';
+import { BAlert, BContainer } from 'bootstrap-vue';
 import { Head } from '@inertiajs/inertia-vue';
 
 import NavBar from '@/components/Nav/Bar.vue';
 
 export default {
     components: {
+        BAlert,
         BContainer,
         Head,
         NavBar,
@@ -90,6 +99,11 @@ export default {
 
         adminItems: {
             type: Array,
+            required: true,
+        },
+
+        messages: {
+            type: Object,
             required: true,
         },
     },
