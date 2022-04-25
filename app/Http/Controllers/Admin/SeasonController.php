@@ -6,20 +6,40 @@ use App\Models\Championship;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Season;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class SeasonController extends Controller
 {
-    public function index(Championship $championship): Renderable
+    public function index(Championship $championship): Response
     {
-        return view('admin.season.index')->with(
+        return Inertia::render(
+            'Admin/Season/Index',
             [
-                'championship' => $championship,
-                'seasons' => $championship->seasons()->paginate(),
+                'title' => Lang::get('Admin')
+                    . ': ' . $championship->name
+                    . ' - ' . Lang::get('Seasons'),
+
+                'labels' => [
+                    'title' => $championship->name,
+                    'year' => Lang::get('Year'),
+                    'back' => Lang::get('Back to championship index'),
+                ],
+
+                'adminAddUrl' => route('admin.season.create', ['championship' => $championship]),
+
+                'adminBackUrl' => route('admin.championship.index'),
+
+                'seasons' => $championship->seasons()
+                    ->with(['championship:id,name'])
+                    ->select(['id', 'year', 'championship_id'])
+                    ->paginate(),
             ]
         );
     }

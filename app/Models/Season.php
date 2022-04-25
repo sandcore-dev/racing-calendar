@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -57,6 +58,11 @@ class Season extends Model
         'icon_image',
         'header_image',
         'footer_image',
+    ];
+
+    protected $appends = [
+        'admin_race_url',
+        'admin_edit_url',
     ];
 
     protected static function boot(): void
@@ -124,6 +130,20 @@ class Season extends Model
     {
         return $this->{$section . '_image'}
             ? Storage::url($this->{$section . '_image'})
+            : null;
+    }
+
+    public function getAdminRaceUrlAttribute(): ?string
+    {
+        return Auth::check()
+            ? route('admin.race.index', ['championship' => $this->championship, 'season' => $this])
+            : null;
+    }
+
+    public function getAdminEditUrlAttribute(): ?string
+    {
+        return Auth::check()
+            ? route('admin.season.edit', ['championship' => $this->championship, 'season' => $this])
             : null;
     }
 }
