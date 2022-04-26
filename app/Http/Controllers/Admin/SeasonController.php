@@ -17,6 +17,12 @@ use Inertia\Response;
 
 class SeasonController extends Controller
 {
+    protected array $acceptedMimeTypes = [
+        'image/jpg',
+        'image/jpeg',
+        'image/png',
+    ];
+
     public function index(Championship $championship): Response
     {
         return Inertia::render(
@@ -44,10 +50,31 @@ class SeasonController extends Controller
         );
     }
 
-    public function create(Championship $championship): Renderable
+    public function create(Championship $championship): Response
     {
-        return view('admin.season.create')
-            ->with('championship', $championship);
+        return Inertia::render(
+            'Admin/Season/Form',
+            [
+                'title' => Lang::get('Admin')
+                    . ': ' . $championship->name
+                    . ' - ' . Lang::get('Add season'),
+
+                'header' => Lang::get('Add season for :name', ['name' => $championship->name]),
+
+                'url' => route('admin.season.store', ['championship' => $championship]),
+
+                'labels' => [
+                    'year' => Lang::get('Year'),
+                    'headerImage' => Lang::get('Header image'),
+                    'footerImage' => Lang::get('Footer image'),
+                    'noFileChosen' => Lang::get('No file chosen'),
+                    'browse' => Lang::get('Browse'),
+                    'submit' => Lang::get('Add'),
+                ],
+
+                'acceptedMimeTypes' => implode(',', $this->acceptedMimeTypes),
+            ]
+        );
     }
 
     public function store(Request $request, Championship $championship): RedirectResponse
