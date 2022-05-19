@@ -38,26 +38,68 @@
           :state="getState(form.errors.footer_image)"
         />
       </b-form-group>
+      <template v-if="!!seasonId">
+        <b-form-group
+          :label="labels.accessToken"
+          :state="getState(form.errors.accessToken)"
+          :invalid-feedback="form.errors.accessToken"
+        >
+          <b-input-group>
+            <b-form-input
+              v-model="form.access_token"
+              :state="getState(form.errors.access_token)"
+              readonly
+            />
+            <b-input-group-append is-text>
+              <b-form-checkbox
+                class="mr-n2"
+                v-model="form.regenerate_token"
+                switch
+              >
+                {{ labels.regenerateToken }}
+              </b-form-checkbox>
+            </b-input-group-append>
+          </b-input-group>
+        </b-form-group>
+        <b-form-group
+          :label="labels.locations"
+          :state="getState(form.errors.locations)"
+          :invalid-feedback="form.errors.locations"
+        >
+          <locations
+            v-model="form.locations"
+            :options="locations"
+          />
+        </b-form-group>
+      </template>
     </template>
   </Form>
 </template>
 
 <script>
 import {
+    BInputGroup,
+    BInputGroupAppend,
+    BFormCheckbox,
     BFormGroup,
     BFormInput,
     BFormFile,
 } from 'bootstrap-vue';
 
 import Form from '@/components/Form.vue';
+import Locations from '@/components/Locations.vue';
 
 export default {
     components: {
+        BInputGroup,
+        BInputGroupAppend,
+        BFormCheckbox,
         BFormGroup,
         BFormInput,
         BFormFile,
 
         Form,
+        Locations,
     },
 
     props: {
@@ -66,9 +108,21 @@ export default {
             required: true,
         },
 
+        seasonId: {
+            type: Number,
+            default: null,
+        },
+
         acceptedMimeTypes: {
             type: String,
             required: true,
+        },
+
+        locations: {
+            type: Array,
+            default() {
+                return [];
+            },
         },
 
         data: {
@@ -78,6 +132,9 @@ export default {
                     year: new Date().getFullYear(),
                     header_image: null,
                     footer_image: null,
+                    access_token: null,
+                    regenerate_token: false,
+                    locations: [],
                 };
             },
         },

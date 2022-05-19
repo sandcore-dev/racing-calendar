@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Championship;
-use Illuminate\Contracts\Support\Renderable;
+use App\Models\Location;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
@@ -108,21 +108,72 @@ class SeasonController extends Controller
             ->route('admin.season.index', ['championship' => $championship])
             ->with(
                 'success',
-                __('The season :season has been added.', [
+                Lang::get('The season :season has been added.', [
                     'season' => $season->year,
                 ])
             );
     }
 
-    public function edit(Championship $championship, Season $season): Renderable
+    public function edit(Championship $championship, Season $season): Response
     {
-        return view('admin.season.edit')
-            ->with(
-                [
-                    'championship' => $championship,
-                    'season' => $season,
-                ]
-            );
+        return Inertia::render(
+            'Admin/Season/Form',
+            [
+                'title' => Lang::get('Admin')
+                    . ': ' . $championship->name
+                    . ' - ' . Lang::get('Edit season'),
+
+                'header' => Lang::get(
+                    'Edit season :year for :name',
+                    [
+                        'name' => $championship->name,
+                        'year' => $season->year,
+                    ]
+                ),
+
+                'seasonId' => $season->id,
+
+                'edit' => true,
+                'url' => route('admin.season.update', ['championship' => $championship, 'season' => $season]),
+
+                'labels' => [
+                    'year' => Lang::get('Year'),
+                    'headerImage' => Lang::get('Header image'),
+                    'footerImage' => Lang::get('Footer image'),
+                    'noFileChosen' => Lang::get('No file chosen'),
+                    'browse' => Lang::get('Browse'),
+                    'accessToken' => Lang::get('Toegangstoken'),
+                    'regenerateToken' => Lang::get('Generate a new access token'),
+                    'locations' => Lang::get('Locations'),
+                    'searchForLocation' => Lang::get('Search for a location'),
+                    'submit' => Lang::get('Add'),
+                ],
+
+                'acceptedMimeTypes' => implode(',', $this->acceptedMimeTypes),
+
+                'images' => $season->only(
+                    [
+                        'header_url',
+                        'footer_url',
+                    ]
+                ),
+
+                'locations' => $season->locations->map(function (Location $location) {
+                    return $location->only(
+                        [
+                            'id',
+                            'name',
+                        ]
+                    );
+                }),
+
+                'data' => [
+                    'year' => $season->year,
+                    'access_token' => $season->access_token,
+                    'locations' => $season->locations->pluck('id'),
+                ],
+            ]
+        );
     }
 
     public function update(Request $request, Championship $championship, Season $season): RedirectResponse
@@ -139,7 +190,7 @@ class SeasonController extends Controller
                 ],
                 'header_image' => ['nullable', 'image'],
                 'footer_image' => ['nullable', 'image'],
-                'regenerate_token' => ['required', 'boolean'],
+                'regenerate_token' => ['nullable', 'boolean'],
                 'locations.*' => ['integer', 'exists:locations,id'],
             ]
         );
@@ -166,7 +217,7 @@ class SeasonController extends Controller
 
         return redirect()
             ->route('admin.season.index', ['championship' => $championship])
-            ->with('success', __('The season :season has been edited.', ['season' => $season->year]));
+            ->with('success', Lang::get('The season :season has been edited.', ['season' => $season->year]));
     }
 
     protected function generateAccessToken(): string
