@@ -135,14 +135,14 @@ class Season extends Model
 
     public function getAdminRaceUrlAttribute(): ?string
     {
-        return Auth::check()
+        return $this->championship_id && Auth::check()
             ? route('admin.race.index', ['championship' => $this->championship, 'season' => $this])
             : null;
     }
 
     public function getAdminEditUrlAttribute(): ?string
     {
-        return Auth::check()
+        return $this->championship_id && Auth::check()
             ? route('admin.season.edit', ['championship' => $this->championship, 'season' => $this])
             : null;
     }

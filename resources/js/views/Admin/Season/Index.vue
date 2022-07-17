@@ -5,12 +5,12 @@
     </h1>
     <nav class="row mt-3 mb-3">
       <div class="col text-center">
-        <a
+        <Link
           class="btn btn-primary"
           :href="adminBackUrl"
         >
           {{ labels.back }}
-        </a>
+        </Link>
       </div>
     </nav>
     <b-row>
