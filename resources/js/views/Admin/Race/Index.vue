@@ -136,10 +136,18 @@ export default {
         return {
             fields: [
                 {
+                    key: 'start_date',
+                    label: this.labels.date,
+                    class: ['text-right'],
+                    formatter(value, key, { start_time: startTime }) {
+                        return DateTime.fromISO(startTime).setLocale('nl').toLocaleString(DateTime.DATE_FULL);
+                    },
+                },
+                {
                     key: 'start_time',
                     label: this.labels.startTime,
                     formatter(value) {
-                        return DateTime.fromISO(value).setLocale('nl').toFormat('dd MMMM yyyy HH:ss');
+                        return DateTime.fromISO(value).setLocale('nl').toLocaleString(DateTime.TIME_24_SIMPLE);
                     },
                 },
                 {

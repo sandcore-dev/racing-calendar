@@ -33,6 +33,7 @@ class RaceController extends Controller
                     'title' => "{$championship->name} {$season->year}",
                     'back' => Lang::get('Back to season index'),
                     'copySeason' => Lang::get('Copy races from season'),
+                    'date' => Lang::get('Datum'),
                     'startTime' => Lang::get('Start time'),
                     'name' => Lang::get('Name'),
                 ],
