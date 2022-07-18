@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\Race
@@ -69,6 +70,10 @@ class Race extends Model
     ];
 
     protected $dates = ['start_time'];
+
+    protected $appends = [
+        'admin_edit_url',
+    ];
 
     protected static function booted(): void
     {
@@ -171,5 +176,19 @@ class Race extends Model
     public function getLocationNameAttribute(): ?string
     {
         return $this->location->name;
+    }
+
+    public function getAdminEditUrlAttribute(): ?string
+    {
+        return $this->season_id && Auth::check()
+            ? route(
+                'admin.race.edit',
+                [
+                    'championship' => $this->season->championship,
+                    'season' => $this->season,
+                    'race' => $this,
+                ]
+            )
+            : null;
     }
 }

@@ -11,6 +11,7 @@ use App\Rules\IsRaceNameUnique;
 use App\Models\Circuit;
 use App\Models\Season;
 use App\Models\Race;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
@@ -53,7 +54,8 @@ class RaceController extends Controller
                     ->get(),
 
                 'races' => $season->races()
-                    ->select(['id', 'start_time', 'name'])
+                    ->select(['id', 'start_time', 'name', 'season_id'])
+                    ->with(['season.championship'])
                     ->paginate(),
             ]
         );
@@ -93,124 +95,141 @@ class RaceController extends Controller
             ->with('success', __('The races from :year have been copied.', ['year' => $copyFromSeason->year]));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param Championship $championship
-     * @param Season $season
-     * @return Renderable
-     */
-    public function create(Championship $championship, Season $season)
+    public function create(Championship $championship, Season $season): Response
     {
-        return view('admin.race.create')
-            ->with(
-                [
-                    'championship' => $championship,
-                    'season' => $season,
-                    'circuits' => Circuit::all(),
-                ]
-            );
+        return Inertia::render(
+            'Admin/Race/Form',
+            [
+                'title' => Lang::get('Admin')
+                    . ': ' . $championship->name
+                    . ' ' . $season->year
+                    . ' - ' . Lang::get('Add race'),
+
+                'header' => Lang::get(
+                    'Add race for :championship season :year',
+                    [
+                        'championship' => $championship->name,
+                        'season' => $season->year,
+                    ]
+                ),
+
+                'url' => route('admin.race.store', ['championship' => $championship, 'season' => $season]),
+
+                'labels' => [
+                    'start_time' => Lang::get('Start time'),
+                    'name' => Lang::get('Name'),
+                    'circuit_id' => Lang::get('Circuit'),
+                    'remarks' => Lang::get('Remarks'),
+                    'status' => Lang::get('Status'),
+                    'submit' => Lang::get('Add'),
+                ],
+
+                'year' => $season->year,
+                'locale' => App::currentLocale(),
+
+                'circuits' => Circuit::select(['id', 'name'])->get(),
+                'statuses' => $this->getStatuses(),
+            ]
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @param Championship $championship
-     * @param Season $season
-     * @return RedirectResponse
-     */
-    public function store(Request $request, Championship $championship, Season $season)
+    public function store(Request $request, Championship $championship, Season $season): RedirectResponse
     {
-        $request->validate([
-                               'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
-                               'name' => [
-                                   'required',
-                                   'min:5',
-                                   new IsRaceNameUnique($request->input('season_id'), $request->input('start_time')),
-                               ],
-                               'circuit_id' => ['required', 'integer', 'exists:circuits,id'],
-                               'remarks' => ['string', 'nullable'],
-                           ]);
+        $request->validate(
+            [
+                'start_time' => ['required', 'date'],
+                'name' => [
+                    'required',
+                    'min:5',
+                    new IsRaceNameUnique($request->input('season_id'), $request->input('start_time')),
+                ],
+                'circuit_id' => ['required', 'integer', 'exists:circuits,id'],
+                'remarks' => ['string', 'nullable'],
+            ]
+        );
 
         /** @var Race $race */
         $race = $season->races()->create($request->only('start_time', 'name', 'circuit_id', 'remarks'));
 
-        return redirect()
-            ->route('admin.race.index', ['championship' => $championship, 'season' => $season, 'race' => $race])
+        return Redirect::route(
+            'admin.race.index',
+            ['championship' => $championship, 'season' => $season, 'race' => $race]
+        )
             ->with('success', __('The race :name has been added.', ['name' => $race->name]));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Race $race
-     */
-    public function show(Race $race)
+    public function edit(Championship $championship, Season $season, Race $race): Response
     {
-        //
+        return Inertia::render(
+            'Admin/Race/Form',
+            [
+                'title' => Lang::get('Admin')
+                    . ': ' . $championship->name
+                    . ' ' . $season->year
+                    . ' - ' . Lang::get('Edit race'),
+
+                'header' => Lang::get(
+                    'Edit race :name for :championship season :season',
+                    [
+                        'name' => $race->name,
+                        'championship' => $championship->name,
+                        'season' => $season->year,
+                    ]
+                ),
+
+                'edit' => true,
+                'url' => route(
+                    'admin.race.update',
+                    ['championship' => $championship, 'season' => $season, 'race' => $race]
+                ),
+
+                'labels' => [
+                    'start_time' => Lang::get('Start time'),
+                    'name' => Lang::get('Name'),
+                    'circuit_id' => Lang::get('Circuit'),
+                    'remarks' => Lang::get('Remarks'),
+                    'status' => Lang::get('Status'),
+                    'submit' => Lang::get('Add'),
+                ],
+
+                'year' => $season->year,
+                'locale' => App::currentLocale(),
+
+                'circuits' => Circuit::select(['id', 'name'])->get(),
+                'statuses' => $this->getStatuses(),
+
+                'data' => $race->only(
+                    [
+                        'start_time',
+                        'name',
+                        'circuit_id',
+                        'remarks',
+                        'status',
+                    ]
+                ),
+            ]
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Championship $championship
-     * @param Season $season
-     * @param Race $race
-     * @return Renderable
-     */
-    public function edit(Championship $championship, Season $season, Race $race)
+    public function update(Request $request, Championship $championship, Season $season, Race $race): RedirectResponse
     {
-        $statuses = [
+        $request->validate(
             [
-                'id' => 'scheduled',
-                'name' => __('Scheduled'),
-            ],
-            [
-                'id' => 'postponed',
-                'name' => __('Postponed'),
-            ],
-            [
-                'id' => 'cancelled',
-                'name' => __('Cancelled'),
-            ],
-        ];
-
-        return view('admin.race.edit')->with([
-                                                 'championship' => $championship,
-                                                 'season' => $season,
-                                                 'race' => $race,
-                                                 'circuits' => Circuit::all(),
-                                                 'statuses' => $statuses,
-                                             ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Championship $championship
-     * @param Season $season
-     * @param Race $race
-     * @return RedirectResponse
-     */
-    public function update(Request $request, Championship $championship, Season $season, Race $race)
-    {
-        $request->validate([
-                               'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
-                               'name' => [
-                                   'required',
-                                   'min:5',
-                                   new IsRaceNameUnique(
-                                       $request->input('season_id'),
-                                       $request->input('start_time'),
-                                       $race->id
-                                   ),
-                               ],
-                               'circuit_id' => ['required', 'integer', 'exists:circuits,id'],
-                               'remarks' => ['string', 'nullable'],
-                               'status' => ['required', 'string', 'in:scheduled,postponed,cancelled'],
-                           ]);
+                'start_time' => ['required', 'date'],
+                'name' => [
+                    'required',
+                    'min:5',
+                    new IsRaceNameUnique(
+                        $request->input('season_id'),
+                        $request->input('start_time'),
+                        $race->id
+                    ),
+                ],
+                'circuit_id' => ['required', 'integer', 'exists:circuits,id'],
+                'remarks' => ['string', 'nullable'],
+                'status' => ['required', 'string', 'in:scheduled,postponed,cancelled'],
+            ]
+        );
 
         $race->update($request->only('start_time', 'name', 'circuit_id', 'remarks', 'status'));
 
@@ -219,13 +238,21 @@ class RaceController extends Controller
             ->with('success', __('The race :name has been changed.', ['name' => $race->name]));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Race $race
-     */
-    public function destroy(Race $race)
+    protected function getStatuses(): array
     {
-        //
+        return [
+            [
+                'value' => 'scheduled',
+                'text' => Lang::get('Scheduled'),
+            ],
+            [
+                'value' => 'postponed',
+                'text' => Lang::get('Postponed'),
+            ],
+            [
+                'value' => 'cancelled',
+                'text' => Lang::get('Cancelled'),
+            ],
+        ];
     }
 }
