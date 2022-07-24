@@ -7,7 +7,6 @@ use App\Models\Race;
 use App\Models\RaceSession;
 use App\Models\Season;
 use App\Models\Template;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,7 +15,6 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
-use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -197,68 +195,90 @@ class RaceSessionController extends Controller
             ->with('success', __('The session :name has been added.', ['name' => $session->name]));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Championship $championship
-     * @param Season $season
-     * @param Race $race
-     * @param RaceSession $session
-     * @return Factory|View
-     */
-    public function edit(Championship $championship, Season $season, Race $race, RaceSession $session)
+    public function edit(Championship $championship, Season $season, Race $race, RaceSession $session): Response
     {
-        return view('admin.race.session.edit')->with([
-                                                         'championship' => $championship,
-                                                         'season' => $season,
-                                                         'race' => $race,
-                                                         'session' => $session,
-                                                     ]);
+        return Inertia::render(
+            'Admin/Race/Session/Form',
+            [
+                'title' => Lang::get('Admin')
+                    . ': ' . $championship->name
+                    . ' ' . $season->year
+                    . ' ' . $race->name
+                    . ' - ' . Lang::get('Add session'),
+
+                'header' => Lang::get(
+                    'Edit race session :championship season :season :race :session',
+                    [
+                        'championship' => $championship->name,
+                        'season' => $season->year,
+                        'race' => $race->name,
+                        'session' => $session->name,
+                    ]
+                ),
+
+                'edit' => true,
+                'url' => route(
+                    'admin.race.session.update',
+                    [
+                        'championship' => $championship,
+                        'season' => $season,
+                        'race' => $race,
+                        'session' => $session,
+                    ]
+                ),
+
+                'labels' => [
+                    'start_time' => Lang::get('Start time'),
+                    'end_time' => Lang::get('End time'),
+                    'name' => Lang::get('Name'),
+                    'submit' => Lang::get('Edit'),
+                ],
+
+                'locale' => App::currentLocale(),
+                'year' => $season->year,
+
+                'data' => $session->only(
+                    [
+                        'start_time',
+                        'end_time',
+                        'name',
+                    ]
+                ),
+            ]
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Championship $championship
-     * @param Season $season
-     * @param Race $race
-     * @param RaceSession $session
-     * @return RedirectResponse
-     */
     public function update(
         Request $request,
         Championship $championship,
         Season $season,
         Race $race,
         RaceSession $session
-    ) {
+    ): RedirectResponse {
         $ruleUniqueSessionName = Rule::unique('race_sessions')
             ->ignore($session->id)
             ->where(function (Builder $query) use ($race) {
                 return $query->where('race_id', $race->id);
             });
 
-        $request->validate([
-                               'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
-                               'end_time' => ['required', 'date_format:Y-m-d H:i:s'],
-                               'name' => ['required', $ruleUniqueSessionName],
-                           ]);
+        $request->validate(
+            [
+                'start_time' => ['required', 'date'],
+                'end_time' => ['required', 'date'],
+                'name' => ['required', $ruleUniqueSessionName],
+            ]
+        );
 
-        $session->update($request->only('start_time', 'end_time', 'name'));
+        $session->update(
+            [
+                'start_time' => $request->date('start_time')->setTimezone(config('app.timezone')),
+                'end_time' => $request->date('end_time')->setTimezone(config('app.timezone')),
+                'name' => $request->input('name'),
+            ]
+        );
 
         return redirect()
             ->route('admin.race.session.index', ['championship' => $championship, 'season' => $season, 'race' => $race])
             ->with('success', __('The session :name has been edited.', ['name' => $session->name]));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\RaceSession $raceSession
-     */
-    public function destroy(RaceSession $raceSession)
-    {
-        //
     }
 }

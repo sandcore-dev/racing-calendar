@@ -14,7 +14,6 @@
           :locale="locale"
           @input="(value) => { form.end_time = value }"
         />
-        {{ form.start_time }}
       </b-form-group>
       <b-form-group
         :label="labels.end_time"

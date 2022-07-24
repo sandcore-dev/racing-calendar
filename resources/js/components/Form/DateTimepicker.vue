@@ -39,7 +39,7 @@ export default {
 
     props: {
         value: {
-            type: Date,
+            type: [Date, String],
             default: null,
         },
 
@@ -67,7 +67,9 @@ export default {
     computed: {
         currentDate: {
             get() {
-                return this.value;
+                return this.value instanceof Date
+                    ? this.value
+                    : DateTime.fromISO(this.value).toJSDate();
             },
 
             set(value) {
@@ -77,7 +79,7 @@ export default {
 
         currentTime: {
             get() {
-                return DateTime.fromJSDate(this.value).toFormat('HH:mm');
+                return DateTime.fromJSDate(this.currentDate).toFormat('HH:mm');
             },
 
             set(value) {
@@ -86,7 +88,7 @@ export default {
 
                 [hour, minute] = value.split(':');
 
-                this.$emit('input', DateTime.fromJSDate(this.value).set({ hour, minute }).toJSDate());
+                this.$emit('input', DateTime.fromJSDate(this.currentDate).set({ hour, minute }).toJSDate());
             },
         },
 
