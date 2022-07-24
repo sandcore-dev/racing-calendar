@@ -8,19 +8,33 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 use Monarobase\CountryList\CountryNotFoundException;
 
 class CountryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Factory|View
-     */
-    public function index()
+    public function index(): Response
     {
-        return view('admin.country.index')->with('countries', Country::paginate());
+        return Inertia::render(
+            'Admin/Country/Index',
+            [
+                'title' => Lang::get('Admin')
+                    . ' - ' . Lang::get('Countries'),
+
+                'labels' => [
+                    'title' => Lang::get('Countries'),
+                    'country' => Lang::get('Country'),
+                    'code' => Lang::get('Code'),
+                ],
+
+                'adminAddUrl' => route('admin.country.create'),
+
+                'countries' => Country::paginate(),
+            ]
+        );
     }
 
     /**

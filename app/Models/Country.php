@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 use Monarobase\CountryList\CountryListFacade as Countries;
 use Monarobase\CountryList\CountryNotFoundException;
 
@@ -43,6 +44,7 @@ class Country extends Model
     ];
 
     protected $appends = [
+        'admin_edit_url',
         'flag_class',
     ];
 
@@ -68,5 +70,12 @@ class Country extends Model
     public function getFlagClassAttribute(): string
     {
         return 'flag-icon flag-icon-' . strtolower($this->code);
+    }
+
+    public function getAdminEditUrlAttribute(): ?string
+    {
+        return Auth::check()
+            ? route('admin.country.edit', ['country' => $this])
+            : null;
     }
 }
