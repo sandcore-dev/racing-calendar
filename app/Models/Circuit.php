@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\Circuit
@@ -41,27 +42,21 @@ class Circuit extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'name', 'city', 'area', 'country_id',
+        'name',
+        'city',
+        'area',
+        'country_id',
     ];
 
-    /**
-     * Eager loading.
-     *
-     * @var array
-     */
-    protected $with = ['country'];
+    protected $with = [
+        'country',
+    ];
 
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
+    protected $appends = [
+        'admin_edit_url',
+    ];
+
     protected static function boot(): void
     {
         parent::boot();
@@ -71,27 +66,16 @@ class Circuit extends Model
         });
     }
 
-    /**
-     * Get the races held at this circuit.
-     */
-    public function races(): HasMany
+    public function races(): HasMany|Race
     {
         return $this->hasMany(Race::class);
     }
 
-    /**
-     * Get the country of this circuit.
-     */
-    public function country(): BelongsTo
+    public function country(): BelongsTo|Country
     {
         return $this->belongsTo(Country::class);
     }
 
-    /**
-     * Get full location of this circuit.
-     *
-     * @return string
-     */
     public function getLocationAttribute(): string
     {
         $location = $this->city;
@@ -105,13 +89,15 @@ class Circuit extends Model
         return $location;
     }
 
-    /**
-     * Get full name of this circuit.
-     *
-     * @return string
-     */
     public function getFullNameAttribute(): string
     {
         return $this->name . ', ' . $this->location;
+    }
+
+    public function getAdminEditUrlAttribute(): ?string
+    {
+        return Auth::check()
+            ? route('admin.circuit.edit', ['circuit' => $this])
+            : null;
     }
 }

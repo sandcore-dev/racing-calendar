@@ -37,20 +37,15 @@ class Country extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'name', 'code',
+        'name',
+        'code',
     ];
 
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
+    protected $appends = [
+        'flag_class',
+    ];
+
     protected static function boot(): void
     {
         parent::boot();
@@ -60,28 +55,16 @@ class Country extends Model
         });
     }
 
-    /**
-     * Get circuits in this country.
-     */
-    public function circuits(): HasMany
+    public function circuits(): HasMany|Circuit
     {
         return $this->hasMany(Circuit::class);
     }
 
-    /**
-     * Get the country name according to the default locale.
-     * @throws CountryNotFoundException
-     */
     public function getLocalNameAttribute(): string
     {
         return Countries::getOne($this->code, config('app.locale'));
     }
 
-    /**
-     * Get the flag class of this country.
-     *
-     * @return  string
-     */
     public function getFlagClassAttribute(): string
     {
         return 'flag-icon flag-icon-' . strtolower($this->code);
