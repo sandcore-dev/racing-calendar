@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\TemplateSession
@@ -37,11 +38,6 @@ class TemplateSession extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'template_id',
         'days',
@@ -50,11 +46,25 @@ class TemplateSession extends Model
         'name',
     ];
 
-    /**
-     * Get the template of this session.
-     */
-    public function template(): BelongsTo
+    protected $appends = [
+        'admin_edit_url',
+    ];
+
+    public function template(): BelongsTo|Template
     {
         return $this->belongsTo(Template::class);
+    }
+
+    public function getAdminEditUrlAttribute(): ?string
+    {
+        return $this->template_id && Auth::check()
+            ? route(
+                'admin.template.session.edit',
+                [
+                    'template' => $this->template_id,
+                    'session' => $this
+                ]
+            )
+            : null;
     }
 }
