@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
@@ -122,64 +123,78 @@ class RaceSessionController extends Controller
             ->with('success', __('The template has been applied.'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param Championship $championship
-     * @param Season $season
-     * @param Race $race
-     * @return Factory|View
-     */
-    public function create(Championship $championship, Season $season, Race $race)
+    public function create(Championship $championship, Season $season, Race $race): Response
     {
-        return view('admin.race.session.create')
-            ->with([
-                       'championship' => $championship,
-                       'season' => $season,
-                       'race' => $race,
-                   ]);
+        return Inertia::render(
+            'Admin/Race/Session/Form',
+            [
+                'title' => Lang::get('Admin')
+                    . ': ' . $championship->name
+                    . ' ' . $season->year
+                    . ' ' . $race->name
+                    . ' - ' . Lang::get('Add session'),
+
+                'header' => Lang::get(
+                    'Add race session for :championship season :season :race',
+                    [
+                        'championship' => $championship->name,
+                        'season' => $season->year,
+                        'race' => $race->name,
+                    ]
+                ),
+
+                'url' => route(
+                    'admin.race.session.store',
+                    [
+                        'championship' => $championship,
+                        'season' => $season,
+                        'race' => $race,
+                    ]
+                ),
+
+                'labels' => [
+                    'start_time' => Lang::get('Start time'),
+                    'end_time' => Lang::get('End time'),
+                    'name' => Lang::get('Name'),
+                    'submit' => Lang::get('Add'),
+                ],
+
+                'locale' => App::currentLocale(),
+                'year' => $season->year,
+            ]
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @param Championship $championship
-     * @param Season $season
-     * @param Race $race
-     * @return RedirectResponse
-     */
-    public function store(Request $request, Championship $championship, Season $season, Race $race)
+    public function store(Request $request, Championship $championship, Season $season, Race $race): RedirectResponse
     {
         $ruleUniqueSessionName = Rule::unique('race_sessions')->where(function (Builder $query) use ($race) {
             return $query->where('race_id', $race->id);
         });
 
-        $request->validate([
-                               'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
-                               'end_time' => ['required', 'date_format:Y-m-d H:i:s'],
-                               'name' => ['required', $ruleUniqueSessionName],
-                           ]);
-
-        $data = $request->only('start_time', 'end_time', 'name');
-        $data['race_id'] = $race->id;
+        $request->validate(
+            [
+                'start_time' => ['required', 'date'],
+                'end_time' => ['required', 'date'],
+                'name' => ['required', $ruleUniqueSessionName],
+            ]
+        );
 
         /** @var RaceSession $session */
-        $session = $race->sessions()->create($data);
+        $session = $race->sessions()
+            ->create(
+                [
+                    'race_id' => $race->id,
+                    'start_time' => $request->date('start_time')->setTimezone(config('app.timezone')),
+                    'end_time' => $request->date('end_time')->setTimezone(config('app.timezone')),
+                    'name' => $request->input('name'),
+                ]
+            );
 
-        return redirect()
-            ->route('admin.race.session.index', ['championship' => $championship, 'season' => $season, 'race' => $race])
+        return Redirect::route(
+            'admin.race.session.index',
+            ['championship' => $championship, 'season' => $season, 'race' => $race]
+        )
             ->with('success', __('The session :name has been added.', ['name' => $session->name]));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\RaceSession $raceSession
-     */
-    public function show(RaceSession $raceSession)
-    {
-        //
     }
 
     /**
