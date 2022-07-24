@@ -72,6 +72,7 @@ class Race extends Model
     protected $dates = ['start_time'];
 
     protected $appends = [
+        'admin_race_session_url',
         'admin_edit_url',
     ];
 
@@ -82,23 +83,23 @@ class Race extends Model
         });
     }
 
-    public function season(): BelongsTo
+    public function season(): BelongsTo|Season
     {
         return $this->belongsTo(Season::class);
     }
 
-    public function circuit(): BelongsTo
+    public function circuit(): BelongsTo|Circuit
     {
         return $this->belongsTo(Circuit::class);
     }
 
-    public function location(): BelongsTo
+    public function location(): BelongsTo|Location
     {
         return $this->belongsTo(Location::class)
             ->withDefault();
     }
 
-    public function sessions(): HasMany
+    public function sessions(): HasMany|RaceSession
     {
         return $this->hasMany(RaceSession::class);
     }
@@ -177,6 +178,21 @@ class Race extends Model
     {
         return $this->location->name;
     }
+
+    public function getAdminRaceSessionUrlAttribute(): ?string
+    {
+        return $this->season_id && Auth::check()
+            ? route(
+                'admin.race.session.index',
+                [
+                    'championship' => $this->season->championship,
+                    'season' => $this->season,
+                    'race' => $this,
+                ]
+            )
+            : null;
+    }
+
 
     public function getAdminEditUrlAttribute(): ?string
     {

@@ -31,7 +31,7 @@
       </template>
 
       <template #cell(name)="data">
-        <Link :href="data.item.admin_season_url">
+        <Link :href="data.item.admin_race_session_url">
           {{ data.value }}
         </Link>
       </template>
