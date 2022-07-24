@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\RaceSession
@@ -51,6 +52,10 @@ class RaceSession extends Model
         'end_time',
     ];
 
+    protected $appends = [
+        'admin_edit_url',
+    ];
+
     protected static function booted(): void
     {
         static::addGlobalScope('orderByStartTime', function (Builder $query) {
@@ -76,5 +81,20 @@ class RaceSession extends Model
     public function getTimeAttribute(): string
     {
         return $this->start_time->formatLocalized('%R') . '-' . $this->end_time->formatLocalized('%R');
+    }
+
+    public function getAdminEditUrlAttribute(): ?string
+    {
+        return $this->race_id && Auth::check()
+            ? route(
+                'admin.race.session.edit',
+                [
+                    'championship' => $this->race->season->championship,
+                    'season' => $this->race->season,
+                    'race' => $this->race,
+                    'session' => $this
+                ]
+            )
+            : null;
     }
 }

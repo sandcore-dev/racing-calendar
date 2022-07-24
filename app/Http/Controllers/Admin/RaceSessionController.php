@@ -11,47 +11,85 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class RaceSessionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param Championship $championship
-     * @param Season $season
-     * @param Race $race
-     * @return Factory|View
-     */
-    public function index(Championship $championship, Season $season, Race $race)
+    public function index(Championship $championship, Season $season, Race $race): Response
     {
-        return view('admin.race.session.index')->with([
-            'championship' => $championship,
-            'season' => $season,
-            'race' => $race,
-            'sessions' => $race->sessions()->paginate(),
-            'templates' => Template::all(),
-        ]);
+        return Inertia::render(
+            'Admin/Race/Session/Index',
+            [
+                'title' => Lang::get('Admin')
+                    . ': ' . $championship->name
+                    . ' ' . $season->year
+                    . ' - ' . $race->name
+                    . ' - ' . Lang::get('Sessions'),
+
+                'labels' => [
+                    'title' => "{$championship->name} {$season->year} {$race->name}",
+                    'back' => Lang::get('Back to race index'),
+                    'date' => Lang::get('Datum'),
+                    'startTime' => Lang::get('Start time'),
+                    'endTime' => Lang::get('End time'),
+                    'name' => Lang::get('Name'),
+                    'applyTemplate' => Lang::get('Apply template'),
+                ],
+
+                'adminAddUrl' => route(
+                    'admin.race.session.create',
+                    [
+                        'championship' => $championship,
+                        'season' => $season,
+                        'race' => $race,
+                    ]
+                ),
+
+                'adminApplyTemplateUrl' => route(
+                    'admin.race.session.apply-template',
+                    [
+                        'championship' => $championship,
+                        'season' => $season,
+                        'race' => $race,
+                    ]
+                ),
+
+                'adminBackUrl' => route(
+                    'admin.race.index',
+                    [
+                        'championship' => $championship,
+                        'season' => $season,
+                        'race' => $race,
+                    ]
+                ),
+
+                'templates' => Template::select(['id', 'name'])->get(),
+
+                'raceSessions' => $race->sessions()
+                    ->paginate(),
+            ]
+        );
     }
 
-    /**
-     * Apply template to race.
-     *
-     * @param Request $request
-     * @param Championship $championship
-     * @param Season $season
-     * @param Race $race
-     * @return RedirectResponse
-     */
-    public function applyTemplate(Request $request, Championship $championship, Season $season, Race $race)
-    {
-        $request->validate([
-            'template' => ['required', 'integer', 'exists:templates,id'],
-        ]);
+    public function applyTemplate(
+        Request $request,
+        Championship $championship,
+        Season $season,
+        Race $race
+    ): RedirectResponse {
+        $request->validate(
+            [
+                'templateId' => ['required', 'integer', 'exists:templates,id'],
+            ]
+        );
 
-        $template = Template::find($request->input('template'));
+        $template = Template::find($request->input('templateId'));
 
         $template->sessions->each(function ($session) use ($race) {
             $start_time = clone $race->start_time;
@@ -60,22 +98,27 @@ class RaceSessionController extends Controller
             $start_time->subDays($session->days);
             $end_time->subDays($session->days);
 
-            list($start_hour, $start_min) = explode(':', $session->start_time);
-            list($end_hour, $end_min) = explode(':', $session->end_time);
+            [$start_hour, $start_min] = explode(':', $session->start_time);
+            [$end_hour, $end_min] = explode(':', $session->end_time);
 
             $start_time->hour($start_hour)->minute($start_min);
             $end_time->hour($end_hour)->minute($end_min);
 
-            $race->sessions()->create([
-                'race_id' => $race->id,
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-                'name' => $session->name,
-            ]);
+            $race->sessions()->create(
+                [
+                    'race_id' => $race->id,
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
+                    'name' => $session->name,
+                ]
+            );
         });
 
-        return redirect()
-            ->route('admin.race.session.index', ['championship' => $championship, 'season' => $season, 'race' => $race])
+        return Redirect::route('admin.race.session.index', [
+            'championship' => $championship,
+            'season' => $season,
+            'race' => $race,
+        ])
             ->with('success', __('The template has been applied.'));
     }
 
@@ -91,10 +134,10 @@ class RaceSessionController extends Controller
     {
         return view('admin.race.session.create')
             ->with([
-                'championship' => $championship,
-                'season' => $season,
-                'race' => $race,
-            ]);
+                       'championship' => $championship,
+                       'season' => $season,
+                       'race' => $race,
+                   ]);
     }
 
     /**
@@ -113,10 +156,10 @@ class RaceSessionController extends Controller
         });
 
         $request->validate([
-            'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
-            'end_time' => ['required', 'date_format:Y-m-d H:i:s'],
-            'name' => ['required', $ruleUniqueSessionName],
-        ]);
+                               'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
+                               'end_time' => ['required', 'date_format:Y-m-d H:i:s'],
+                               'name' => ['required', $ruleUniqueSessionName],
+                           ]);
 
         $data = $request->only('start_time', 'end_time', 'name');
         $data['race_id'] = $race->id;
@@ -151,11 +194,11 @@ class RaceSessionController extends Controller
     public function edit(Championship $championship, Season $season, Race $race, RaceSession $session)
     {
         return view('admin.race.session.edit')->with([
-            'championship' => $championship,
-            'season' => $season,
-            'race' => $race,
-            'session' => $session,
-        ]);
+                                                         'championship' => $championship,
+                                                         'season' => $season,
+                                                         'race' => $race,
+                                                         'session' => $session,
+                                                     ]);
     }
 
     /**
@@ -168,8 +211,13 @@ class RaceSessionController extends Controller
      * @param RaceSession $session
      * @return RedirectResponse
      */
-    public function update(Request $request, Championship $championship, Season $season, Race $race, RaceSession $session)
-    {
+    public function update(
+        Request $request,
+        Championship $championship,
+        Season $season,
+        Race $race,
+        RaceSession $session
+    ) {
         $ruleUniqueSessionName = Rule::unique('race_sessions')
             ->ignore($session->id)
             ->where(function (Builder $query) use ($race) {
@@ -177,10 +225,10 @@ class RaceSessionController extends Controller
             });
 
         $request->validate([
-            'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
-            'end_time' => ['required', 'date_format:Y-m-d H:i:s'],
-            'name' => ['required', $ruleUniqueSessionName],
-        ]);
+                               'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
+                               'end_time' => ['required', 'date_format:Y-m-d H:i:s'],
+                               'name' => ['required', $ruleUniqueSessionName],
+                           ]);
 
         $session->update($request->only('start_time', 'end_time', 'name'));
 

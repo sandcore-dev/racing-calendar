@@ -77,5 +77,6 @@
 	"No file chosen": "Geen bestand gekozen",
 	"Browse": "Bladeren",
 	"Add season for :name": "Voeg seizoen toe voor :name",
-	"Add race for :championship season :season": "Voeg een race toe voor :championship seizoen :season"
+	"Add race for :championship season :season": "Voeg een race toe voor :championship seizoen :season",
+	"Apply template": "Gebruik template"
 }
