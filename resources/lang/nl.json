@@ -1,8 +1,12 @@
 {
 	":season :championship": ":championship :season",
 	"Championship": "Kampioenschap",
+	"Championships": "Kampioenschappen",
+	"Back to championship index": "Terug naar kampioenschappen-lijst",
 	"Season": "Seizoen",
 	"Seasons": "Seizoenen",
+	"Back to season index": "Terug naar seizoenen-lijst",
+	"Back to race index": "Terug naar race-lijst",
 	"Year": "Jaar",
 	"Date": "Datum",
 	"Days before race day": "Aantal dagen vóór de race",

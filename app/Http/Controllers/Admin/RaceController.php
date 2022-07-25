@@ -35,6 +35,7 @@ class RaceController extends Controller
                     'copySeason' => Lang::get('Copy races from season'),
                     'date' => Lang::get('Datum'),
                     'startTime' => Lang::get('Start time'),
+                    'location' => Lang::get('Location'),
                     'name' => Lang::get('Name'),
                 ],
 
@@ -53,9 +54,9 @@ class RaceController extends Controller
                     ->get(),
 
                 'races' => $season->races()
-                    ->select(['id', 'start_time', 'name', 'season_id'])
-                    ->with(['season.championship'])
-                    ->paginate(),
+                    ->select(['id', 'start_time', 'name', 'season_id', 'location_id'])
+                    ->with(['season.championship', 'location'])
+                    ->paginate(25),
             ]
         );
     }
@@ -134,7 +135,7 @@ class RaceController extends Controller
 
     public function store(Request $request, Championship $championship, Season $season): RedirectResponse
     {
-        $request->validate(
+        $validated = $request->validate(
             [
                 'start_time' => ['required', 'date'],
                 'name' => [
@@ -147,8 +148,10 @@ class RaceController extends Controller
             ]
         );
 
+        $validated['start_time'] = $request->date('start_time')->setTimezone(config('app.timezone'));
+
         /** @var Race $race */
-        $race = $season->races()->create($request->only('start_time', 'name', 'circuit_id', 'remarks'));
+        $race = $season->races()->create($validated);
 
         return Redirect::route(
             'admin.race.index',
@@ -188,7 +191,8 @@ class RaceController extends Controller
                     'circuit_id' => Lang::get('Circuit'),
                     'remarks' => Lang::get('Remarks'),
                     'status' => Lang::get('Status'),
-                    'submit' => Lang::get('Add'),
+                    'location' => Lang::get('Location'),
+                    'submit' => Lang::get('Change'),
                 ],
 
                 'year' => $season->year,
@@ -196,6 +200,9 @@ class RaceController extends Controller
 
                 'circuits' => Circuit::select(['id', 'name'])->get(),
                 'statuses' => $this->getStatuses(),
+                'locations' => $race->season->locations()
+                    ->select(['locations.id', 'locations.name'])
+                    ->get(),
 
                 'data' => $race->only(
                     [
@@ -204,6 +211,7 @@ class RaceController extends Controller
                         'circuit_id',
                         'remarks',
                         'status',
+                        'location_id',
                     ]
                 ),
             ]
@@ -212,7 +220,7 @@ class RaceController extends Controller
 
     public function update(Request $request, Championship $championship, Season $season, Race $race): RedirectResponse
     {
-        $request->validate(
+        $validated = $request->validate(
             [
                 'start_time' => ['required', 'date'],
                 'name' => [
@@ -227,13 +235,15 @@ class RaceController extends Controller
                 'circuit_id' => ['required', 'integer', 'exists:circuits,id'],
                 'remarks' => ['string', 'nullable'],
                 'status' => ['required', 'string', 'in:scheduled,postponed,cancelled'],
+                'location_id' => ['required', 'integer', 'exists:locations,id'],
             ]
         );
 
-        $race->update($request->only('start_time', 'name', 'circuit_id', 'remarks', 'status'));
+        $validated['start_time'] = $request->date('start_time')->setTimezone(config('app.timezone'));
 
-        return redirect()
-            ->route('admin.race.index', ['championship' => $championship, 'season' => $season])
+        $race->update($validated);
+
+        return Redirect::route('admin.race.index', ['championship' => $championship, 'season' => $season])
             ->with('success', __('The race :name has been changed.', ['name' => $race->name]));
     }
 

@@ -155,6 +155,10 @@ export default {
                     label: this.labels.name,
                 },
                 {
+                    key: 'location.name',
+                    label: this.labels.location,
+                },
+                {
                     key: 'admin',
                     label: '',
                     class: 'text-center',

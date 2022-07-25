@@ -6,7 +6,7 @@
         :state="getState(form.errors.start_time)"
         :invalid-feedback="form.errors.start_time"
       >
-        <b-form-datepicker
+        <form-date-timepicker
           v-model="form.start_time"
           :state="getState(form.errors.start_time)"
           :min="min"
@@ -58,13 +58,26 @@
           :options="statuses"
         />
       </b-form-group>
+      <b-form-group
+        v-show="edit"
+        :label="labels.location"
+        :state="getState(form.errors.location_id)"
+        :invalid-feedback="form.errors.location_id"
+      >
+        <b-form-select
+          v-model="form.location_id"
+          :state="getState(form.errors.location_id)"
+          :options="locations"
+          value-field="id"
+          text-field="name"
+        />
+      </b-form-group>
     </template>
   </Form>
 </template>
 
 <script>
 import {
-    BFormDatepicker,
     BFormGroup,
     BFormInput,
     BFormSelect,
@@ -73,21 +86,27 @@ import {
 import { DateTime } from 'luxon';
 
 import Form from '@/components/Form.vue';
+import FormDateTimepicker from '@/components/Form/DateTimepicker.vue';
 
 export default {
     components: {
-        BFormDatepicker,
         BFormGroup,
         BFormInput,
         BFormSelect,
         BFormTextarea,
 
         Form,
+        FormDateTimepicker,
     },
 
     props: {
         labels: {
             type: Object,
+            required: true,
+        },
+
+        edit: {
+            type: Boolean,
             required: true,
         },
 
@@ -111,6 +130,11 @@ export default {
             required: true,
         },
 
+        locations: {
+            type: Array,
+            required: true,
+        },
+
         data: {
             type: Object,
             default() {
@@ -120,6 +144,7 @@ export default {
                     circuit_id: null,
                     remarks: null,
                     status: 'scheduled',
+                    location_id: null,
                 };
             },
         },
