@@ -10,50 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * App\Models\Race
- *
- * @property int $id
- * @property \Illuminate\Support\Carbon $start_time
- * @property string $name
- * @property int $season_id
- * @property int $circuit_id
- * @property int|null $location_id
- * @property string|null $remarks
- * @property string $status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Circuit $circuit
- * @property-read string $circuit_city
- * @property-read string $country_flag
- * @property-read string $country_local_name
- * @property-read string $date
- * @property-read string $date_short
- * @property-read array $details
- * @property-read string|null $location_name
- * @property-read bool $this_week
- * @property-read string $time
- * @property-read \App\Models\Location|null $location
- * @property-read \App\Models\Season $season
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RaceSession[] $sessions
- * @property-read int|null $sessions_count
- * @method static Builder|Race bySeason(\App\Models\Season $season)
- * @method static \Database\Factories\RaceFactory factory(...$parameters)
- * @method static Builder|Race newModelQuery()
- * @method static Builder|Race newQuery()
- * @method static Builder|Race query()
- * @method static Builder|Race whereCircuitId($value)
- * @method static Builder|Race whereCreatedAt($value)
- * @method static Builder|Race whereId($value)
- * @method static Builder|Race whereLocationId($value)
- * @method static Builder|Race whereName($value)
- * @method static Builder|Race whereRemarks($value)
- * @method static Builder|Race whereSeasonId($value)
- * @method static Builder|Race whereStartTime($value)
- * @method static Builder|Race whereStatus($value)
- * @method static Builder|Race whereUpdatedAt($value)
- * @mixin \Eloquent
- * @noinspection PhpFullyQualifiedNameUsageInspection
- * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ * @mixin IdeHelperRace
  */
 class Race extends Model
 {

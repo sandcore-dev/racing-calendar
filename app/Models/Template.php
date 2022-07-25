@@ -8,24 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * App\Models\Template
- *
- * @property int $id
- * @property string $name
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateSession[] $sessions
- * @property-read int|null $sessions_count
- * @method static \Illuminate\Database\Eloquent\Builder|Template newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Template newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Template query()
- * @method static \Illuminate\Database\Eloquent\Builder|Template whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Template whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Template whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Template whereUpdatedAt($value)
- * @mixin \Eloquent
- * @noinspection PhpFullyQualifiedNameUsageInspection
- * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ * @mixin IdeHelperTemplate
  */
 class Template extends Model
 {

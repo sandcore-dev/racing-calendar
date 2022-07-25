@@ -11,28 +11,7 @@ use Monarobase\CountryList\CountryListFacade as Countries;
 use Monarobase\CountryList\CountryNotFoundException;
 
 /**
- * App\Models\Country
- *
- * @property int $id
- * @property string $code
- * @property string $name
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Circuit[] $circuits
- * @property-read int|null $circuits_count
- * @property-read string $flag_class
- * @property-read string $local_name
- * @method static Builder|Country newModelQuery()
- * @method static Builder|Country newQuery()
- * @method static Builder|Country query()
- * @method static Builder|Country whereCode($value)
- * @method static Builder|Country whereCreatedAt($value)
- * @method static Builder|Country whereId($value)
- * @method static Builder|Country whereName($value)
- * @method static Builder|Country whereUpdatedAt($value)
- * @mixin \Eloquent
- * @noinspection PhpFullyQualifiedNameUsageInspection
- * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ * @mixin IdeHelperCountry
  */
 class Country extends Model
 {

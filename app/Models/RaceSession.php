@@ -9,32 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * App\Models\RaceSession
- *
- * @property int $id
- * @property int $race_id
- * @property \Illuminate\Support\Carbon $start_time
- * @property \Illuminate\Support\Carbon $end_time
- * @property string $name
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read string $date
- * @property-read string $date_short
- * @property-read string $time
- * @property-read \App\Models\Race $race
- * @method static \Illuminate\Database\Eloquent\Builder|RaceSession newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|RaceSession newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|RaceSession query()
- * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereEndTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereRaceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereStartTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RaceSession whereUpdatedAt($value)
- * @mixin \Eloquent
- * @noinspection PhpFullyQualifiedNameUsageInspection
- * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ * @mixin IdeHelperRaceSession
  */
 class RaceSession extends Model
 {

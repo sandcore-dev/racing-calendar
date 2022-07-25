@@ -10,29 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * App\Models\Championship
- *
- * @property int $id
- * @property string $name
- * @property string $domain
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read string $url
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Season[] $seasons
- * @property-read int|null $seasons_count
- * @method static \Database\Factories\ChampionshipFactory factory(...$parameters)
- * @method static Builder|Championship newModelQuery()
- * @method static Builder|Championship newQuery()
- * @method static Builder|Championship others()
- * @method static Builder|Championship query()
- * @method static Builder|Championship whereCreatedAt($value)
- * @method static Builder|Championship whereDomain($value)
- * @method static Builder|Championship whereId($value)
- * @method static Builder|Championship whereName($value)
- * @method static Builder|Championship whereUpdatedAt($value)
- * @mixin \Eloquent
- * @noinspection PhpFullyQualifiedNameUsageInspection
- * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ * @mixin IdeHelperChampionship
  */
 class Championship extends Model
 {

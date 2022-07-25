@@ -10,33 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * App\Models\Circuit
- *
- * @property int $id
- * @property string $name
- * @property string $city
- * @property string|null $area
- * @property int $country_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Country $country
- * @property-read string $full_name
- * @property-read string $location
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Race[] $races
- * @property-read int|null $races_count
- * @method static Builder|Circuit newModelQuery()
- * @method static Builder|Circuit newQuery()
- * @method static Builder|Circuit query()
- * @method static Builder|Circuit whereArea($value)
- * @method static Builder|Circuit whereCity($value)
- * @method static Builder|Circuit whereCountryId($value)
- * @method static Builder|Circuit whereCreatedAt($value)
- * @method static Builder|Circuit whereId($value)
- * @method static Builder|Circuit whereName($value)
- * @method static Builder|Circuit whereUpdatedAt($value)
- * @mixin \Eloquent
- * @noinspection PhpFullyQualifiedNameUsageInspection
- * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ * @mixin IdeHelperCircuit
  */
 class Circuit extends Model
 {

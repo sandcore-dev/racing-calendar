@@ -10,26 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * App\Models\Location
- *
- * @property int $id
- * @property string $name
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Race[] $races
- * @property-read int|null $races_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Season[] $seasons
- * @property-read int|null $seasons_count
- * @method static Builder|Location newModelQuery()
- * @method static Builder|Location newQuery()
- * @method static Builder|Location query()
- * @method static Builder|Location whereCreatedAt($value)
- * @method static Builder|Location whereId($value)
- * @method static Builder|Location whereName($value)
- * @method static Builder|Location whereUpdatedAt($value)
- * @mixin \Eloquent
- * @noinspection PhpFullyQualifiedNameUsageInspection
- * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ * @mixin IdeHelperLocation
  */
 class Location extends Model
 {
