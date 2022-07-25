@@ -62,23 +62,35 @@ class CalendarController extends Controller
 
                 'showLocations' => $showLocations,
 
-                'items' => $season->races->map(function (Race $race) use ($showLocations) {
-                    return $race->only(
+                'items' => $season->races()
+                    ->select(
                         [
                             'id',
                             'start_time',
+                            'season_id',
+                            'circuit_id',
+                            'status',
+                            $showLocations
+                                ? 'location_id'
+                                : null,
+                        ]
+                    )
+                    ->get()
+                    ->append(
+                        [
                             'country_flag',
                             'country_local_name',
                             'circuit_city',
                             'details',
                             'this_week',
-                            'status',
                             $showLocations
                                 ? 'location_name'
                                 : null,
+                            $showLocations
+                                ? 'location_edit_url'
+                                : null,
                         ]
-                    );
-                }),
+                    ),
             ]
         );
     }

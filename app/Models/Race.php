@@ -31,6 +31,7 @@ class Race extends Model
     protected $appends = [
         'admin_race_session_url',
         'admin_edit_url',
+        'location_edit_url',
     ];
 
     protected static function booted(): void
@@ -163,5 +164,14 @@ class Race extends Model
                 ]
             )
             : null;
+    }
+
+    public function getLocationEditUrlAttribute(): ?string
+    {
+        return route('calendar.location.edit', [
+            'championship' => $this->season->championship,
+            'season' => $this->season,
+            'race' => $this,
+        ]);
     }
 }

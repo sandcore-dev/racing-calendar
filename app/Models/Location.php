@@ -46,7 +46,7 @@ class Location extends Model
 
     public function getAdminEditUrlAttribute(): ?string
     {
-        return Auth::check()
+        return $this->exists && Auth::check()
             ? route('admin.location.edit', ['location' => $this])
             : null;
     }

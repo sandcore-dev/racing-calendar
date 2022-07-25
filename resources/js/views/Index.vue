@@ -36,6 +36,17 @@
       </b-button>
     </template>
 
+    <template #cell(location_name)="data">
+      <Link :href="data.item.location_edit_url">
+        <template v-if="!!data.value">
+          {{ data.value }}
+        </template>
+        <template v-else>
+          <i class="fa fa-plus" />
+        </template>
+      </Link>
+    </template>
+
     <template #row-details="data">
       <race-details
         :country-flag="data.item.country_flag"
@@ -52,6 +63,7 @@ import {
     VBTooltip,
 } from 'bootstrap-vue';
 import { DateTime } from 'luxon';
+import { Link } from '@inertiajs/inertia-vue';
 
 import RaceDetails from '@/components/Race/Details.vue';
 
@@ -63,6 +75,7 @@ export default {
     components: {
         BButton,
         BTableLite,
+        Link,
 
         RaceDetails,
     },
