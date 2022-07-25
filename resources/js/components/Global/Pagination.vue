@@ -1,20 +1,9 @@
 <template>
   <nav v-show="showPagination">
     <ul class="pagination">
-      <li
-        class="page-item"
-        :class="getPageItemClass(links.first_page_url)"
-      >
+      <li :class="getPageItemClass(!previousPage.url)">
         <Link
-          :href="links.first_page_url"
-          class="page-link"
-        >
-          &laquo;
-        </Link>
-      </li>
-      <li :class="getPageItemClass(links.previous_page_url)">
-        <Link
-          :href="links.previous_page_url"
+          :href="previousPage.url"
           class="page-link"
         >
           &lt;
@@ -32,20 +21,12 @@
           {{ page.label }}
         </Link>
       </li>
-      <li :class="getPageItemClass(links.next_page_url)">
+      <li :class="getPageItemClass(!nextPage.url)">
         <Link
-          :href="links.next_page_url"
+          :href="nextPage.url"
           class="page-link"
         >
           &gt;
-        </Link>
-      </li>
-      <li :class="getPageItemClass(links.last_page_url)">
-        <Link
-          :href="links.last_page_url"
-          class="page-link"
-        >
-          &raquo;
         </Link>
       </li>
     </ul>
@@ -73,6 +54,14 @@ export default {
     },
 
     computed: {
+        previousPage() {
+            return this.links.slice(0, 1)[0];
+        },
+
+        nextPage() {
+            return this.links.slice(-1)[0];
+        },
+
         pages() {
             return this.links.slice(1, -1);
         },

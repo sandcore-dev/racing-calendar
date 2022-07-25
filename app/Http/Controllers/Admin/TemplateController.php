@@ -28,7 +28,7 @@ class TemplateController extends Controller
 
                 'adminAddUrl' => route('admin.template.create'),
 
-                'templates' => Template::paginate(),
+                'templates' => Template::paginate(25),
             ]
         );
     }
