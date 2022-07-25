@@ -1,5 +1,8 @@
 <template>
   <div>
+    <h1 class="text-center">
+      {{ labels.title }}
+    </h1>
     <b-row>
       <b-col />
       <b-col cols="auto">
@@ -55,6 +58,11 @@ export default {
     },
 
     props: {
+        labels: {
+            type: Object,
+            required: true,
+        },
+
         adminAddUrl: {
             type: String,
             required: true,

@@ -21,15 +21,14 @@
         </Link>
       </template>
 
-      <template #cell(country)="data">
-        <i :class="data.value.flag_class" />
-        {{ data.value.name }}
-      </template>
-
       <template #cell(name)="data">
         <Link :href="data.item.admin_edit_url">
           {{ data.value }}
         </Link>
+      </template>
+
+      <template #cell(flag)="data">
+        <i :class="data.item.flag_class" />
       </template>
 
       <template #cell(admin)="data">
@@ -84,6 +83,10 @@ export default {
                 {
                     key: 'name',
                     label: this.labels.country,
+                },
+                {
+                    key: 'flag',
+                    label: '',
                 },
                 {
                     key: 'code',

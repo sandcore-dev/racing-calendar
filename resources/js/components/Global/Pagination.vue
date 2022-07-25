@@ -85,8 +85,8 @@ export default {
     methods: {
         getPageItemClass(active) {
             return active
-                ? 'page-item'
-                : 'page-item disabled';
+                ? 'page-item disabled'
+                : 'page-item';
         },
     },
 };

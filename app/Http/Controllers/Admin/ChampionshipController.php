@@ -18,7 +18,12 @@ class ChampionshipController extends Controller
         return Inertia::render(
             'Admin/Championship/Index',
             [
-                'title' => Lang::get('Admin') . ': ' . Lang::get('Championship'),
+                'title' => Lang::get('Admin') . ': ' . Lang::get('Championships'),
+
+                'labels' => [
+                    'title' => Lang::get('Championships'),
+                    'name' => Lang::get('Naam'),
+                ],
 
                 'adminAddUrl' => route('admin.championship.create'),
 
