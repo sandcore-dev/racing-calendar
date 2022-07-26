@@ -84,5 +84,6 @@
 	"Add season for :name": "Voeg seizoen toe voor :name",
 	"Add race for :championship season :season": "Voeg een race toe voor :championship seizoen :season",
 	"Apply template": "Gebruik template",
-	"Nobody": "Niemand"
+	"Nobody": "Niemand",
+	"Edit race :race for :championship season :season": "Bewerk race :race voor :championship seizoen :season"
 }

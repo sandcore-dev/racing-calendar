@@ -68,6 +68,7 @@ class CalendarController extends Controller
                             [
                                 'id',
                                 'start_time',
+                                'name',
                                 'season_id',
                                 'circuit_id',
                                 'status',

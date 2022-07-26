@@ -171,11 +171,11 @@ class RaceController extends Controller
                     . ' - ' . Lang::get('Edit race'),
 
                 'header' => Lang::get(
-                    'Edit race :name for :championship season :season',
+                    'Edit race :race for :championship season :season',
                     [
-                        'name' => $race->name,
                         'championship' => $championship->name,
                         'season' => $season->year,
+                        'race' => $race->name,
                     ]
                 ),
 
