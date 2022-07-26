@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 /**
  * @mixin IdeHelperRace
@@ -31,7 +32,6 @@ class Race extends Model
     protected $appends = [
         'admin_race_session_url',
         'admin_edit_url',
-        'location_edit_url',
     ];
 
     protected static function booted(): void
@@ -137,10 +137,22 @@ class Race extends Model
         return $this->location->name;
     }
 
+    public function getIsPastAttribute(): ?bool
+    {
+        return $this->exists
+            ? $this->start_time->isPast()
+            : null;
+    }
+
+    public function getIsScheduledAttribute(): bool
+    {
+        return $this->status === 'scheduled';
+    }
+
     public function getAdminRaceSessionUrlAttribute(): ?string
     {
         return $this->season_id && Auth::check()
-            ? route(
+            ? URL::route(
                 'admin.race.session.index',
                 [
                     'championship' => $this->season->championship,
@@ -155,7 +167,7 @@ class Race extends Model
     public function getAdminEditUrlAttribute(): ?string
     {
         return $this->season_id && Auth::check()
-            ? route(
+            ? URL::route(
                 'admin.race.edit',
                 [
                     'championship' => $this->season->championship,
@@ -168,7 +180,11 @@ class Race extends Model
 
     public function getLocationEditUrlAttribute(): ?string
     {
-        return route('calendar.location.edit', [
+        if (!$this->exists) {
+            return null;
+        }
+
+        return URL::route('calendar.location.edit', [
             'championship' => $this->season->championship,
             'season' => $this->season,
             'race' => $this,

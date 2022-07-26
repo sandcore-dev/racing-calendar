@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Race;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,11 +28,10 @@ class CalendarController extends Controller
                 ->whereNotNull('access_token')
                 ->first()
         ) {
-            return redirect()
-                ->route('calendar', [
-                    'championship' => $championship,
-                    'season' => $season,
-                ]);
+            return Redirect::route('calendar', [
+                'championship' => $championship,
+                'season' => $season,
+            ]);
         }
 
         /** @var Season $season */
@@ -91,6 +92,8 @@ class CalendarController extends Controller
                                 $showLocations
                                     ? 'location_edit_url'
                                     : null,
+                                'is_past',
+                                'is_scheduled',
                             ]
                         )
                     ),
@@ -98,8 +101,12 @@ class CalendarController extends Controller
         );
     }
 
-    public function editLocation(Championship $championship, Season $season, Race $race): Response
+    public function editLocation(Championship $championship, Season $season, Race $race): Response|RedirectResponse
     {
+        if (!$race->is_scheduled || $race->is_past) {
+            return Redirect::back();
+        }
+
         return Inertia::render(
             'Location/Form',
             [
@@ -111,7 +118,7 @@ class CalendarController extends Controller
                     . ', ' . $race->country_local_name,
 
                 'edit' => true,
-                'url' => route('calendar.location.update', [
+                'url' => URL::route('calendar.location.update', [
                     'championship' => $championship,
                     'season' => $season,
                     'race' => $race,
@@ -151,7 +158,6 @@ class CalendarController extends Controller
 
         $race->save();
 
-        return redirect()
-            ->route('calendar', ['championship' => $championship, 'season' => $season]);
+        return Redirect::route('calendar', ['championship' => $championship, 'season' => $season]);
     }
 }

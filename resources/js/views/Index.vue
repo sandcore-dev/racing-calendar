@@ -37,14 +37,21 @@
     </template>
 
     <template #cell(location_name)="data">
-      <Link :href="data.item.location_edit_url">
-        <template v-if="!!data.value">
+      <template v-if="data.item.is_scheduled">
+        <template v-if="data.item.is_past">
           {{ data.value }}
         </template>
         <template v-else>
-          <i class="fa fa-plus" />
+          <Link :href="data.item.location_edit_url">
+            <template v-if="!!data.value">
+              {{ data.value }}
+            </template>
+            <template v-else>
+              <i class="fa fa-plus" />
+            </template>
+          </Link>
         </template>
-      </Link>
+      </template>
     </template>
 
     <template #row-details="data">
