@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Championship;
 use App\Models\Season;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,47 +63,72 @@ class CalendarController extends Controller
 
                 'items' => $season->races()
                     ->select(
-                        [
-                            'id',
-                            'start_time',
-                            'season_id',
-                            'circuit_id',
-                            'status',
-                            $showLocations
-                                ? 'location_id'
-                                : null,
-                        ]
+                        array_filter(
+                            [
+                                'id',
+                                'start_time',
+                                'season_id',
+                                'circuit_id',
+                                'status',
+                                $showLocations
+                                    ? 'location_id'
+                                    : null,
+                            ]
+                        )
                     )
                     ->get()
                     ->append(
-                        [
-                            'country_flag',
-                            'country_local_name',
-                            'circuit_city',
-                            'details',
-                            'this_week',
-                            $showLocations
-                                ? 'location_name'
-                                : null,
-                            $showLocations
-                                ? 'location_edit_url'
-                                : null,
-                        ]
+                        array_filter(
+                            [
+                                'country_flag',
+                                'country_local_name',
+                                'circuit_city',
+                                'details',
+                                'this_week',
+                                $showLocations
+                                    ? 'location_name'
+                                    : null,
+                                $showLocations
+                                    ? 'location_edit_url'
+                                    : null,
+                            ]
+                        )
                     ),
             ]
         );
     }
 
-    public function editLocation(Championship $championship, Season $season, Race $race): Renderable
+    public function editLocation(Championship $championship, Season $season, Race $race): Response
     {
-        return view('location.edit')
-            ->with(
-                [
+        return Inertia::render(
+            'Location/Form',
+            [
+                'title' => $championship->name
+                    . ' - ' . $season->year,
+
+                'header' => $season->year
+                    . ' - ' . $race->circuit_city
+                    . ', ' . $race->country_local_name,
+
+                'edit' => true,
+                'url' => route('calendar.location.update', [
                     'championship' => $championship,
                     'season' => $season,
                     'race' => $race,
-                ]
-            );
+                ]),
+
+                'labels' => [
+                    'nobody' => Lang::get('Nobody'),
+                    'submit' => Lang::get('Edit'),
+                ],
+
+                'data' => $race->only(['location_id']),
+
+                'locations' => $season->locations()
+                    ->select(['locations.id', 'locations.name'])
+                    ->get(),
+            ]
+        );
     }
 
     public function updateLocation(
@@ -115,14 +139,13 @@ class CalendarController extends Controller
     ): RedirectResponse {
         $request->validate(
             [
-                'location' => ['integer', 'exists:locations,id'],
-                'erase_location' => ['boolean'],
+                'location_id' => ['nullable', 'integer', 'exists:locations,id'],
             ]
         );
 
-        if ($location = $request->input('location')) {
+        if ($location = $request->input('location_id')) {
             $race->location()->associate($location);
-        } elseif ($request->input('erase_location')) {
+        } else {
             $race->location()->dissociate();
         }
 

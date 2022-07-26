@@ -7,8 +7,10 @@
       <slot
         :form="form"
         :get-state="getState"
+        :submit="onSubmit"
       />
       <b-button
+        v-if="!hideSubmitButton"
         type="submit"
         variant="primary"
       >
@@ -36,6 +38,11 @@ export default {
         data: {
             type: Object,
             required: true,
+        },
+
+        hideSubmitButton: {
+            type: Boolean,
+            default: false,
         },
     },
 
