@@ -29,6 +29,7 @@ class Season extends Model
     protected $appends = [
         'admin_race_url',
         'admin_edit_url',
+        'admin_images_url',
     ];
 
     protected static function boot(): void
@@ -110,6 +111,13 @@ class Season extends Model
     {
         return $this->championship_id && Auth::check()
             ? route('admin.season.edit', ['championship' => $this->championship, 'season' => $this])
+            : null;
+    }
+
+    public function getAdminImagesUrlAttribute(): ?string
+    {
+        return $this->championship_id && Auth::check()
+            ? route('admin.image.index', ['championship' => $this->championship, 'season' => $this])
             : null;
     }
 }

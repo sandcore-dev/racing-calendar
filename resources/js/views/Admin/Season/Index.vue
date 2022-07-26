@@ -42,6 +42,12 @@
           <i class="fa fa-edit" />
         </Link>
       </template>
+
+      <template #cell(images)="data">
+        <Link :href="data.item.admin_images_url">
+          <i class="fa fa-image" />
+        </Link>
+      </template>
     </b-table-lite>
   </div>
 </template>
@@ -98,6 +104,11 @@ export default {
                 },
                 {
                     key: 'admin',
+                    label: '',
+                    class: 'text-center',
+                },
+                {
+                    key: 'images',
                     label: '',
                     class: 'text-center',
                 },
