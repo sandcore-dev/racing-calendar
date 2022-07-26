@@ -24,14 +24,15 @@
         :text="dropdownTitle"
         right
       >
-        <Link
+        <a
           v-for="dropdownItem in dropdownItems"
           :key="dropdownItem.id"
           class="dropdown-item"
           :href="dropdownItem.url"
+          target="_blank"
         >
           {{ dropdownItem.label }}
-        </Link>
+        </a>
         <b-dropdown-divider />
         <b-dropdown-item>
           <dark-mode-switch />
