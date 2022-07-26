@@ -25,14 +25,8 @@
         @click="data.toggleDetails()"
         v-show="showDetailsButton(data.item)"
       >
-        <i
-          class="fa fa-chevron-down"
-          v-show="!data.detailsShowing"
-        />
-        <i
-          class="fa fa-chevron-up"
-          v-show="data.detailsShowing"
-        />
+        <b-icon-chevron-down v-show="!data.detailsShowing" />
+        <b-icon-chevron-up v-show="data.detailsShowing" />
       </b-button>
     </template>
 
@@ -47,7 +41,7 @@
               {{ data.value }}
             </template>
             <template v-else>
-              <i class="fa fa-plus" />
+              <b-icon-plus-lg />
             </template>
           </Link>
         </template>
@@ -66,6 +60,9 @@
 <script>
 import {
     BButton,
+    BIconChevronDown,
+    BIconChevronUp,
+    BIconPlusLg,
     BTableLite,
     VBTooltip,
 } from 'bootstrap-vue';
@@ -81,6 +78,9 @@ export default {
 
     components: {
         BButton,
+        BIconChevronDown,
+        BIconChevronUp,
+        BIconPlusLg,
         BTableLite,
         Link,
 

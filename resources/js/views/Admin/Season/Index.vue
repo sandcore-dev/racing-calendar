@@ -27,7 +27,7 @@
     >
       <template #head(admin)>
         <Link :href="adminAddUrl">
-          <i class="fa fa-plus" />
+          <b-icon-plus-lg />
         </Link>
       </template>
 
@@ -39,13 +39,13 @@
 
       <template #cell(admin)="data">
         <Link :href="data.item.admin_edit_url">
-          <i class="fa fa-edit" />
+          <b-icon-pencil-fill />
         </Link>
       </template>
 
       <template #cell(images)="data">
         <Link :href="data.item.admin_images_url">
-          <i class="fa fa-image" />
+          <b-icon-image />
         </Link>
       </template>
     </b-table-lite>
@@ -54,8 +54,11 @@
 
 <script>
 import {
-    BRow,
     BCol,
+    BIconPlusLg,
+    BIconPencilFill,
+    BIconImage,
+    BRow,
     BTableLite,
 } from 'bootstrap-vue';
 
@@ -65,8 +68,11 @@ import GlobalPagination from '@/components/Global/Pagination.vue';
 
 export default {
     components: {
-        BRow,
         BCol,
+        BIconPlusLg,
+        BIconPencilFill,
+        BIconImage,
+        BRow,
         BTableLite,
         Link,
 

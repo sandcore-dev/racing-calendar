@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue';
-// import 'bootstrap';
 
 import Layout from '@/layouts/Layout.vue';
 

@@ -25,7 +25,7 @@
     >
       <template #head(admin)>
         <Link :href="adminAddUrl">
-          <i class="fa fa-plus" />
+          <b-icon-plus-lg />
         </Link>
       </template>
 
@@ -37,7 +37,7 @@
 
       <template #cell(admin)="data">
         <Link :href="data.item.admin_edit_url">
-          <i class="fa fa-edit" />
+          <b-icon-pencil-fill />
         </Link>
       </template>
     </b-table>
@@ -48,6 +48,8 @@
 import {
     BCol,
     BIconArrowLeftCircleFill,
+    BIconPlusLg,
+    BIconPencilFill,
     BRow,
     BTable,
 } from 'bootstrap-vue';
@@ -59,6 +61,8 @@ export default {
     components: {
         BCol,
         BIconArrowLeftCircleFill,
+        BIconPlusLg,
+        BIconPencilFill,
         BRow,
         BTable,
         Link,
