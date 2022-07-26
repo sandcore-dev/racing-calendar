@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Championship;
 use App\Models\Season;
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Race;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CalendarController extends Controller
 {
@@ -18,72 +20,125 @@ class CalendarController extends Controller
      * If logged in: redirect to most recent calendar.
      * If not logged in: show most recent calendar without locations.
      */
-    public function index(Championship $championship): Renderable|RedirectResponse
+    public function index(Championship $championship): Response|RedirectResponse
     {
-        if (!$championship->seasons()->count()) {
-            return view('empty')->with('championship', $championship);
-        }
-
         if (
             Auth::check()
             && $season = $championship->seasons()
                 ->whereNotNull('access_token')
                 ->first()
         ) {
-            return redirect()
-                ->route('calendar', [
-                    'championship' => $championship,
-                    'season' => $season,
-                ]);
+            return Redirect::route('calendar', [
+                'championship' => $championship,
+                'season' => $season,
+            ]);
         }
 
-        $season = $championship->seasons()->first();
+        /** @var Season $season */
+        $season = $championship->seasons()->firstOrFail();
 
-        return view('index')
-            ->with(
-                [
-                    'icon' => $season?->icon_url,
-                    'championship' => $championship,
-                    'season' => $season,
-                    'showLocations' => false,
-                ]
-            );
+        return $this->calendar($championship, $season, false);
     }
 
-    /**
-     * Show calendar.
-     */
-    public function calendar(Championship $championship, Season $season): Renderable
+    public function calendar(Championship $championship, Season $season, bool $showLocations = true): Response
     {
-        return view('index')
-            ->with(
-                [
-                    'icon' => $season->icon_url,
-                    'championship' => $championship,
-                    'season' => $season,
-                    'showLocations' => $season->locations()->count() > 0,
-                ]
-            );
+        return Inertia::render(
+            'Index',
+            [
+                'title' => "{$championship->name} {$season->year}",
+
+                'iconUrl' => $season->icon_url,
+                'headerUrl' => $season->header_url,
+                'footerUrl' => $season->footer_url,
+
+                'labels' => [
+                    'date' => Lang::get('Date'),
+                    'race_time' => Lang::get('Race time'),
+                    'race' => Lang::get('Race'),
+                    'cancelled' => Lang::get('Cancelled'),
+                    'postponed' => Lang::get('Postponed'),
+                    'location' => Lang::get('Location'),
+                ],
+
+                'showLocations' => $showLocations,
+
+                'items' => $season->races()
+                    ->select(
+                        array_filter(
+                            [
+                                'id',
+                                'start_time',
+                                'name',
+                                'season_id',
+                                'circuit_id',
+                                'status',
+                                $showLocations
+                                    ? 'location_id'
+                                    : null,
+                            ]
+                        )
+                    )
+                    ->get()
+                    ->append(
+                        array_filter(
+                            [
+                                'country_flag',
+                                'country_local_name',
+                                'circuit_city',
+                                'details',
+                                'this_week',
+                                $showLocations
+                                    ? 'location_name'
+                                    : null,
+                                $showLocations
+                                    ? 'location_edit_url'
+                                    : null,
+                                'is_past',
+                                'is_scheduled',
+                            ]
+                        )
+                    ),
+            ]
+        );
     }
 
-    /**
-     * Show location edit form.
-     */
-    public function editLocation(Championship $championship, Season $season, Race $race): Renderable
+    public function editLocation(Championship $championship, Season $season, Race $race): Response|RedirectResponse
     {
-        return view('location.edit')
-            ->with(
-                [
+        if (!$race->is_scheduled || $race->is_past) {
+            return Redirect::back();
+        }
+
+        return Inertia::render(
+            'Location/Form',
+            [
+                'title' => $championship->name
+                    . ' - ' . $season->year,
+
+                'header' => $season->year
+                    . ' - ' . $race->circuit_city
+                    . ', ' . $race->country_local_name,
+
+                'edit' => true,
+                'url' => URL::route('calendar.location.update', [
                     'championship' => $championship,
                     'season' => $season,
                     'race' => $race,
-                ]
-            );
+                ]),
+
+                'labels' => [
+                    'nobody' => Lang::get('Nobody'),
+                    'submit' => Lang::get('Edit'),
+                ],
+
+                'data' => $race->only(['location_id']),
+
+                'locations' => $season->locations()
+                    ->select(['locations.id', 'locations.name'])
+                    ->get(),
+            ]
+        );
     }
 
-    /**
-     * Update location.
-     */
     public function updateLocation(
         Championship $championship,
         Season $season,
@@ -92,20 +147,18 @@ class CalendarController extends Controller
     ): RedirectResponse {
         $request->validate(
             [
-                'location' => ['integer', 'exists:locations,id'],
-                'erase_location' => ['boolean'],
+                'location_id' => ['nullable', 'integer', 'exists:locations,id'],
             ]
         );
 
-        if ($location = $request->input('location')) {
+        if ($location = $request->input('location_id')) {
             $race->location()->associate($location);
-        } elseif ($request->input('erase_location')) {
+        } else {
             $race->location()->dissociate();
         }
 
         $race->save();
 
-        return redirect()
-            ->route('calendar', ['championship' => $championship, 'season' => $season]);
+        return Redirect::route('calendar', ['championship' => $championship, 'season' => $season]);
     }
 }

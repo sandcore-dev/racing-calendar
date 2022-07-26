@@ -3,98 +3,104 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Template;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class TemplateController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
+    public function index(): Response
     {
-        return view('admin.template.index')->with('templates', Template::paginate());
+        return Inertia::render(
+            'Admin/Template/Index',
+            [
+                'title' => Lang::get('Admin')
+                    . ' - ' . Lang::get('Templates'),
+
+                'labels' => [
+                    'title' => Lang::get('Templates'),
+                    'template' => Lang::get('Template'),
+                ],
+
+                'adminAddUrl' => route('admin.template.create'),
+
+                'templates' => Template::paginate(25),
+            ]
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function create()
+    public function create(): Response
     {
-        return view('admin.template.create');
+        return Inertia::render(
+            'Admin/Template/Form',
+            [
+                'title' => Lang::get('Admin')
+                    . ' - ' . Lang::get('Add template'),
+
+                'header' => Lang::get('Add template'),
+
+                'url' => route('admin.template.store'),
+
+                'labels' => [
+                    'name' => Lang::get('Name'),
+                    'submit' => Lang::get('Add'),
+                ],
+            ]
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name'          => [ 'required', 'unique:templates,name' ],
-        ]);
+        $request->validate(
+            [
+                'name' => ['required', 'unique:templates,name'],
+            ]
+        );
 
         $template = Template::create($request->only('name'));
 
-        return redirect()
-            ->route('admin.template.index')
-            ->with('success', __('The template :name has been added.', [ 'name' => $template->name ]));
+        return Redirect::route('admin.template.index')
+            ->with('success', __('The template :name has been added.', ['name' => $template->name]));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Template  $template
-     */
-    public function show(Template $template)
+    public function edit(Template $template): Response
     {
-        //
+        return Inertia::render(
+            'Admin/Template/Form',
+            [
+                'title' => Lang::get('Admin')
+                    . ' - ' . Lang::get('Edit template :template', ['template' => $template->name]),
+
+                'header' => Lang::get('Edit template :template', ['template' => $template->name]),
+
+                'edit' => true,
+                'url' => route('admin.template.update', ['template' => $template]),
+
+                'labels' => [
+                    'name' => Lang::get('Name'),
+                    'submit' => Lang::get('Edit'),
+                ],
+
+                'data' => $template->only(['name']),
+            ]
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Template  $template
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit(Template $template)
+    public function update(Request $request, Template $template): RedirectResponse
     {
-        return view('admin.template.edit')->with('template', $template);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Template  $template
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(Request $request, Template $template)
-    {
-        $request->validate([
-            'name'              => [ 'required', 'unique:templates,name,' . $template->id ],
-        ]);
+        $request->validate(
+            [
+                'name' => ['required', 'unique:templates,name,' . $template->id],
+            ]
+        );
 
         $template->update($request->only('name'));
 
-        return redirect()
-            ->route('admin.template.index')
-            ->with('success', __('The template :name has been edited.', [ 'name' => $template->name ]));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Template  $template
-     */
-    public function destroy(Template $template)
-    {
-        //
+        return Redirect::route('admin.template.index')
+            ->with('success', __('The template :name has been edited.', ['name' => $template->name]));
     }
 }

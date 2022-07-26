@@ -7,161 +7,87 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 /**
- * App\Models\Race
- *
- * @property int $id
- * @property \Illuminate\Support\Carbon $start_time
- * @property string $name
- * @property int $season_id
- * @property int $circuit_id
- * @property int|null $location_id
- * @property string|null $remarks
- * @property string $status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Circuit $circuit
- * @property-read string $date
- * @property-read string $date_short
- * @property-read bool $this_week
- * @property-read string $time
- * @property-read \App\Models\Location|null $location
- * @property-read Season $season
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RaceSession[] $sessions
- * @property-read int|null $sessions_count
- * @method static Builder|Race bySeason(Season $season)
- * @method static Builder|Race newModelQuery()
- * @method static Builder|Race newQuery()
- * @method static Builder|Race query()
- * @method static Builder|Race whereCircuitId($value)
- * @method static Builder|Race whereCreatedAt($value)
- * @method static Builder|Race whereId($value)
- * @method static Builder|Race whereLocationId($value)
- * @method static Builder|Race whereName($value)
- * @method static Builder|Race whereRemarks($value)
- * @method static Builder|Race whereSeasonId($value)
- * @method static Builder|Race whereStartTime($value)
- * @method static Builder|Race whereStatus($value)
- * @method static Builder|Race whereUpdatedAt($value)
- * @mixin \Eloquent
- * @noinspection PhpFullyQualifiedNameUsageInspection
- * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ * @mixin IdeHelperRace
  */
 class Race extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'season_id', 'start_time', 'name', 'circuit_id', 'location_id', 'remarks', 'status',
+        'season_id',
+        'start_time',
+        'name',
+        'circuit_id',
+        'location_id',
+        'remarks',
+        'status',
     ];
 
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
     protected $dates = ['start_time'];
 
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    protected static function boot(): void
-    {
-        parent::boot();
+    protected $appends = [
+        'admin_race_session_url',
+        'admin_edit_url',
+    ];
 
-        static::addGlobalScope('sortByStartTime', function (Builder $builder) {
-            $builder->orderBy('start_time', 'asc');
+    protected static function booted(): void
+    {
+        static::addGlobalScope('orderByStartTime', function (Builder $query) {
+            $query->orderBy('start_time');
         });
     }
 
-    /**
-     * Get the season of this race.
-     */
-    public function season(): BelongsTo
+    public function season(): BelongsTo|Season
     {
         return $this->belongsTo(Season::class);
     }
 
-    /**
-     * Get the circuit of this race.
-     */
-    public function circuit(): BelongsTo
+    public function circuit(): BelongsTo|Circuit
     {
         return $this->belongsTo(Circuit::class);
     }
 
-    /**
-     * Get the location of this race.
-     */
-    public function location(): BelongsTo
+    public function location(): BelongsTo|Location
     {
         return $this->belongsTo(Location::class)
             ->withDefault();
     }
 
-    /**
-     * Get the sessions of this race.
-     */
-    public function sessions(): HasMany
+    public function sessions(): HasMany|RaceSession
     {
         return $this->hasMany(RaceSession::class);
     }
 
-    /**
-     * Get localized date.
-     *
-     * @return  string
-     */
+    public function scopeBySeason(Builder $query, Season $season): Builder
+    {
+        return $query->where('season_id', $season->id);
+    }
+
     public function getDateAttribute(): string
     {
         return $this->start_time->formatLocalized('%d %B');
     }
 
-    /**
-     * Get localized date.
-     *
-     * @return  string
-     */
     public function getDateShortAttribute(): string
     {
         return $this->start_time->formatLocalized('%d %b');
     }
 
-    /**
-     * Get localized time.
-     *
-     * @return  string
-     */
     public function getTimeAttribute(): string
     {
         return $this->start_time->formatLocalized('%R');
     }
 
-    /**
-     * Is the start time within 7 days?
-     *
-     * @return  boolean
-     */
     public function getThisWeekAttribute(): bool
     {
         $diffInDays = $this->start_time->diffInDays(null, false);
         return 0 >= $diffInDays && $diffInDays > -7;
     }
 
-    /**
-     * Sanitize and set remarks.
-     *
-     * @param string|null $value The value to sanitize.
-     * @return string|null
-     */
     public function setRemarksAttribute(?string $value): ?string
     {
         return $this->attributes['remarks'] = $value === null
@@ -169,16 +95,99 @@ class Race extends Model
             : strip_tags($value);
     }
 
-    /**
-     * Scope to season.
-     *
-     * @param Builder $query
-     * @param Season $season
-     *
-     * @return Builder
-     */
-    public function scopeBySeason(Builder $query, Season $season): Builder
+    public function getCountryFlagAttribute(): string
     {
-        return $query->where('season_id', $season->id);
+        return $this->circuit->country->flag_class;
+    }
+
+    public function getCountryLocalNameAttribute(): string
+    {
+        return $this->circuit->country->local_name;
+    }
+
+    public function getCircuitCityAttribute(): string
+    {
+        return $this->circuit->city;
+    }
+
+    public function getDetailsAttribute(): array
+    {
+        return [
+            'title' => $this->name,
+            'circuit' => $this->circuit->only(
+                [
+                    'name',
+                    'location',
+                ]
+            ),
+            'sessions' => $this->sessions->map(function (RaceSession $session) {
+                return $session->only(
+                    [
+                        'start_time',
+                        'end_time',
+                        'name',
+                    ]
+                );
+            }),
+        ];
+    }
+
+    public function getLocationNameAttribute(): ?string
+    {
+        return $this->location->name;
+    }
+
+    public function getIsPastAttribute(): ?bool
+    {
+        return $this->exists
+            ? $this->start_time->isPast()
+            : null;
+    }
+
+    public function getIsScheduledAttribute(): bool
+    {
+        return $this->status === 'scheduled';
+    }
+
+    public function getAdminRaceSessionUrlAttribute(): ?string
+    {
+        return $this->season_id && Auth::check()
+            ? URL::route(
+                'admin.race.session.index',
+                [
+                    'championship' => $this->season->championship,
+                    'season' => $this->season,
+                    'race' => $this,
+                ]
+            )
+            : null;
+    }
+
+
+    public function getAdminEditUrlAttribute(): ?string
+    {
+        return $this->season_id && Auth::check()
+            ? URL::route(
+                'admin.race.edit',
+                [
+                    'championship' => $this->season->championship,
+                    'season' => $this->season,
+                    'race' => $this,
+                ]
+            )
+            : null;
+    }
+
+    public function getLocationEditUrlAttribute(): ?string
+    {
+        if (!$this->exists) {
+            return null;
+        }
+
+        return URL::route('calendar.location.edit', [
+            'championship' => $this->season->championship,
+            'season' => $this->season,
+            'race' => $this,
+        ]);
     }
 }

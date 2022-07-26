@@ -5,33 +5,45 @@ namespace App\Http\Controllers\Admin\Season;
 use App\Http\Controllers\Controller;
 use App\Models\Championship;
 use App\Models\Season;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
+use Inertia\Response;
 use Intervention\Image\ImageManager;
 
 class ImageController extends Controller
 {
-    public function index(Championship $championship, Season $season): Renderable
+    public function index(Championship $championship, Season $season): Response
     {
-        return view('admin.season.image.index')
-            ->with(
-                [
-                    'id' => $season->id,
+        return Inertia::render(
+            'Admin/Season/Image/Index',
+            [
+                'seasonId' => $season->id,
+
+                'labels' => [
                     'name' => $championship->name,
                     'year' => $season->year,
 
-                    'back' => route('admin.season.index', ['championship' => $championship]),
+                    'back' => Lang::get('Back to index'),
 
-                    'iconUrl' => $season->icon_url,
-                    'headerUrl' => $season->header_url,
-                    'footerUrl' => $season->footer_url,
-                ]
-            );
+                    'iconImage' => Lang::get('Icon image'),
+                    'headerImage' => Lang::get('Header image'),
+                    'footerImage' => Lang::get('Footer image'),
+                ],
+
+                'backUrl' => URL::route('admin.season.index', ['championship' => $championship]),
+
+                'iconUrl' => $season->icon_url,
+                'headerUrl' => $season->header_url,
+                'footerUrl' => $season->footer_url,
+            ]
+        );
     }
 
-    public function update(Request $request, ImageManager $imageManager, Season $season)
+    public function update(Request $request, ImageManager $imageManager, Season $season): array
     {
         $request->validate(
             [

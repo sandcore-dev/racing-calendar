@@ -8,9 +8,8 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css');
 
 mix.vue();
+mix.version();
 
-if (mix.inProduction()) {
-    mix.version();
-} else {
+if (!mix.inProduction()) {
     mix.sourceMaps();
 }

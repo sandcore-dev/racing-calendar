@@ -3,98 +3,104 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Location;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class LocationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
+    public function index(): Response
     {
-        return view('admin.location.index')->with('locations', Location::paginate());
+        return Inertia::render(
+            'Admin/Location/Index',
+            [
+                'title' => Lang::get('Admin')
+                    . ' - ' . Lang::get('Locations'),
+
+                'labels' => [
+                    'title' => Lang::get('Locations'),
+                    'location' => Lang::get('Location'),
+                ],
+
+                'adminAddUrl' => route('admin.location.create'),
+
+                'locations' => Location::paginate(),
+            ]
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function create()
+    public function create(): Response
     {
-        return view('admin.location.create');
+        return Inertia::render(
+            'Admin/Location/Form',
+            [
+                'title' => Lang::get('Admin')
+                    . ' - ' . Lang::get('Add location'),
+
+                'header' => Lang::get('Add location'),
+
+                'url' => route('admin.location.store'),
+
+                'labels' => [
+                    'name' => Lang::get('Name'),
+                    'submit' => Lang::get('Add'),
+                ],
+            ]
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name'      => [ 'required', 'min:2', 'unique:locations' ],
-        ]);
+        $request->validate(
+            [
+                'name' => ['required', 'min:2', 'unique:locations'],
+            ]
+        );
 
         $location = Location::create($request->only('name'));
 
-        return redirect()
-            ->route('admin.location.index')
-            ->with('success', __('The location :name has been added.', [ 'name' => $location->name ]));
+        return Redirect::route('admin.location.index')
+            ->with('success', __('The location :name has been added.', ['name' => $location->name]));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Location  $location
-     */
-    public function show(Location $location)
+    public function edit(Location $location): Response
     {
-        //
+        return Inertia::render(
+            'Admin/Location/Form',
+            [
+                'title' => Lang::get('Admin')
+                    . ' - ' . Lang::get('Edit location :location', ['location' => $location->name]),
+
+                'header' => Lang::get('Edit location :location', ['location' => $location->name]),
+
+                'edit' => true,
+                'url' => route('admin.location.update', ['location' => $location]),
+
+                'labels' => [
+                    'name' => Lang::get('Name'),
+                    'submit' => Lang::get('Edit'),
+                ],
+
+                'data' => $location->only(['name']),
+            ]
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Location  $location
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit(Location $location)
+    public function update(Request $request, Location $location): RedirectResponse
     {
-        return view('admin.location.edit')->with('location', $location);
-    }
+        $request->validate(
+            [
+                'name' => ['required', 'min:2', 'unique:locations,name,' . $location->id],
+            ]
+        );
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Location  $location
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(Request $request, Location $location)
-    {
-        $request->validate([
-            'name'      => [ 'required', 'min:2', 'unique:locations,name,' . $location->id ],
-        ]);
+        $location->update($request->only(['name', 'code']));
 
-        $location->update($request->only('name', 'code'));
-
-        return redirect()
-            ->route('admin.location.index')
-            ->with('success', __('The location :name has been updated.', [ 'name' => $location->name ]));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Location  $location
-     */
-    public function destroy(Location $location)
-    {
-        //
+        return Redirect::route('admin.location.index')
+            ->with('success', __('The location :name has been updated.', ['name' => $location->name]));
     }
 }

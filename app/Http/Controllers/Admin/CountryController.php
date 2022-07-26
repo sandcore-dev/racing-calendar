@@ -4,107 +4,127 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Country;
 use Countries;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\View\View;
-use Monarobase\CountryList\CountryNotFoundException;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CountryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Factory|View
-     */
-    public function index()
+    public function index(): Response
     {
-        return view('admin.country.index')->with('countries', Country::paginate());
+        return Inertia::render(
+            'Admin/Country/Index',
+            [
+                'title' => Lang::get('Admin')
+                    . ' - ' . Lang::get('Countries'),
+
+                'labels' => [
+                    'title' => Lang::get('Countries'),
+                    'country' => Lang::get('Country'),
+                    'code' => Lang::get('Code'),
+                ],
+
+                'adminAddUrl' => route('admin.country.create'),
+
+                'countries' => Country::paginate(),
+            ]
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Factory|View
-     */
-    public function create()
+    public function create(): Response
     {
-        return view('admin.country.create');
+        return Inertia::render(
+            'Admin/Country/Create',
+            [
+                'title' => Lang::get('Admin')
+                    . ' - ' . Lang::get('Add country'),
+
+                'header' => Lang::get('Add country'),
+
+                'url' => route('admin.country.store'),
+
+                'labels' => [
+                    'code' => Lang::get('Code'),
+                    'submit' => Lang::get('Add'),
+                ],
+
+                'codes' => (new Collection(Countries::getList(config('app.locale'))))
+                    ->map(function (string $name, string $id) {
+                        return [
+                            'id' => $id,
+                            'name' => $name,
+                        ];
+                    })
+                    ->values(),
+            ]
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return RedirectResponse
-     * @throws CountryNotFoundException
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'code'      => [ 'required', 'size:2', 'unique:countries' ],
-        ]);
+        $request->validate(
+            [
+                'code' => ['required', 'size:2', 'unique:countries'],
+            ]
+        );
 
-        $country = Country::create([
-            'code'  => $request->input('code'),
-            'name'  => Countries::getOne($request->input('code'), config('app.locale')),
-        ]);
+        $country = Country::create(
+            [
+                'code' => $request->input('code'),
+                'name' => Countries::getOne($request->input('code'), config('app.locale')),
+            ]
+        );
 
-        return redirect()
-            ->route('admin.country.index')
-            ->with('success', __('The country :name has been added.', [ 'name' => $country->name ]));
+        return Redirect::route('admin.country.index')
+            ->with('success', __('The country :name has been added.', ['name' => $country->name]));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Country $country
-     */
-    public function show(Country $country)
+    public function edit(Country $country): Response
     {
-        //
+        return Inertia::render(
+            'Admin/Country/Edit',
+            [
+                'title' => Lang::get('Admin')
+                    . ' - ' . Lang::get('Edit country :country', ['country' => $country->name]),
+
+                'header' => Lang::get('Edit country :country', ['country' => $country->name]),
+
+                'edit' => true,
+                'url' => route('admin.country.update', ['country' => $country]),
+
+                'labels' => [
+                    'name' => Lang::get('Name'),
+                    'code' => Lang::get('Code'),
+                    'submit' => Lang::get('Edit'),
+                ],
+
+                'data' => $country->only(
+                    [
+                        'name',
+                        'code',
+                    ]
+                ),
+            ]
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Country $country
-     * @return Factory|View
-     */
-    public function edit(Country $country)
+    public function update(Request $request, Country $country): RedirectResponse
     {
-        return view('admin.country.edit')->with('country', $country);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Country $country
-     * @return RedirectResponse
-     */
-    public function update(Request $request, Country $country)
-    {
-        $request->validate([
-            'name'      => [ 'required', 'min:2', 'unique:countries,name,' . $country->id ],
-            'code'      => [ 'required', 'size:2', 'unique:countries,code,' . $country->id ],
-        ]);
+        $request->validate(
+            [
+                'name' => ['required', 'min:2', 'unique:countries,name,' . $country->id],
+                'code' => ['required', 'size:2', 'unique:countries,code,' . $country->id],
+            ]
+        );
 
         $country->update($request->only('name', 'code'));
 
-        return redirect()
-            ->route('admin.country.index')
-            ->with('success', __('The country :name has been updated.', [ 'name' => $country->name ]));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Country $country
-     */
-    public function destroy(Country $country)
-    {
-        //
+        return Redirect::route('admin.country.index')
+            ->with('success', __('The country :name has been updated.', ['name' => $country->name]));
     }
 }

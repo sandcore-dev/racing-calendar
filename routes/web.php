@@ -1,15 +1,18 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Auth;
 use App\Http\Controllers\CalendarController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Auth::routes(
-    [
-        'register' => false,
-    ]
-);
+Route::get('login', [Auth\LoginController::class, 'showLoginForm'])
+    ->name('login');
+
+Route::post('login', [Auth\LoginController::class, 'login'])
+    ->name('login.submit');
+
+Route::get('logout', [Auth\LoginController::class, 'logout'])
+    ->name('logout');
 
 Route::prefix('admin')
     ->as('admin.')

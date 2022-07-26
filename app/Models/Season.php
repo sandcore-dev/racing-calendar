@@ -8,44 +8,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * App\Models\Season
- *
- * @property int $id
- * @property int $championship_id
- * @property string $year
- * @property string|null $header_image
- * @property string|null $icon_image
- * @property string|null $footer_image
- * @property string|null $access_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Championship $championship
- * @property-read string|null $footer_url
- * @property-read string|null $header_url
- * @property-read string|null $icon_url
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
- * @property-read int|null $locations_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Race[] $races
- * @property-read int|null $races_count
- * @method static \Database\Factories\SeasonFactory factory(...$parameters)
- * @method static Builder|Season newModelQuery()
- * @method static Builder|Season newQuery()
- * @method static Builder|Season query()
- * @method static Builder|Season whereAccessToken($value)
- * @method static Builder|Season whereChampionshipId($value)
- * @method static Builder|Season whereCreatedAt($value)
- * @method static Builder|Season whereFooterImage($value)
- * @method static Builder|Season whereHeaderImage($value)
- * @method static Builder|Season whereIconImage($value)
- * @method static Builder|Season whereId($value)
- * @method static Builder|Season whereUpdatedAt($value)
- * @method static Builder|Season whereYear($value)
- * @mixin \Eloquent
- * @noinspection PhpFullyQualifiedNameUsageInspection
- * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ * @mixin IdeHelperSeason
  */
 class Season extends Model
 {
@@ -57,6 +24,12 @@ class Season extends Model
         'icon_image',
         'header_image',
         'footer_image',
+    ];
+
+    protected $appends = [
+        'admin_race_url',
+        'admin_edit_url',
+        'admin_images_url',
     ];
 
     protected static function boot(): void
@@ -124,6 +97,27 @@ class Season extends Model
     {
         return $this->{$section . '_image'}
             ? Storage::url($this->{$section . '_image'})
+            : null;
+    }
+
+    public function getAdminRaceUrlAttribute(): ?string
+    {
+        return $this->championship_id && Auth::check()
+            ? route('admin.race.index', ['championship' => $this->championship, 'season' => $this])
+            : null;
+    }
+
+    public function getAdminEditUrlAttribute(): ?string
+    {
+        return $this->championship_id && Auth::check()
+            ? route('admin.season.edit', ['championship' => $this->championship, 'season' => $this])
+            : null;
+    }
+
+    public function getAdminImagesUrlAttribute(): ?string
+    {
+        return $this->championship_id && Auth::check()
+            ? route('admin.image.index', ['championship' => $this->championship, 'season' => $this])
             : null;
     }
 }

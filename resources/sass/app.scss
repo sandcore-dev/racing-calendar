@@ -4,12 +4,9 @@
 // Variables
 @import 'variables';
 
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
-
-// Font Awesome Free
-@import "~@fortawesome/fontawesome-free/scss/fontawesome";
-@import "~@fortawesome/fontawesome-free/scss/solid";
+// Bootstrap & Bootstrap-Vue
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
 
 // Flag icons
 @import "~flag-icon-css/sass/flag-icon";

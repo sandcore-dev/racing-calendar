@@ -7,37 +7,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
- * App\Models\Championship
- *
- * @property int $id
- * @property string $name
- * @property string $domain
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Season[] $seasons
- * @property-read int|null $seasons_count
- * @method static Builder|Championship newModelQuery()
- * @method static Builder|Championship newQuery()
- * @method static Builder|Championship others()
- * @method static Builder|Championship query()
- * @method static Builder|Championship whereCreatedAt($value)
- * @method static Builder|Championship whereDomain($value)
- * @method static Builder|Championship whereId($value)
- * @method static Builder|Championship whereName($value)
- * @method static Builder|Championship whereUpdatedAt($value)
- * @mixin \Eloquent
- * @noinspection PhpFullyQualifiedNameUsageInspection
- * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ * @mixin IdeHelperChampionship
  */
 class Championship extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'domain'];
+    protected $fillable = [
+        'name',
+        'domain',
+    ];
 
-    public function seasons(): HasMany
+    protected $appends = [
+        'admin_season_url',
+        'admin_edit_url',
+    ];
+
+    public function seasons(): HasMany|Season
     {
         return $this->hasMany(Season::class);
     }
@@ -47,5 +36,24 @@ class Championship extends Model
         return $query
             ->where('domain', '!=', app(Request::class)->getHost())
             ->orderBy('name');
+    }
+
+    public function getUrlAttribute(): string
+    {
+        return route('index', ['championship' => $this]);
+    }
+
+    public function getAdminSeasonUrlAttribute(): ?string
+    {
+        return Auth::check()
+            ? route('admin.season.index', ['championship' => $this])
+            : null;
+    }
+
+    public function getAdminEditUrlAttribute(): ?string
+    {
+        return Auth::check()
+            ? route('admin.championship.edit', ['championship' => $this])
+            : null;
     }
 }
