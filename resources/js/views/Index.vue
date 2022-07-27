@@ -1,5 +1,6 @@
 <template>
   <b-table-lite
+    class="table-sm-y"
     striped
     :fields="fields"
     :items="items"
@@ -123,36 +124,34 @@ export default {
                     key: 'date_short',
                     label: this.labels.date,
                     formatter: this.showDateShort,
-                    class: 'text-nowrap d-lg-none col-2',
+                    class: 'text-nowrap d-lg-none pl-2',
                 },
                 {
                     key: 'date_long',
                     label: this.labels.date,
                     formatter: this.showDateLong,
-                    class: 'text-nowrap d-none d-lg-table-cell col-2',
+                    class: 'text-nowrap d-none d-lg-table-cell pl-2',
                 },
                 {
                     key: 'start_time',
                     label: this.labels.race_time,
                     formatter: this.showTime,
-                    class: 'col-2',
                 },
                 {
                     key: 'details',
                     label: '',
-                    class: 'text-center col-1',
+                    class: 'text-center',
                 },
                 {
                     key: 'race',
                     label: this.labels.race,
-                    class: 'text-nowrap col-5',
+                    class: 'text-nowrap',
                 },
                 !this.showLocations
                     ? null
                     : {
                         key: 'location_name',
                         label: this.labels.location,
-                        class: 'col-2',
                     },
             ];
         },

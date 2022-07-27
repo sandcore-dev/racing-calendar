@@ -14,6 +14,17 @@ img
 	background-color: #fcf8e3;
 }
 
+.table-sm-y {
+	@extend .table-sm;
+
+	tr {
+		th, td {
+			padding-top: 0.6rem;
+			padding-bottom: 0.6rem;
+		}
+	}
+}
+
 .timetable-footer {
 	@extend .bg-white;
 }

@@ -1,11 +1,14 @@
 <template>
-  <div>
+  <b-container fluid>
     <b-row class="mb-3">
       <b-col
         cols="2"
-        :class="countryFlag"
+        :class="flagColumnClass"
       />
-      <b-col cols="8">
+      <b-col
+        cols="12"
+        lg="8"
+      >
         <div class="h4 text-center">
           {{ details.title }}
         </div>
@@ -31,12 +34,13 @@
         {{ showTime(data.item.start_time) }}-{{ showTime(data.item.end_time) }}
       </template>
     </b-table-lite>
-  </div>
+  </b-container>
 </template>
 
 <script>
 import {
     BCol,
+    BContainer,
     BRow,
     BTableLite,
 } from 'bootstrap-vue';
@@ -45,6 +49,7 @@ import { DateTime } from 'luxon';
 export default {
     components: {
         BCol,
+        BContainer,
         BRow,
         BTableLite,
     },
@@ -58,6 +63,12 @@ export default {
         details: {
             type: Object,
             required: true,
+        },
+    },
+
+    computed: {
+        flagColumnClass() {
+            return `d-none d-lg-table-cell ${this.countryFlag}`;
         },
     },
 
