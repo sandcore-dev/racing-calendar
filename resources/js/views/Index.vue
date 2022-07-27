@@ -17,7 +17,7 @@
         v-v-b-tooltip.hover.left
         :title="data.item.country_local_name"
       />
-      <span class="d-none d-md-inline">
+      <span :class="cityClass">
         {{ data.item.circuit_city }}
       </span>
     </template>
@@ -120,6 +120,12 @@ export default {
     },
 
     computed: {
+        cityClass() {
+            return this.showLocations
+                ? 'd-none d-md-inline'
+                : '';
+        },
+
         fields() {
             return [
                 {
