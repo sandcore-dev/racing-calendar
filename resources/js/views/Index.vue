@@ -17,7 +17,9 @@
         v-v-b-tooltip.hover.left
         :title="data.item.country_local_name"
       />
-      {{ data.item.circuit_city }}
+      <span class="d-none d-md-inline">
+        {{ data.item.circuit_city }}
+      </span>
     </template>
 
     <template #cell(details)="data">
