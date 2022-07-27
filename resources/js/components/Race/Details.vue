@@ -90,17 +90,17 @@ export default {
                 {
                     key: 'times',
                     label: '',
-                    class: 'col-2',
+                    class: 'text-nowrap col-2',
                 },
                 {
                     key: 'empty',
                     label: '',
-                    class: 'col-1',
+                    class: 'col-1 d-none d-lg-table-cell',
                 },
                 {
                     key: 'name',
                     label: '',
-                    class: 'col-7 pl-2',
+                    class: 'col-8 col-lg-7 pl-2',
                 },
             ],
         };
