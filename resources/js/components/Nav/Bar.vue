@@ -7,6 +7,7 @@
     </b-navbar-brand>
     <b-navbar-nav v-if="adminItems.length">
       <b-nav-item
+        class="d-none d-lg-block"
         v-for="item in adminItems"
         :key="item.url"
         :active="item.active"
@@ -24,6 +25,19 @@
         :text="dropdownTitle"
         right
       >
+        <template v-if="adminItems.length">
+          <div class="d-block d-lg-none">
+            <Link
+              v-for="dropdownAdminItem in adminItems"
+              :key="dropdownAdminItem.key"
+              class="dropdown-item"
+              :href="dropdownAdminItem.url"
+            >
+              {{ dropdownAdminItem.label }}
+            </Link>
+            <b-dropdown-divider />
+          </div>
+        </template>
         <a
           v-for="dropdownItem in dropdownItems"
           :key="dropdownItem.id"
