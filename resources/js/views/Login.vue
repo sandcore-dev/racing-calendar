@@ -1,7 +1,7 @@
 <template>
   <b-card
     :header="title"
-    class="col-6 offset-3"
+    class="col-12 col-lg-6 offset-lg-3"
   >
     <b-form @submit.prevent="onSubmit">
       <b-form-group
