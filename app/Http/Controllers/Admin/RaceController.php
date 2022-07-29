@@ -235,7 +235,7 @@ class RaceController extends Controller
                 'circuit_id' => ['required', 'integer', 'exists:circuits,id'],
                 'remarks' => ['string', 'nullable'],
                 'status' => ['required', 'string', 'in:scheduled,postponed,cancelled'],
-                'location_id' => ['required', 'integer', 'exists:locations,id'],
+                'location_id' => ['nullable', 'integer', 'exists:locations,id'],
             ]
         );
 
