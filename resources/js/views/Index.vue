@@ -28,7 +28,7 @@
         @click="data.toggleDetails()"
         v-show="showDetailsButton(data.item)"
       >
-        <b-icon-chevron-down v-show="!data.detailsShowing" />
+        <b-icon-list v-show="!data.detailsShowing" />
         <b-icon-chevron-up v-show="data.detailsShowing" />
       </b-button>
     </template>
@@ -63,8 +63,8 @@
 <script>
 import {
     BButton,
-    BIconChevronDown,
     BIconChevronUp,
+    BIconList,
     BIconPlusLg,
     BTableLite,
     VBTooltip,
@@ -81,8 +81,8 @@ export default {
 
     components: {
         BButton,
-        BIconChevronDown,
         BIconChevronUp,
+        BIconList,
         BIconPlusLg,
         BTableLite,
         Link,

@@ -10,8 +10,10 @@ img
 	}
 }
 
-.this-week * {
-	background-color: #fcf8e3;
+.this-week {
+	th, td {
+		background-color: #fcf8e3;
+	}
 }
 
 .table-sm-y {
