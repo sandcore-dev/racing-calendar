@@ -32,7 +32,7 @@
         "bootstrap-vue": "^2.21.2",
         "cropperjs": "^1.5.12",
         "flag-icon-css": "^2.9.0",
-        "luxon": "^2.3.1",
+        "luxon": "^2.5.2",
         "store2": "^2.12.0",
         "vue": "^2.6.12",
         "vue-cropperjs": "^4.2.0"
