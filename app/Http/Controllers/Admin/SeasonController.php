@@ -146,7 +146,7 @@ class SeasonController extends Controller
                     'regenerateToken' => Lang::get('Generate a new access token'),
                     'locations' => Lang::get('Locations'),
                     'searchForLocation' => Lang::get('Search for a location'),
-                    'submit' => Lang::get('Add'),
+                    'submit' => Lang::get('Change'),
                 ],
 
                 'acceptedMimeTypes' => implode(',', $this->acceptedMimeTypes),
@@ -170,6 +170,7 @@ class SeasonController extends Controller
                 'data' => [
                     'year' => $season->year,
                     'access_token' => $season->access_token,
+                    'regenerate_token' => null,
                     'locations' => $season->locations->pluck('id'),
                 ],
             ]
@@ -197,7 +198,7 @@ class SeasonController extends Controller
 
         $data = $request->only('year');
 
-        if ($request->input('regenerate_token')) {
+        if ($request->boolean('regenerate_token')) {
             $data['access_token'] = $this->generateAccessToken();
         }
 

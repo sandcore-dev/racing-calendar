@@ -55,6 +55,8 @@
                 class="mr-n2"
                 v-model="form.regenerate_token"
                 switch
+                :value="true"
+                :unchecked-value="false"
               >
                 {{ labels.regenerateToken }}
               </b-form-checkbox>
