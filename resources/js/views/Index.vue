@@ -1,74 +1,86 @@
 <template>
-  <b-table-lite
-    class="table-sm-y"
-    striped
-    :fields="fields"
-    :items="items"
-    :tbody-tr-class="getRowClass"
-  >
-    <template #cell(start_time)="data">
-      <span :class="getCellClass(data.item)">
-        {{ data.value }}
-      </span>
-    </template>
-    <template #cell(race)="data">
-      <i
-        :class="data.item.country_flag"
-        v-v-b-tooltip.hover.left
-        :title="data.item.country_local_name"
-      />
-      <span :class="cityClass">
-        {{ data.item.circuit_city }}
-      </span>
-    </template>
-
-    <template #cell(details)="data">
-      <b-button
-        size="sm"
-        @click="data.toggleDetails()"
-        v-show="showDetailsButton(data.item)"
-      >
-        <b-icon-list v-show="!data.detailsShowing" />
-        <b-icon-chevron-up v-show="data.detailsShowing" />
-      </b-button>
-    </template>
-
-    <template #cell(has_sprint)="data">
-      <span
-        class="font-weight-bold font-italic text-danger"
-        :title="labels.has_sprint"
-        v-if="data.value"
-        v-v-b-tooltip.hover.left
-      >
-        <b-icon-list-nested flip-v />S
-      </span>
-    </template>
-
-    <template #cell(location_name)="data">
-      <template v-if="data.item.is_scheduled">
-        <template v-if="data.item.is_past">
+  <div>
+    <img
+      :src="headerUrl"
+      :alt="title"
+      v-if="headerUrl"
+    >
+    <b-table-lite
+      class="table-sm-y"
+      striped
+      :fields="fields"
+      :items="items"
+      :tbody-tr-class="getRowClass"
+    >
+      <template #cell(start_time)="data">
+        <span :class="getCellClass(data.item)">
           {{ data.value }}
-        </template>
-        <template v-else>
-          <Link :href="data.item.location_edit_url">
-            <template v-if="!!data.value">
-              {{ data.value }}
-            </template>
-            <template v-else>
-              <b-icon-plus-lg />
-            </template>
-          </Link>
+        </span>
+      </template>
+      <template #cell(race)="data">
+        <i
+          :class="data.item.country_flag"
+          v-v-b-tooltip.hover.left
+          :title="data.item.country_local_name"
+        />
+        <span :class="cityClass">
+          {{ data.item.circuit_city }}
+        </span>
+      </template>
+
+      <template #cell(details)="data">
+        <b-button
+          size="sm"
+          @click="data.toggleDetails()"
+          v-show="showDetailsButton(data.item)"
+        >
+          <b-icon-list v-show="!data.detailsShowing" />
+          <b-icon-chevron-up v-show="data.detailsShowing" />
+        </b-button>
+      </template>
+
+      <template #cell(has_sprint)="data">
+        <span
+          class="font-weight-bold font-italic text-danger"
+          :title="labels.has_sprint"
+          v-if="data.value"
+          v-v-b-tooltip.hover.left
+        >
+          <b-icon-list-nested flip-v />S
+        </span>
+      </template>
+
+      <template #cell(location_name)="data">
+        <template v-if="data.item.is_scheduled">
+          <template v-if="data.item.is_past">
+            {{ data.value }}
+          </template>
+          <template v-else>
+            <Link :href="data.item.location_edit_url">
+              <template v-if="!!data.value">
+                {{ data.value }}
+              </template>
+              <template v-else>
+                <b-icon-plus-lg />
+              </template>
+            </Link>
+          </template>
         </template>
       </template>
-    </template>
 
-    <template #row-details="data">
-      <race-details
-        :country-flag="data.item.country_flag"
-        :details="data.item.details"
-      />
-    </template>
-  </b-table-lite>
+      <template #row-details="data">
+        <race-details
+          :country-flag="data.item.country_flag"
+          :details="data.item.details"
+        />
+      </template>
+    </b-table-lite>
+    <img
+      :src="footerUrl"
+      :alt="title"
+      v-if="footerUrl"
+    >
+  </div>
 </template>
 
 <script>
@@ -104,6 +116,11 @@ export default {
     },
 
     props: {
+        title: {
+            type: String,
+            required: true,
+        },
+
         headerUrl: {
             type: String,
             default: null,
