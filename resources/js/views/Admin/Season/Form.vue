@@ -1,5 +1,8 @@
 <template>
-  <Form :data="data">
+  <Form
+    :data="data"
+    contains-upload
+  >
     <template #default="{ form, getState }">
       <b-form-group
         :label="labels.year"

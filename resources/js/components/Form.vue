@@ -44,6 +44,11 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        containsUpload: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
@@ -66,7 +71,10 @@ export default {
 
     data() {
         return {
-            form: this.$inertia.form(this.data),
+            form: this.$inertia.form({
+                _method: null,
+                ...this.data,
+            }),
         };
     },
 
@@ -79,7 +87,13 @@ export default {
 
         onSubmit() {
             if (this.edit) {
-                this.form.put(this.url);
+                if (this.containsUpload) {
+                    // eslint-disable-next-line no-underscore-dangle
+                    this.form._method = 'PUT';
+                    this.form.post(this.url);
+                } else {
+                    this.form.put(this.url);
+                }
                 return;
             }
 

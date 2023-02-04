@@ -169,6 +169,8 @@ class SeasonController extends Controller
 
                 'data' => [
                     'year' => $season->year,
+                    'header_image' => null,
+                    'footer_image' => null,
                     'access_token' => $season->access_token,
                     'regenerate_token' => null,
                     'locations' => $season->locations->pluck('id'),
