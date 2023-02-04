@@ -22,6 +22,7 @@ class Race extends Model
         'start_time',
         'name',
         'circuit_id',
+        'has_sprint',
         'location_id',
         'remarks',
         'status',
@@ -32,6 +33,10 @@ class Race extends Model
     protected $appends = [
         'admin_race_session_url',
         'admin_edit_url',
+    ];
+
+    protected $casts = [
+        'has_sprint' => 'bool',
     ];
 
     protected static function booted(): void

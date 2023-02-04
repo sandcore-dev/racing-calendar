@@ -53,6 +53,7 @@ class CalendarController extends Controller
 
                 'labels' => [
                     'date' => Lang::get('Date'),
+                    'has_sprint' => Lang::get('Has sprint race'),
                     'race_time' => Lang::get('Race time'),
                     'race' => Lang::get('Race'),
                     'cancelled' => Lang::get('Cancelled'),
@@ -71,6 +72,7 @@ class CalendarController extends Controller
                                 'name',
                                 'season_id',
                                 'circuit_id',
+                                'has_sprint',
                                 'status',
                                 $showLocations
                                     ? 'location_id'

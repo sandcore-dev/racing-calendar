@@ -37,6 +37,15 @@
           text-field="name"
         />
       </b-form-group>
+      <b-form-group>
+        <b-form-checkbox
+          v-model="form.has_sprint"
+          :value="true"
+          :unchecked-value="false"
+        >
+          {{ labels.has_sprint }}
+        </b-form-checkbox>
+      </b-form-group>
       <b-form-group
         :label="labels.remarks"
         :state="getState(form.errors.remarks)"
@@ -78,6 +87,7 @@
 
 <script>
 import {
+    BFormCheckbox,
     BFormGroup,
     BFormInput,
     BFormSelect,
@@ -90,6 +100,7 @@ import FormDateTimepicker from '@/components/Form/DateTimepicker.vue';
 
 export default {
     components: {
+        BFormCheckbox,
         BFormGroup,
         BFormInput,
         BFormSelect,
@@ -145,6 +156,7 @@ export default {
                     remarks: null,
                     status: 'scheduled',
                     location_id: null,
+                    has_sprint: null,
                 };
             },
         },

@@ -33,6 +33,17 @@
       </b-button>
     </template>
 
+    <template #cell(has_sprint)="data">
+      <span
+        class="font-weight-bold font-italic text-danger"
+        :title="labels.has_sprint"
+        v-if="data.value"
+        v-v-b-tooltip.hover.left
+      >
+        <b-icon-list-nested flip-v />S
+      </span>
+    </template>
+
     <template #cell(location_name)="data">
       <template v-if="data.item.is_scheduled">
         <template v-if="data.item.is_past">
@@ -65,6 +76,7 @@ import {
     BButton,
     BIconChevronUp,
     BIconList,
+    BIconListNested,
     BIconPlusLg,
     BTableLite,
     VBTooltip,
@@ -83,6 +95,7 @@ export default {
         BButton,
         BIconChevronUp,
         BIconList,
+        BIconListNested,
         BIconPlusLg,
         BTableLite,
         Link,
@@ -147,6 +160,11 @@ export default {
                 },
                 {
                     key: 'details',
+                    label: '',
+                    class: 'text-center',
+                },
+                {
+                    key: 'has_sprint',
                     label: '',
                     class: 'text-center',
                 },
