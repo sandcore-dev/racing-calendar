@@ -28,8 +28,6 @@ class Race extends Model
         'status',
     ];
 
-    protected $dates = ['start_time'];
-
     protected $appends = [
         'admin_race_session_url',
         'admin_edit_url',
@@ -37,6 +35,7 @@ class Race extends Model
 
     protected $casts = [
         'has_sprint' => 'bool',
+        'start_time' => 'datetime',
     ];
 
     protected static function booted(): void

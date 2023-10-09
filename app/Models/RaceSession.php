@@ -22,9 +22,9 @@ class RaceSession extends Model
         'name',
     ];
 
-    protected $dates = [
-        'start_time',
-        'end_time',
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
     ];
 
     protected $appends = [
@@ -67,7 +67,7 @@ class RaceSession extends Model
                     'championship' => $this->race->season->championship,
                     'season' => $this->race->season,
                     'race' => $this->race,
-                    'session' => $this
+                    'session' => $this,
                 ]
             )
             : null;
