@@ -1,15 +1,15 @@
 // Fonts
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600");
+@import '@fontsource/open-sans';
 
 // Variables
 @import 'variables';
 
 // Bootstrap & Bootstrap-Vue
-@import '~bootstrap/scss/bootstrap.scss';
-@import '~bootstrap-vue/src/index.scss';
+@import 'bootstrap/scss/bootstrap.scss';
+@import 'bootstrap-vue/src/index.scss';
 
 // Flag icons
-@import "~flag-icon-css/sass/flag-icon";
+@import 'flag-icons';
 
 // Global styling
-@import "global";
+@import 'global.scss';

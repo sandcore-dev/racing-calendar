@@ -48,7 +48,7 @@ class Country extends Model
 
     public function getFlagClassAttribute(): string
     {
-        return 'flag-icon flag-icon-' . strtolower($this->code);
+        return 'fi fi-' . strtolower($this->code);
     }
 
     public function getAdminEditUrlAttribute(): ?string
