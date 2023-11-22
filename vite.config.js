@@ -6,6 +6,7 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue2';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import eslint from 'vite-plugin-eslint';
+import { resolve } from 'path';
 
 export default defineConfig({
     build: {
@@ -28,4 +29,12 @@ export default defineConfig({
             fix: process.env.NODE_ENV !== 'production',
         }),
     ],
+    resolve: {
+        alias: [
+            {
+                find: '@',
+                replacement: resolve(__dirname, './resources/js'),
+            },
+        ],
+    },
 });
