@@ -47,7 +47,7 @@
 
 <script>
 import { BAlert, BContainer } from 'bootstrap-vue';
-import { Head } from '@inertiajs/inertia-vue';
+import { Head } from '@inertiajs/vue2';
 
 import NavBar from '@/components/Nav/Bar.vue';
 

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { createInertiaApp } from '@inertiajs/inertia-vue';
+import { createInertiaApp } from '@inertiajs/vue2';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
@@ -22,5 +22,8 @@ createInertiaApp({
         new Vue({
             render: (h) => h(App, props),
         }).$mount(el);
+    },
+    progress: {
+        includeCSS: false,
     },
 });

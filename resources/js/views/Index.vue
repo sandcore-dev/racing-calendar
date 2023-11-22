@@ -94,7 +94,7 @@ import {
     VBTooltip,
 } from 'bootstrap-vue';
 import { DateTime } from 'luxon';
-import { Link } from '@inertiajs/inertia-vue';
+import { Link } from '@inertiajs/vue2';
 
 import RaceDetails from '@/components/Race/Details.vue';
 

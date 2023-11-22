@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/inertia-vue';
+import { Link } from '@inertiajs/vue2';
 
 import ImageCrop from '@/components/ImageCrop.vue';
 

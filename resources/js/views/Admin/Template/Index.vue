@@ -44,7 +44,7 @@ import {
     BRow,
     BTable,
 } from 'bootstrap-vue';
-import { Link } from '@inertiajs/inertia-vue';
+import { Link } from '@inertiajs/vue2';
 
 import GlobalPagination from '@/components/Global/Pagination.vue';
 
