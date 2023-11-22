@@ -8,6 +8,9 @@
 @import 'bootstrap/scss/bootstrap.scss';
 @import 'bootstrap-vue/src/index.scss';
 
+// NProgress, used by Inertia
+@import 'nprogress/nprogress.css';
+
 // Flag icons
 @import 'flag-icons';
 

@@ -8,6 +8,9 @@ import vue from '@vitejs/plugin-vue2';
 import eslint from 'vite-plugin-eslint';
 
 export default defineConfig({
+    build: {
+        sourcemap: true,
+    },
     plugins: [
         laravel([
             'resources/sass/app.scss',
@@ -22,7 +25,7 @@ export default defineConfig({
             },
         }),
         eslint({
-            fix: true,
+            fix: process.env.NODE_ENV !== 'production',
         }),
     ],
 });
