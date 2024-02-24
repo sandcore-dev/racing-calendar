@@ -8,18 +8,20 @@
         <link
           rel="icon"
           :href="iconUrl"
+          :type="iconMimeType"
+          :sizes="iconDimensions"
         >
         <link
           rel="shortcut icon"
           :href="iconUrl"
+          :type="iconMimeType"
+          :sizes="iconDimensions"
         >
         <link
           rel="apple-touch-icon"
           :href="iconUrl"
-        >
-        <link
-          rel="apple-touch-icon-precomposed"
-          :href="iconUrl"
+          :type="iconMimeType"
+          :sizes="iconDimensions"
         >
       </template>
     </Head>
@@ -78,6 +80,16 @@ export default {
         },
 
         iconUrl: {
+            type: String,
+            default: null,
+        },
+
+        iconMimeType: {
+            type: String,
+            default: null,
+        },
+
+        iconDimensions: {
             type: String,
             default: null,
         },

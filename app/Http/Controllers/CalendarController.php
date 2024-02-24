@@ -48,6 +48,8 @@ class CalendarController extends Controller
                 'title' => "{$championship->name} {$season->year}",
 
                 'iconUrl' => $season->icon_url,
+                'iconMimeType' => $season->icon_mime_type,
+                'iconDimensions' => $season->icon_dimensions,
                 'headerUrl' => $season->header_url,
                 'footerUrl' => $season->footer_url,
 

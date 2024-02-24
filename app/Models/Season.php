@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManagerStatic as Image;
 
 /**
  * @mixin IdeHelperSeason
@@ -74,6 +76,16 @@ class Season extends Model
         return $this->getImageUrl('icon');
     }
 
+    public function getIconMimeTypeAttribute(): ?string
+    {
+        return $this->getImageMimeType('icon');
+    }
+
+    public function getIconDimensionsAttribute(): ?string
+    {
+        return $this->getImageDimensions('icon');
+    }
+
     /**
      * Get the URL of the header image.
      */
@@ -98,6 +110,33 @@ class Season extends Model
         return $this->{$section . '_image'}
             ? Storage::url($this->{$section . '_image'})
             : null;
+    }
+
+    protected function getImageMimeType(string $section): ?string
+    {
+        return $this->{$section . '_image'}
+            ? Storage::mimeType($this->{$section . '_image'})
+            : null;
+    }
+
+    protected function getImageDimensions(string $section): ?string
+    {
+        $imagePath = $this->{$section . '_image'};
+
+        if (!$imagePath) {
+            return null;
+        }
+
+        return Cache::remember(
+            "{$imagePath}-dimensions",
+            86400,
+            function () use ($imagePath) {
+                $path = Storage::path($imagePath);
+                $image = Image::make($path);
+
+                return $image->width() . 'x' . $image->height();
+            }
+        );
     }
 
     public function getAdminRaceUrlAttribute(): ?string
