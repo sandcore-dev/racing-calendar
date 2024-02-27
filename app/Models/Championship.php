@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -36,6 +37,14 @@ class Championship extends Model
         return $query
             ->where('domain', '!=', app(Request::class)->getHost())
             ->orderBy('name');
+    }
+
+    public function scopeCurrentYear(Builder $query): Builder
+    {
+        return $query->whereHas(
+            'seasons',
+            fn(Builder $query) => $query->where('year', Carbon::now()->year)
+        );
     }
 
     public function getUrlAttribute(): string

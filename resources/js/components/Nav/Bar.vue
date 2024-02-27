@@ -47,7 +47,7 @@
         >
           {{ dropdownItem.label }}
         </a>
-        <b-dropdown-divider />
+        <b-dropdown-divider v-if="dropdownItems.length" />
         <b-dropdown-item>
           <dark-mode-switch />
         </b-dropdown-item>

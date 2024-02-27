@@ -97,18 +97,24 @@ class HandleInertiaRequests extends Middleware
 
                 'dropdownTitle' => fn() => Auth::check()
                     ? Auth::user()->name
-                    : Lang::get('Racing series'),
+                    : (
+                    Championship::others()
+                        ->currentYear()
+                        ->exists()
+                        ? Lang::get('Racing series')
+                        : Lang::get('Menu')
+                    ),
 
-                'dropdownItems' => function () {
-                    return Championship::others()->get()
-                        ->map(function (Championship $championship) {
-                            return [
-                                'id' => $championship->id,
-                                'url' => $championship->url,
-                                'label' => $championship->name,
-                            ];
-                        });
-                },
+                'dropdownItems' => fn() => Championship::others()
+                    ->currentYear()
+                    ->get()
+                    ->map(function (Championship $championship) {
+                        return [
+                            'id' => $championship->id,
+                            'url' => $championship->url,
+                            'label' => $championship->name,
+                        ];
+                    }),
 
                 'messages' => [
                     'success' => $request->session()->get('success'),
