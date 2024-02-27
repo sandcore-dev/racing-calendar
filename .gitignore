@@ -18,5 +18,5 @@ yarn-error.log
 /public/mix-manifest.json
 _ide_helper*
 .phpstorm.meta.php
-
 /public/build/
+/bootstrap/ssr/

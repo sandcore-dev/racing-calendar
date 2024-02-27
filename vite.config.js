@@ -13,10 +13,14 @@ export default defineConfig({
         sourcemap: true,
     },
     plugins: [
-        laravel([
-            'resources/sass/app.scss',
-            'resources/js/app.js',
-        ]),
+        laravel({
+            input: [
+                'resources/sass/app.scss',
+                'resources/js/app.js',
+            ],
+            ssr: 'resources/js/ssr.js',
+            refresh: true,
+        }),
         vue({
             template: {
                 transformAssetUrls: {

@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build && vite build --ssr"
   },
   "devDependencies": {
     "@vitejs/plugin-vue2": "^2.3.1",
@@ -33,6 +33,7 @@
     "luxon": "^2.3.1",
     "store2": "^2.12.0",
     "vue": "^2.6.12",
-    "vue-cropperjs": "^4.2.0"
+    "vue-cropperjs": "^4.2.0",
+    "vue-server-renderer": "^2.7.16"
   }
 }
