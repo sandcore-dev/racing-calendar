@@ -55,11 +55,13 @@ class ImageController extends Controller
             ]
         );
 
+        $disk = Storage::disk('public');
+
         $name = $request->input('name');
         $field = "{$name}_image";
         $path = $name === 'icon'
-            ? Storage::path($season->header_image)
-            : Storage::path($season->{$field});
+            ? $disk->path($season->header_image)
+            : $disk->path($season->{$field});
 
         $width = (int)$request->input('width');
         $height = (int)$request->input('height');
@@ -96,18 +98,18 @@ class ImageController extends Controller
             );
         }
 
-        $newPath = 'public/images/' . Str::random(40) . '.png';
-        Storage::put($newPath, $image->stream('png'));
+        $newPath = 'images/' . Str::random(40) . '.png';
+        $disk->put($newPath, $image->stream('png'));
 
         if ($season->{$field}) {
-            Storage::delete($season->{$field});
+            $disk->delete($season->{$field});
         }
 
         $season->{$field} = $newPath;
         $season->save();
 
         return [
-            'url' => Storage::url($season->{$field}),
+            'url' => $disk->url($season->{$field}),
         ];
     }
 }

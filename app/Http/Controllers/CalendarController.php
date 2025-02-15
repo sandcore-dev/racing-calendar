@@ -42,10 +42,28 @@ class CalendarController extends Controller
 
     public function calendar(Championship $championship, Season $season, bool $showLocations = true): Response
     {
+        $firstRace = $season->races()->first();
+        $lastRace = $season->races()->orderByDesc('start_time')->first();
+
         return Inertia::render(
             'Index',
             [
                 'title' => "{$championship->name} {$season->year}",
+                'description' => Lang::get(
+                    'The :name season has :total races (:sprint sprint races) and begins in :first_city on :first_date and ends in :last_city on :last_date.',
+                    [
+                        'name' => $championship->name,
+                        'year' => $season->year,
+                        'total' => $season->races()->count(),
+                        'sprint' => $season->races()->where('has_sprint', '=', 1)->count(),
+
+                        'first_city' => $firstRace->circuit_city,
+                        'first_date' => $firstRace->start_time->isoFormat('LL'),
+
+                        'last_city' => $lastRace->circuit_city,
+                        'last_date' => $lastRace->start_time->isoFormat('LL'),
+                    ]
+                ),
 
                 'iconUrl' => $season->icon_url,
                 'iconMimeType' => $season->icon_mime_type,

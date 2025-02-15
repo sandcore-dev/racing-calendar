@@ -162,13 +162,13 @@ export default {
                     key: 'date_short',
                     label: this.labels.date,
                     formatter: this.showDateShort,
-                    class: 'text-nowrap d-lg-none pl-2',
+                    class: ['text-nowrap', 'd-lg-none', 'pl-2'],
                 },
                 {
                     key: 'date_long',
                     label: this.labels.date,
                     formatter: this.showDateLong,
-                    class: 'text-nowrap d-none d-lg-table-cell pl-2',
+                    class: ['text-nowrap', 'd-none', 'd-lg-table-cell', 'pl-2'],
                 },
                 {
                     key: 'start_time',
@@ -178,17 +178,17 @@ export default {
                 {
                     key: 'details',
                     label: '',
-                    class: 'text-center',
+                    class: ['text-center'],
                 },
                 {
                     key: 'has_sprint',
                     label: '',
-                    class: 'text-center',
+                    class: ['text-center', 'text-nowrap'],
                 },
                 {
                     key: 'race',
                     label: this.labels.race,
-                    class: 'text-nowrap',
+                    class: ['text-nowrap'],
                 },
                 !this.showLocations
                     ? null

@@ -108,14 +108,14 @@ class Season extends Model
     protected function getImageUrl(string $section): ?string
     {
         return $this->{$section . '_image'}
-            ? Storage::url($this->{$section . '_image'})
+            ? Storage::disk('public')->url($this->{$section . '_image'})
             : null;
     }
 
     protected function getImageMimeType(string $section): ?string
     {
         return $this->{$section . '_image'}
-            ? Storage::mimeType($this->{$section . '_image'})
+            ? Storage::disk('public')->mimeType($this->{$section . '_image'})
             : null;
     }
 
@@ -131,7 +131,7 @@ class Season extends Model
             "{$imagePath}-dimensions",
             86400,
             function () use ($imagePath) {
-                $path = Storage::path($imagePath);
+                $path = Storage::disk('public')->path($imagePath);
                 $image = Image::make($path);
 
                 return $image->width() . 'x' . $image->height();

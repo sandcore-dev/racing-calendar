@@ -4,7 +4,23 @@
       <title>
         {{ title }}
       </title>
+      <meta
+        property="og:title"
+        :content="title"
+      >
+      <meta
+        property="og:description"
+        :content="description"
+      >
+      <meta
+        property="og:url"
+        :content="navBarUrl"
+      >
       <template v-if="iconUrl">
+        <meta
+          property="og:image"
+          :content="iconUrl"
+        >
         <link
           rel="icon"
           :href="iconUrl"
@@ -67,6 +83,11 @@ export default {
             required: true,
         },
 
+        description: {
+            type: String,
+            default: null,
+        },
+
         navBarTitle: {
             type: String,
             default() {
@@ -80,6 +101,11 @@ export default {
         },
 
         iconUrl: {
+            type: String,
+            default: null,
+        },
+
+        headerUrl: {
             type: String,
             default: null,
         },

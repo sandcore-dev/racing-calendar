@@ -97,7 +97,7 @@ class SeasonController extends Controller
 
         foreach (['header_image', 'footer_image'] as $field) {
             if ($request->hasFile($field)) {
-                $data[$field] = $request->file($field)->store('public/images');
+                $data[$field] = $request->file($field)->store('images', 'public');
             }
         }
 
@@ -204,13 +204,15 @@ class SeasonController extends Controller
             $data['access_token'] = $this->generateAccessToken();
         }
 
+        $disk = Storage::disk('public');
+
         foreach (['header_image', 'footer_image'] as $field) {
             if ($request->file($field)) {
-                if (($data[$field] = $request->file($field)->store('public/images')) && $season->{$field}) {
-                    Storage::delete($season->{$field});
+                if (($data[$field] = $request->file($field)->store('images', 'public')) && $season->{$field}) {
+                    $disk->delete($season->{$field});
                 }
             } elseif ($request->input('remove_' . $field) && $season->{$field}) {
-                Storage::delete($season->{$field});
+                $disk->delete($season->{$field});
             }
         }
 

@@ -86,5 +86,6 @@
 	"Add race for :championship season :season": "Voeg een race toe voor :championship seizoen :season",
 	"Apply template": "Gebruik template",
 	"Nobody": "Niemand",
-	"Edit race :race for :championship season :season": "Bewerk race :race voor :championship seizoen :season"
+	"Edit race :race for :championship season :season": "Bewerk race :race voor :championship seizoen :season",
+	"The :name season has :total races (:sprint sprint races) and begins in :first_city on :first_date and ends in :last_city on :last_date.": "Het :name-seizoen heeft :total races (:sprint sprintraces) begint in :first_city op :first_date en eindigt in :last_city op :last_date"
 }
