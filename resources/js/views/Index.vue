@@ -1,10 +1,12 @@
 <template>
   <div>
-    <img
-      :src="headerUrl"
-      :alt="title"
-      v-if="headerUrl"
-    >
+    <div v-if="headerUrl">
+      <img
+        class="img-fluid w-100"
+        :src="headerUrl"
+        :alt="title"
+      >
+    </div>
     <b-table-lite
       class="table-sm-y"
       striped
@@ -75,11 +77,13 @@
         />
       </template>
     </b-table-lite>
-    <img
-      :src="footerUrl"
-      :alt="title"
-      v-if="footerUrl"
-    >
+    <div v-if="footerUrl">
+      <img
+        class="img-fluid w-100"
+        :src="footerUrl"
+        :alt="title"
+      >
+    </div>
   </div>
 </template>
 
