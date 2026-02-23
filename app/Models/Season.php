@@ -34,6 +34,10 @@ class Season extends Model
         'admin_images_url',
     ];
 
+    protected $casts = [
+        'year' => 'int',
+    ];
+
     protected static function boot(): void
     {
         parent::boot();
