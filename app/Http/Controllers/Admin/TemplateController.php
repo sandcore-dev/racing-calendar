@@ -103,4 +103,14 @@ class TemplateController extends Controller
         return Redirect::route('admin.template.index')
             ->with('success', __('The template :name has been edited.', ['name' => $template->name]));
     }
+
+
+    public function destroy(Template $template): RedirectResponse
+    {
+        $template->sessions()->delete();
+        $template->delete();
+
+        return Redirect::route('admin.template.index')
+            ->with('success', __('The template :name has been deleted.', ['name' => $template->name]));
+    }
 }

@@ -32,19 +32,33 @@
           <b-icon-pencil-fill />
         </Link>
       </template>
+
+      <template #cell(admin_delete_url)="{value:url}">
+        <b-icon-trash
+          class="text-danger cursor-pointer"
+          @click.prevent="submit(url)"
+        />
+      </template>
     </b-table>
   </div>
 </template>
+
+<style>
+.cursor-pointer {
+    cursor: pointer;
+}
+</style>
 
 <script>
 import {
     BCol,
     BIconPlusLg,
     BIconPencilFill,
+    BIconTrash,
     BRow,
     BTable,
 } from 'bootstrap-vue';
-import { Link } from '@inertiajs/vue2';
+import { Link, router } from '@inertiajs/vue2';
 
 import GlobalPagination from '@/components/Global/Pagination.vue';
 
@@ -53,6 +67,7 @@ export default {
         BCol,
         BIconPlusLg,
         BIconPencilFill,
+        BIconTrash,
         BRow,
         BTable,
         Link,
@@ -89,8 +104,19 @@ export default {
                     label: '',
                     class: 'text-center',
                 },
+                {
+                    key: 'admin_delete_url',
+                    label: '',
+                    class: 'text-center',
+                },
             ],
         };
+    },
+
+    methods: {
+        submit(url) {
+            router.delete(url);
+        },
     },
 };
 </script>

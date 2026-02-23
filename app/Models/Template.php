@@ -21,6 +21,7 @@ class Template extends Model
 
     protected $appends = [
         'admin_edit_url',
+        'admin_delete_url',
         'admin_template_session_url',
     ];
 
@@ -40,6 +41,13 @@ class Template extends Model
     {
         return Auth::check()
             ? route('admin.template.edit', ['template' => $this])
+            : null;
+    }
+
+    public function getAdminDeleteUrlAttribute(): ?string
+    {
+        return Auth::check()
+            ? route('admin.template.destroy', ['template' => $this])
             : null;
     }
 }
