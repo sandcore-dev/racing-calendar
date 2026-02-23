@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
 
-/**
- * @mixin IdeHelperSeason
- */
 class Season extends Model
 {
     use HasFactory;

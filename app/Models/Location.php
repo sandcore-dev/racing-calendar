@@ -9,9 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * @mixin IdeHelperLocation
- */
 class Location extends Model
 {
     use HasFactory;

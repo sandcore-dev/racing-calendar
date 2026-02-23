@@ -10,9 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * @mixin IdeHelperChampionship
- */
 class Championship extends Model
 {
     use HasFactory;

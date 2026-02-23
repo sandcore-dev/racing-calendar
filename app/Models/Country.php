@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Monarobase\CountryList\CountryListFacade as Countries;
 use Monarobase\CountryList\CountryNotFoundException;
 
-/**
- * @mixin IdeHelperCountry
- */
 class Country extends Model
 {
     use HasFactory;

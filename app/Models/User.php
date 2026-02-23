@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-/**
- * @mixin IdeHelperUser
- */
 class User extends Authenticatable
 {
     use Notifiable;

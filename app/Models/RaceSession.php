@@ -8,9 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * @mixin IdeHelperRaceSession
- */
 class RaceSession extends Model
 {
     use HasFactory;

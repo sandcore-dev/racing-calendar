@@ -10,9 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 
-/**
- * @mixin IdeHelperRace
- */
 class Race extends Model
 {
     use HasFactory;
