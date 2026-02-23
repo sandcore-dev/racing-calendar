@@ -80,6 +80,22 @@ class RaceController extends Controller
             $start_time = clone $race->start_time;
             $start_time->year($season->year);
 
+            if (!$start_time->isSunday()) {
+                if (
+                    $start_time->isMonday()
+                    || $start_time->isTuesday()
+                    || $start_time->isWednesday()
+                ) {
+                    $start_time->startOfWeek()->subDay();
+                } else {
+                    $start_time->endOfWeek();
+                }
+            }
+
+            $start_time
+                ->setHour($race->start_time->hour)
+                ->setMinute($race->start_time->minute);
+
             $season->races()
                 ->create(
                     [
