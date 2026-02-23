@@ -90,18 +90,35 @@ class RaceSessionController extends Controller
 
         $template = Template::find($request->input('templateId'));
 
-        $template->sessions->each(function ($session) use ($race) {
-            $start_time = clone $race->start_time;
-            $end_time = clone $race->start_time;
+        $lastSession = $template->sessions()
+            ->where('days', '=', 0)
+            ->orderByDesc('start_time')
+            ->first();
 
-            $start_time->subDays($session->days);
-            $end_time->subDays($session->days);
+        [$hour, $minute] = explode(':', $lastSession->start_time);
+
+        $lastSessionTime = $race->start_time->clone()
+            ->setHour((int)$hour)
+            ->setMinute((int)$minute);
+        $offset = $race->start_time->diffInMinutes($lastSessionTime);
+
+        $template->sessions->each(function ($session) use ($race, $offset) {
+            $start_time = $race->start_time->clone()
+                ->subDays($session->days);
+            $end_time = $race->start_time->clone()
+                ->subDays($session->days);
 
             [$start_hour, $start_min] = explode(':', $session->start_time);
             [$end_hour, $end_min] = explode(':', $session->end_time);
 
-            $start_time->hour($start_hour)->minute($start_min);
-            $end_time->hour($end_hour)->minute($end_min);
+            $start_time
+                ->hour((int)$start_hour)
+                ->minute((int)$start_min)
+                ->subMinutes($offset);
+            $end_time
+                ->hour((int)$end_hour)
+                ->minute((int)$end_min)
+                ->subMinutes($offset);
 
             $race->sessions()->create(
                 [
